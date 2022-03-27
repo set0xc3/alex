@@ -1,14 +1,11 @@
-#include <entry_point.h>
+#include <core/pekora_memory.h>
+#include <pekora_entry_point.h>
 
 #include "sandbox.h"
 
-// TODO(parsecffo): Remove this.
-#include <malloc.h>
-#include <stdio.h>
-#include <stdlib.h>
-
 // Define the funtion to create a game
-b8 create_game(game *out_game) {
+internal b8
+create_game(game *out_game) {
     // Application configuration.
     out_game->app_config.pos_x = 100;
     out_game->app_config.pos_y = 100;
@@ -22,7 +19,7 @@ b8 create_game(game *out_game) {
     out_game->on_resize = sandbox_on_resize;
 
     // Create the game state.
-    out_game->state = malloc(sizeof(sandbox_state));
+    out_game->state = pekora_allocate(sizeof(sandbox_state), MEMORY_TAG_GAME);
 
     return true;
 }

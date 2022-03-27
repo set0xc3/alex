@@ -1,9 +1,10 @@
-#include "application.h"
+#include "pekora_application.h"
 
-#include "asserts.h"
-#include "game_types.h"
-#include "logger.h"
-#include "platform/platform.h"
+#include "pekora_assert.h"
+#include "pekora_game_types.h"
+#include "pekora_logger.h"
+#include "pekora_memory.h"
+#include "platform/pekora_platform.h"
 
 typedef struct application_state {
     b8 is_running;
@@ -15,10 +16,11 @@ typedef struct application_state {
     platform_state platform;
 } application_state;
 
-static b8 initialized = false;
-static application_state app_state;
+global b8 initialized = false;
+global application_state app_state;
 
-b8 application_create(game *game_inst) {
+internal b8
+application_create(game *game_inst) {
     if (initialized) {
         LOG_ERROR("application_create failed.");
         return false;
@@ -63,7 +65,10 @@ b8 application_create(game *game_inst) {
     return true;
 }
 
-b8 application_run() {
+internal b8
+application_run() {
+    LOG_INFO(get_memory_usage_str());
+
     while (app_state.is_running) {
         if (!platform_poll_message(&app_state.platform)) {
             app_state.is_running = false;
@@ -82,6 +87,8 @@ b8 application_run() {
                 break;
             }
         }
+
+        platform_sleep(1);
     }
 
     platform_shutdown(&app_state.platform);

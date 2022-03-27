@@ -1,6 +1,7 @@
-#pragma once
+#if !defined(PEKORA_ASSERT_H)
+#define PEKORA_ASSERT_H
 
-#include "defines.h"
+#include "pekora_defines.h"
 
 #define ASSERTIONS_ENABLED
 
@@ -12,7 +13,7 @@
 #define DEBUGBREAK() __buildtin_trap()
 #endif
 
-API void report_assertion_failed(const char* expr, const char* msg, const char* file, i32 line);
+PEKORA_API void report_assertion_failed(const char* expr, const char* msg, const char* file, i32 line);
 
 #define ASSERT(expr)                                                \
     {                                                               \
@@ -50,3 +51,5 @@ API void report_assertion_failed(const char* expr, const char* msg, const char* 
 #define ASSERT_MSG(expr, msg)
 #define ASSERT_DEBUG(expr)
 #endif
+
+#endif  // PEKORA_ASSERT_H

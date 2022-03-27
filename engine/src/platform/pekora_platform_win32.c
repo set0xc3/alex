@@ -1,5 +1,5 @@
-#include "core/logger.h"
-#include "platform.h"
+#include "core/pekora_logger.h"
+#include "pekora_platform.h"
 
 #if PLATFORM_WINDOWS
 
@@ -11,17 +11,30 @@ typedef struct internal_state {
     HWND hwnd;
 } internal_state;
 
+// Clock
+global f64 clock_frequency;
+global LARGE_INTEGER start_time;
+
 LRESULT CALLBACK win32_process_message(HWND hwnd, u32 msg, WPARAM w_param, LPARAM l_param);
 
-b8 platform_startup(
-    platform_state *platform,
-    const char *title,
+internal void
+clock_setup() {
+    LARGE_INTEGER frequency;
+    QueryPerformanceCounter(&frequency);
+    clock_frequency = 1.0 / (f64)frequency.QuadPart;
+    QueryPerformanceCounter(&start_time);
+}
+
+internal b8
+platform_startup(
+    platform_state* platform,
+    const char* title,
     i32 pos_x,
     i32 pos_y,
     i32 width,
     i32 height) {
     platform->internal_state = malloc(sizeof(internal_state));
-    internal_state *state = (internal_state *)platform->internal_state;
+    internal_state* state = (internal_state*)platform->internal_state;
 
     state->h_instance = GetModuleHandleA(0);
 
@@ -89,8 +102,9 @@ b8 platform_startup(
     return true;
 }
 
-b8 platform_shutdown(platform_state *platform) {
-    internal_state *state = (internal_state *)platform->internal_state;
+internal b8
+platform_shutdown(platform_state* platform) {
+    internal_state* state = (internal_state*)platform->internal_state;
     if (state->hwnd) {
         if (!DestroyWindow(state->hwnd)) {
             LOG_ERROR("DestroyWindow failed.");
@@ -101,7 +115,8 @@ b8 platform_shutdown(platform_state *platform) {
     return true;
 }
 
-b8 platform_poll_message(platform_state *platform) {
+internal b8
+platform_poll_message(platform_state* platform) {
     b8 b_ret = 0;
     MSG msg;
     while ((b_ret = PeekMessageA(&msg, NULL, 0, 0, PM_REMOVE) != 0) && b_ret != -1) {
@@ -158,6 +173,73 @@ LRESULT CALLBACK win32_process_message(HWND hwnd, u32 msg, WPARAM w_param, LPARA
     }
 
     return DefWindowProcA(hwnd, msg, w_param, l_param);
+}
+
+internal void*
+platform_allocate(u64 size, b8 aligned) {
+    return malloc(size);
+}
+
+internal void
+platform_free(void* block, b8 aligned) {
+    free(block);
+}
+
+internal void*
+platform_zero_memory(void* block, u64 size) {
+    return memset(block, 0, size);
+}
+
+internal void*
+platform_copy_memory(void* dest, const void* source, u64 size) {
+    return memcpy(dest, source, size);
+}
+
+internal void*
+platform_set_memory(void* dest, i32 value, u64 size) {
+    return memset(dest, value, size);
+}
+
+internal void
+platform_console_write(const char* msg, u8 colour) {
+    HANDLE console_handle = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    // FATAL, ERROR, WARN, INFO, DEBUG, TRACE
+    local u8 levels[6] = {64, 4, 6, 2, 1, 8};
+    SetConsoleTextAttribute(console_handle, levels[colour]);
+    OutputDebugStringA(msg);
+    u64 length = strlen(msg);
+    LPDWORD number_written = 0;
+    WriteConsoleA(GetStdHandle(STD_OUTPUT_HANDLE), msg, (DWORD)length, number_written, 0);
+}
+
+internal void
+platform_console_write_error(const char* msg, u8 colour) {
+    HANDLE console_handle = GetStdHandle(STD_ERROR_HANDLE);
+
+    // FATAL, ERROR, WARN, INFO, DEBUG, TRACE
+    local u8 levels[6] = {64, 4, 6, 2, 1, 8};
+    SetConsoleTextAttribute(console_handle, levels[colour]);
+    OutputDebugStringA(msg);
+    u64 length = strlen(msg);
+    LPDWORD number_written = 0;
+    WriteConsoleA(GetStdHandle(STD_ERROR_HANDLE), msg, (DWORD)length, number_written, 0);
+}
+
+internal f64
+platform_get_absolute_time() {
+    if (!clock_frequency) {
+        clock_setup();
+    }
+
+    LARGE_INTEGER now_time;
+    QueryPerformanceCounter(&now_time);
+    return (f64)now_time.QuadPart * clock_frequency;
+}
+
+internal void
+platform_sleep(u64 ms) {
+    Sleep(ms);
 }
 
 #endif  // PLATFORM_WINDOWS

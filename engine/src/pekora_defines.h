@@ -1,4 +1,5 @@
-#pragma once
+#if !defined(PEKORA_DEFINES_H)
+#define PEKORA_DEFINES_H
 
 // Unsigned int types.
 typedef unsigned char u8;
@@ -46,6 +47,11 @@ STATIC_ASSERT(sizeof(f64) == 8, "Expected f64 to be 8 bytes.");
 #define INVALID_ID_U16 65535U
 #define INVALID_ID_U8 255U
 
+#define internal static
+#define local static
+#define global static
+#define external extern "C"
+
 // Platform detection
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 #define PLATFORM_WINDOWS 1
@@ -65,15 +71,17 @@ STATIC_ASSERT(sizeof(f64) == 8, "Expected f64 to be 8 bytes.");
 #ifdef EXPORT
 // Exports
 #ifdef _MSC_VER
-#define API __declspec(dllexport)
+#define PEKORA_API __declspec(dllexport)
 #else
-#define API __attribute__((visibility("default")))
+#define PEKORA_API __attribute__((visibility("default")))
 #endif
 #else
 // Imports
 #ifdef _MSC_VER
-#define API __declspec(dllimport)
+#define PEKORA_API __declspec(dllimport)
 #else
-#define API
+#define PEKORA_API
 #endif
 #endif
+
+#endif  // PEKORA_DEFINES_H

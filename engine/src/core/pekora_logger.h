@@ -1,6 +1,7 @@
-#pragma once
+#if !defined(PEKORA_LOGGER_H)
+#define PEKORA_LOGGER_H
 
-#include "defines.h"
+#include "pekora_defines.h"
 
 #define LOG_WARN_ENABLED 1
 #define LOG_INFO_ENABLED 1
@@ -24,7 +25,7 @@ typedef enum log_level {
 b8 initialize_logging();
 void shutdown_logging();
 
-API void log_output(log_level level, const char* message, ...);
+PEKORA_API void log_output(log_level level, const char* message, ...);
 
 #define LOG_FATAL(message, ...) log_output(LOG_LEVEL_FATAL, message, ##__VA_ARGS__);
 #define LOG_ERROR(message, ...) log_output(LOG_LEVEL_ERROR, message, ##__VA_ARGS__);
@@ -52,3 +53,5 @@ API void log_output(log_level level, const char* message, ...);
 #else
 #define LOG_TRACE(message, ...)
 #endif
+
+#endif  // PEKORA_LOGGER_H

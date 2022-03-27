@@ -1,6 +1,7 @@
-#pragma once
+#if !defined(PEKORA_GAME_TYPES_H)
+#define PEKORA_GAME_TYPES_H
 
-#include "core/application.h"
+#include "core/pekora_application.h"
 
 typedef struct game {
     application_config app_config;
@@ -10,3 +11,5 @@ typedef struct game {
     b8 (*on_resize)(struct game* game_inst, u32 width, u32 height);
     void* state;
 } game;
+
+#endif  // PEKORA_GAME_TYPES_H

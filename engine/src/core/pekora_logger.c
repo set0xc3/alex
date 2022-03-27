@@ -1,26 +1,31 @@
-#include "logger.h"
+#include "pekora_logger.h"
 
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
 
-#include "asserts.h"
+#include "core/pekora_memory.h"
+#include "pekora_assert.h"
+#include "platform/pekora_platform.h"
 
-b8 initialize_logging() {
+internal b8
+initialize_logging() {
     return true;
 }
 
-void shutdown_logging() {
+internal void
+shutdown_logging() {
 }
 
-void log_output(log_level level, const char* message, ...) {
+internal void
+log_output(log_level level, const char* message, ...) {
     const char* level_strings[6] = {"[FATAL]: ", "[ERROR]: ", "[WARN]: ", "[INFO]: ", "[DEBUG]: ", "[TRACE]: "};
-    // b8 is_error = level < LOG_LEVEL_WARN;
+    b8 is_error = level < LOG_LEVEL_WARN;
 
     // NOTE(parsecffo): переделать!.
     const i32 msg_length = 32000;
     char out_message[msg_length];
-    memset(out_message, 0, sizeof(out_message));
+    pekora_zero_memory(out_message, sizeof(out_message));
 
     __builtin_va_list arg_ptr;
     va_start(arg_ptr, message);
@@ -30,10 +35,15 @@ void log_output(log_level level, const char* message, ...) {
     char out_message2[msg_length];
     sprintf(out_message2, "%s%s\n", level_strings[level], out_message);
 
-    // TODO(parsecffo): platform-specific output.
-    printf("%s", out_message2);
+    // Print accordingly
+    if (is_error) {
+        platform_console_write_error(out_message2, level);
+    } else {
+        platform_console_write(out_message2, level);
+    }
 }
 
-void report_assertion_failed(const char* expr, const char* msg, const char* file, i32 line) {
+internal void
+report_assertion_failed(const char* expr, const char* msg, const char* file, i32 line) {
     log_output(LOG_LEVEL_FATAL, "Assertion Failed: %s, msg: '%s', in file: %s, line: %d\n", expr, msg, file, line);
 }

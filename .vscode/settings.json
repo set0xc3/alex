@@ -82,7 +82,16 @@
         "asserts.h": "c",
         "new": "c",
         "cstdlib": "c",
-        "memory": "c"
+        "memory": "c",
+        "pekora_game_types.h": "c",
+        "pekora_platform.h": "c",
+        "sandbox.h": "c",
+        "pekora_application.h": "c",
+        "pekora_logger.h": "c",
+        "*.rh": "cpp",
+        "pekora_defines.h": "c",
+        "pekora_entry_point.h": "c",
+        "pekora_memory.h": "c"
     },
     // File copyright documentation tag.  Array of strings will be converted to one line per element.  Can template {year}.
     "doxdocgen.file.copyrightTag": [

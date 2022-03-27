@@ -1,10 +1,17 @@
-#include "core/application.h"
-#include "core/logger.h"
-#include "game_types.h"
+#if !defined(PEKORA_ENTRY_POINT_H)
+#define PEKORA_ENTRY_POINT_H
+
+#include "core/pekora_application.h"
+#include "core/pekora_logger.h"
+#include "core/pekora_memory.h"
+#include "pekora_defines.h"
+#include "pekora_game_types.h"
 
 extern b8 create_game(game *out_game);
 
 int main(void) {
+    initialize_memory();
+
     game game_inst;
     if (!create_game(&game_inst)) {
         LOG_FATAL("create_game failed.");
@@ -32,5 +39,9 @@ int main(void) {
         return 2;
     }
 
+    shutdown_memory();
+
     return 0;
 }
+
+#endif  // PEKORA_ENTRY_POINT_H
