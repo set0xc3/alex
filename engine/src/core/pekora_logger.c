@@ -43,7 +43,6 @@ log_output(log_level level, const char* message, ...) {
     }
 }
 
-internal void
-report_assertion_failed(const char* expr, const char* msg, const char* file, i32 line) {
+void report_assertion_failed(const char* expr, const char* msg, const char* file, i32 line) {
     log_output(LOG_LEVEL_FATAL, "Assertion Failed: %s, msg: '%s', in file: %s, line: %d\n", expr, msg, file, line);
 }

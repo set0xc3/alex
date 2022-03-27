@@ -19,8 +19,7 @@ typedef struct application_state {
 global b8 initialized = false;
 global application_state app_state;
 
-internal b8
-application_create(game *game_inst) {
+b8 application_create(game *game_inst) {
     if (initialized) {
         LOG_ERROR("application_create failed.");
         return false;
@@ -65,8 +64,7 @@ application_create(game *game_inst) {
     return true;
 }
 
-internal b8
-application_run() {
+b8 application_run() {
     LOG_INFO(get_memory_usage_str());
 
     while (app_state.is_running) {
