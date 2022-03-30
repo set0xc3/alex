@@ -1,7 +1,7 @@
 #ifndef PK_MEMORY_H
 #define PK_MEMORY_H
 
-#include "..\pk_defines.h"
+#include "pk_defines.h"
 
 typedef enum memory_tag {
     MEMORY_TAG_UNKNOWN,
@@ -25,14 +25,14 @@ typedef enum memory_tag {
     MEMORY_TAG_MAX_TAGS
 } memory_tag;
 
-PEKORA_API void initialize_memory();
-PEKORA_API void shutdown_memory();
+PK_API void memory_initialize();
+PK_API void memory_shutdown();
 
-PEKORA_API void* pk_allocate(u64 size, memory_tag tag);
-PEKORA_API void pk_free(void* block, u64 size, memory_tag tag);
-PEKORA_API void* pk_zero_memory(void* block, u64 size);
-PEKORA_API void* pk_copy_memory(void* dest, const void* source, u64 size);
-PEKORA_API void* pk_set_memory(void* dest, i32 value, u64 size);
-PEKORA_API char* get_memory_usage_str();
+PK_API void* memory_allocate(u64 size, memory_tag tag);
+PK_API void memory_free(void* block, u64 size, memory_tag tag);
+PK_API void* memory_zero(void* block, u64 size);
+PK_API void* memory_copy(void* dest, const void* source, u64 size);
+PK_API void* memory_set(void* dest, i32 value, u64 size);
+PK_API char* get_memory_usage_str();
 
-#endif // PK_MEMORY_H
+#endif  // PK_MEMORY_H

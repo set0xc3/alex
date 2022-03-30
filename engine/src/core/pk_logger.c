@@ -1,19 +1,20 @@
+#include "pk_logger.h"
+
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
 
 #include "core/pk_memory.h"
 #include "pk_assert.h"
-#include "pk_logger.h"
-#include "platform/pk_platform.h"
+#include "pk_console.h"
 
 internal b8
-initialize_logging() {
+logger_initialize() {
     return true;
 }
 
 internal void
-shutdown_logging() {
+logger_shutdown() {
 }
 
 internal void
@@ -24,7 +25,7 @@ log_output(log_level level, const char* message, ...) {
     // NOTE(parsecffo): переделать!.
     const i32 msg_length = 32000;
     char out_message[msg_length];
-    pk_zero_memory(out_message, sizeof(out_message));
+    memory_zero(out_message, sizeof(out_message));
 
     __builtin_va_list arg_ptr;
     va_start(arg_ptr, message);
@@ -36,9 +37,9 @@ log_output(log_level level, const char* message, ...) {
 
     // Print accordingly
     if (is_error) {
-        platform_console_write_error(out_message2, level);
+        console_write_error(out_message2, level);
     } else {
-        platform_console_write(out_message2, level);
+        console_write(out_message2, level);
     }
 }
 

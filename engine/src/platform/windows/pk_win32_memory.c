@@ -1,11 +1,12 @@
-#include "pk_memory.h"
+#include "core/pk_logger.h"
+#include "core/pk_memory.h"
+
+#if PK_PLATFORM_WINDOWS
 
 // TODO(parsecffo): Custom string lib
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
-
-#include "core/pk_logger.h"
-#include "platform/pk_platform.h"
 
 struct memory_stats {
     u64 total_allocated;
@@ -33,49 +34,49 @@ global const char* memory_tag_strings[MEMORY_TAG_MAX_TAGS] = {
 
 global struct memory_stats stats;
 
-void initialize_memory() {
-    platform_zero_memory(&stats, sizeof(stats));
+void memory_initialize() {
+    memory_zero(&stats, sizeof(stats));
 }
 
-void shutdown_memory() {
+void memory_shutdown() {
 }
 
-void* pk_allocate(u64 size, memory_tag tag) {
+void* memory_allocate(u64 size, memory_tag tag) {
     if (tag == MEMORY_TAG_UNKNOWN) {
-        LOG_WARN("pk_allocate called using MEMORY_TAG_UNKNOWN. Re-class this allocation.");
+        LOG_WARN("memory_allocate called using MEMORY_TAG_UNKNOWN. Re-class this allocation.");
     }
 
     stats.total_allocated += size;
     stats.tagged_allocations[tag] += size;
 
     // TODO(parsecffo): Memory alignment
-    void* block = platform_allocate(size);
-    platform_zero_memory(block, size);
+    void* block = malloc(size);
+    memory_zero(block, size);
     return block;
 }
 
-void pk_free(void* block, u64 size, memory_tag tag) {
+void memory_free(void* block, u64 size, memory_tag tag) {
     if (tag == MEMORY_TAG_UNKNOWN) {
-        LOG_WARN("pk_free called using MEMORY_TAG_UNKNOWN. Re-class this allocation.");
+        LOG_WARN("memory_free called using MEMORY_TAG_UNKNOWN. Re-class this allocation.");
     }
 
     stats.total_allocated -= size;
     stats.tagged_allocations[tag] -= size;
 
     // TODO(parsecffo): Memory alignment
-    platform_free(block);
+    free(block);
 }
 
-void* pk_zero_memory(void* block, u64 size) {
-    return platform_zero_memory(block, size);
+void* memory_zero(void* block, u64 size) {
+    return memset(block, 0, size);
 }
 
-void* pk_copy_memory(void* dest, const void* source, u64 size) {
-    return platform_copy_memory(dest, source, size);
+void* memory_copy(void* dest, const void* source, u64 size) {
+    return memcpy(dest, source, size);
 }
 
-void* pk_set_memory(void* dest, i32 value, u64 size) {
-    return platform_set_memory(dest, value, size);
+void* memory_set(void* dest, i32 value, u64 size) {
+    return memset(dest, value, size);
 }
 
 char* get_memory_usage_str() {
@@ -109,3 +110,5 @@ char* get_memory_usage_str() {
     char* out_string = _strdup(buffer);
     return out_string;
 }
+
+#endif

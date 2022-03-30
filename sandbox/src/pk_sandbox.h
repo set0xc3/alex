@@ -13,4 +13,4 @@ b8 sandbox_update(game *game_inst, f32 delta_time);
 b8 sandbox_render(game *game_inst, f32 delta_time);
 b8 sandbox_on_resize(game *game_inst, u32 width, u32 height);
 
-#endif  // PK_SANDBOX_H
+#endif // PK_SANDBOX_H

@@ -1,10 +1,11 @@
 #include "pk_application.h"
 
-#include "..\pk_game_types.h"
+#include "core/pk_window.h"
 #include "pk_assert.h"
+#include "pk_common.h"
+#include "pk_game_types.h"
 #include "pk_logger.h"
 #include "pk_memory.h"
-#include "platform/pk_platform.h"
 
 typedef struct application_state {
     b8 is_running;
@@ -13,7 +14,7 @@ typedef struct application_state {
     i16 height;
     f64 last_time;
     game *game_inst;
-    platform_state platform;
+    window_state window_state;
 } application_state;
 
 global b8 initialized = false;
@@ -28,7 +29,7 @@ b8 application_create(game *game_inst) {
     app_state.game_inst = game_inst;
 
     // Initialize sybsystems.
-    initialize_logging();
+    logger_initialize();
 
     // TODO(parsecffo): Remove this.
     LOG_FATAL("Message: %f", 3.14f);
@@ -41,14 +42,14 @@ b8 application_create(game *game_inst) {
     app_state.is_running = true;
     app_state.is_suspended = false;
 
-    if (!platform_startup(
-            &app_state.platform,
+    if (!window_initialize(
+            &app_state.window_state,
             game_inst->app_config.name,
             game_inst->app_config.pos_x,
             game_inst->app_config.pos_y,
             game_inst->app_config.width,
             game_inst->app_config.height)) {
-        LOG_ERROR("platform_startup failed.");
+        LOG_ERROR("window_initialize failed.");
         return false;
     }
 
@@ -68,28 +69,19 @@ b8 application_run() {
     LOG_INFO(get_memory_usage_str());
 
     while (app_state.is_running) {
-        if (!platform_poll_message(&app_state.platform)) {
+        if (!window_poll_message(&app_state.window_state)) {
             app_state.is_running = false;
         }
 
         if (!app_state.is_suspended) {
-            if (!app_state.game_inst->update(app_state.game_inst, (f32)0.f)) {
-                LOG_FATAL("Game update failed. shutting down.");
-                app_state.is_running = false;
-                break;
-            }
-
-            if (!app_state.game_inst->render(app_state.game_inst, (f32)0.f)) {
-                LOG_FATAL("Game render failed. shutting down.");
-                app_state.is_running = false;
-                break;
-            }
+            app_state.game_inst->update(app_state.game_inst, (f32)0.f);
+            app_state.game_inst->render(app_state.game_inst, (f32)0.f);
         }
 
-        platform_sleep(1);
+        sleep(1);
     }
 
-    platform_shutdown(&app_state.platform);
+    window_shutdown(&app_state.window_state);
     app_state.is_running = false;
     return true;
 }

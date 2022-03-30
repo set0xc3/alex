@@ -54,6 +54,13 @@
         "pek_logger.h": "c",
         "pek_platform.h": "c",
         "pek_memory.h": "c",
-        "sandbox.h": "c"
+        "sandbox.h": "c",
+        "pk_logger.h": "c",
+        "windows.h": "c",
+        "pk_platform.h": "c",
+        "pk_window_c": "c",
+        "pk_defines.h": "c",
+        "pk_game_types.h": "c",
+        "pk_memory.h": "c"
     }
 }

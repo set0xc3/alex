@@ -1,14 +1,15 @@
 #ifndef PK_LOGGER_H
 #define PK_LOGGER_H
 
-#include "..\pk_defines.h"
+#include "pk_defines.h"
 
 #define LOG_WARN_ENABLED 1
 #define LOG_INFO_ENABLED 1
+
+#if _DEBUG
 #define LOG_DEBUG_ENABLED 1
 #define LOG_TRACE_ENABLED 1
-
-#if RELEASE == 1
+#else
 #define LOG_DEBUG_ENABLED 0
 #define LOG_TRACE_ENABLED 0
 #endif
@@ -22,10 +23,10 @@ typedef enum log_level {
     LOG_LEVEL_TRACE = 5
 } log_level;
 
-b8 initialize_logging();
-void shutdown_logging();
+b8 logger_initialize();
+void logger_shutdown();
 
-PEKORA_API void log_output(log_level level, const char* message, ...);
+PK_API void log_output(log_level level, const char* message, ...);
 
 #define LOG_FATAL(message, ...) log_output(LOG_LEVEL_FATAL, message, ##__VA_ARGS__);
 #define LOG_ERROR(message, ...) log_output(LOG_LEVEL_ERROR, message, ##__VA_ARGS__);
@@ -54,4 +55,4 @@ PEKORA_API void log_output(log_level level, const char* message, ...);
 #define LOG_TRACE(message, ...)
 #endif
 
-#endif // PK_LOGGER_H
+#endif  // PK_LOGGER_H

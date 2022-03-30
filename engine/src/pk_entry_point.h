@@ -2,6 +2,7 @@
 #define PK_ENTRY_POINT_H
 
 #include "core/pk_application.h"
+#include "core/pk_assert.h"
 #include "core/pk_logger.h"
 #include "core/pk_memory.h"
 #include "pk_defines.h"
@@ -10,12 +11,13 @@
 extern b8 create_game(game *out_game);
 
 int main(void) {
-    initialize_memory();
+    memory_initialize();
 
     game game_inst;
+    memory_zero(&game_inst, sizeof(game_inst));
+
     if (!create_game(&game_inst)) {
-        LOG_FATAL("create_game failed.");
-        return -1;
+        ASSERT_MSG(false, "create_game failed.");
     }
 
     if (
@@ -23,23 +25,20 @@ int main(void) {
         !game_inst.update ||
         !game_inst.render ||
         !game_inst.on_resize) {
-        LOG_FATAL("The game's function pointers must be assigned.");
-        return -2;
+        ASSERT_MSG(false, "The game's function pointers must be assigned.");
     }
 
     // Initialization.
     if (!application_create(&game_inst)) {
-        LOG_ERROR("Applicaion failed to create.");
-        return 1;
+        ASSERT_MSG(false, "Applicaion failed to create.");
     }
 
     // The main game loop.
     if (!application_run()) {
-        LOG_ERROR("Applicaion did not shutdown gracefully.");
-        return 2;
+        ASSERT_MSG(false, "Applicaion did not shutdown gracefully.");
     }
 
-    shutdown_memory();
+    memory_shutdown();
 
     return 0;
 }

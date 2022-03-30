@@ -50,38 +50,37 @@ STATIC_ASSERT(sizeof(f64) == 8, "Expected f64 to be 8 bytes.");
 #define internal static
 #define local static
 #define global static
-#define external extern "C"
 
 // Platform detection
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
-#define PLATFORM_WINDOWS 1
+#define PK_PLATFORM_WINDOWS 1
 #ifndef _WIN64
 #error "64-bit is required on Windows!"
 #endif
 #elif defined(__linux__) || defined(__gnu_linux__)
 // Linux OS
-#define PLATFORM_LINUX 1
+#define PK_PLATFORM_LINUX 1
 #if defined(__ANDROID__)
-#define PLATFORM_ANDROID 1
+#define PK_PLATFORM_ANDROID 1
 #endif
 #else
 #error "Unknown platform!"
 #endif
 
-#ifdef EXPORT
+#ifdef PK_EXPORT
 // Exports
 #ifdef _MSC_VER
-#define PEKORA_API __declspec(dllexport)
+#define PK_API __declspec(dllexport)
 #else
-#define PEKORA_API __attribute__((visibility("default")))
+#define PK_API __attribute__((visibility("default")))
 #endif
 #else
 // Imports
 #ifdef _MSC_VER
-#define PEKORA_API __declspec(dllimport)
+#define PK_API __declspec(dllimport)
 #else
-#define PEKORA_API
+#define PK_API
 #endif
 #endif
 
-#endif // PK_DEFINES_H
+#endif  // PK_DEFINES_H

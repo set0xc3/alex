@@ -1,7 +1,7 @@
 #ifndef PK_ASSERT_H
 #define PK_ASSERT_H
 
-#include "..\pk_defines.h"
+#include "pk_defines.h"
 
 #define ASSERTIONS_ENABLED
 
@@ -13,7 +13,7 @@
 #define DEBUGBREAK() __buildtin_trap()
 #endif
 
-PEKORA_API void report_assertion_failed(const char* expr, const char* msg, const char* file, i32 line);
+PK_API void report_assertion_failed(const char* expr, const char* msg, const char* file, i32 line);
 
 #define ASSERT(expr)                                                \
     {                                                               \
@@ -52,4 +52,4 @@ PEKORA_API void report_assertion_failed(const char* expr, const char* msg, const
 #define ASSERT_DEBUG(expr)
 #endif
 
-#endif  // PK_ASSERT_H
+#endif // PK_ASSERT_H
