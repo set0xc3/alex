@@ -28,11 +28,11 @@ typedef enum memory_tag {
 PEKORA_API void initialize_memory();
 PEKORA_API void shutdown_memory();
 
-PEKORA_API void* pek_allocate(u64 size, memory_tag tag);
-PEKORA_API void pek_free(void* block, u64 size, memory_tag tag);
-PEKORA_API void* pek_zero_memory(void* block, u64 size);
-PEKORA_API void* pek_copy_memory(void* dest, const void* source, u64 size);
-PEKORA_API void* pek_set_memory(void* dest, i32 value, u64 size);
+PEKORA_API void* pk_allocate(u64 size, memory_tag tag);
+PEKORA_API void pk_free(void* block, u64 size, memory_tag tag);
+PEKORA_API void* pk_zero_memory(void* block, u64 size);
+PEKORA_API void* pk_copy_memory(void* dest, const void* source, u64 size);
+PEKORA_API void* pk_set_memory(void* dest, i32 value, u64 size);
 PEKORA_API char* get_memory_usage_str();
 
-#endif  // PK_MEMORY_H
+#endif // PK_MEMORY_H

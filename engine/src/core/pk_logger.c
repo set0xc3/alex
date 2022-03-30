@@ -24,7 +24,7 @@ log_output(log_level level, const char* message, ...) {
     // NOTE(parsecffo): переделать!.
     const i32 msg_length = 32000;
     char out_message[msg_length];
-    pek_zero_memory(out_message, sizeof(out_message));
+    pk_zero_memory(out_message, sizeof(out_message));
 
     __builtin_va_list arg_ptr;
     va_start(arg_ptr, message);

@@ -40,9 +40,9 @@ void initialize_memory() {
 void shutdown_memory() {
 }
 
-void* pek_allocate(u64 size, memory_tag tag) {
+void* pk_allocate(u64 size, memory_tag tag) {
     if (tag == MEMORY_TAG_UNKNOWN) {
-        LOG_WARN("pek_allocate called using MEMORY_TAG_UNKNOWN. Re-class this allocation.");
+        LOG_WARN("pk_allocate called using MEMORY_TAG_UNKNOWN. Re-class this allocation.");
     }
 
     stats.total_allocated += size;
@@ -54,9 +54,9 @@ void* pek_allocate(u64 size, memory_tag tag) {
     return block;
 }
 
-void pek_free(void* block, u64 size, memory_tag tag) {
+void pk_free(void* block, u64 size, memory_tag tag) {
     if (tag == MEMORY_TAG_UNKNOWN) {
-        LOG_WARN("pek_free called using MEMORY_TAG_UNKNOWN. Re-class this allocation.");
+        LOG_WARN("pk_free called using MEMORY_TAG_UNKNOWN. Re-class this allocation.");
     }
 
     stats.total_allocated -= size;
@@ -66,15 +66,15 @@ void pek_free(void* block, u64 size, memory_tag tag) {
     platform_free(block);
 }
 
-void* pek_zero_memory(void* block, u64 size) {
+void* pk_zero_memory(void* block, u64 size) {
     return platform_zero_memory(block, size);
 }
 
-void* pek_copy_memory(void* dest, const void* source, u64 size) {
+void* pk_copy_memory(void* dest, const void* source, u64 size) {
     return platform_copy_memory(dest, source, size);
 }
 
-void* pek_set_memory(void* dest, i32 value, u64 size) {
+void* pk_set_memory(void* dest, i32 value, u64 size) {
     return platform_set_memory(dest, value, size);
 }
 

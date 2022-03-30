@@ -24,7 +24,7 @@ create_game(game *out_game) {
     out_game->on_resize = sandbox_on_resize;
 
     // Create the game state.
-    out_game->state = pek_allocate(sizeof(sandbox_state), MEMORY_TAG_GAME);
+    out_game->state = pk_allocate(sizeof(sandbox_state), MEMORY_TAG_GAME);
 
     return true;
 }
