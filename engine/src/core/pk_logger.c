@@ -1,12 +1,11 @@
-#include "pekora_logger.h"
-
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
 
-#include "core/pekora_memory.h"
-#include "pekora_assert.h"
-#include "platform/pekora_platform.h"
+#include "core/pk_memory.h"
+#include "pk_assert.h"
+#include "pk_logger.h"
+#include "platform/pk_platform.h"
 
 internal b8
 initialize_logging() {
@@ -25,7 +24,7 @@ log_output(log_level level, const char* message, ...) {
     // NOTE(parsecffo): переделать!.
     const i32 msg_length = 32000;
     char out_message[msg_length];
-    pekora_zero_memory(out_message, sizeof(out_message));
+    pek_zero_memory(out_message, sizeof(out_message));
 
     __builtin_va_list arg_ptr;
     va_start(arg_ptr, message);

@@ -1,10 +1,10 @@
-#include "pekora_application.h"
+#include "pk_application.h"
 
-#include "pekora_assert.h"
-#include "pekora_game_types.h"
-#include "pekora_logger.h"
-#include "pekora_memory.h"
-#include "platform/pekora_platform.h"
+#include "..\pk_game_types.h"
+#include "pk_assert.h"
+#include "pk_logger.h"
+#include "pk_memory.h"
+#include "platform/pk_platform.h"
 
 typedef struct application_state {
     b8 is_running;

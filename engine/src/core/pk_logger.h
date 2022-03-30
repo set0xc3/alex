@@ -1,7 +1,7 @@
-#if !defined(PEKORA_LOGGER_H)
-#define PEKORA_LOGGER_H
+#ifndef PK_LOGGER_H
+#define PK_LOGGER_H
 
-#include "pekora_defines.h"
+#include "..\pk_defines.h"
 
 #define LOG_WARN_ENABLED 1
 #define LOG_INFO_ENABLED 1
@@ -54,4 +54,4 @@ PEKORA_API void log_output(log_level level, const char* message, ...);
 #define LOG_TRACE(message, ...)
 #endif
 
-#endif  // PEKORA_LOGGER_H
+#endif // PK_LOGGER_H

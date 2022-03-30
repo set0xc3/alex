@@ -1,11 +1,11 @@
-#include "pekora_memory.h"
+#include "pk_memory.h"
 
 // TODO(parsecffo): Custom string lib
 #include <stdio.h>
 #include <string.h>
 
-#include "core/pekora_logger.h"
-#include "platform/pekora_platform.h"
+#include "core/pk_logger.h"
+#include "platform/pk_platform.h"
 
 struct memory_stats {
     u64 total_allocated;
@@ -40,41 +40,41 @@ void initialize_memory() {
 void shutdown_memory() {
 }
 
-void* pekora_allocate(u64 size, memory_tag tag) {
+void* pek_allocate(u64 size, memory_tag tag) {
     if (tag == MEMORY_TAG_UNKNOWN) {
-        LOG_WARN("pekora_allocate called using MEMORY_TAG_UNKNOWN. Re-class this allocation.");
+        LOG_WARN("pek_allocate called using MEMORY_TAG_UNKNOWN. Re-class this allocation.");
     }
 
     stats.total_allocated += size;
     stats.tagged_allocations[tag] += size;
 
     // TODO(parsecffo): Memory alignment
-    void* block = platform_allocate(size, false);
+    void* block = platform_allocate(size);
     platform_zero_memory(block, size);
     return block;
 }
 
-void pekora_free(void* block, u64 size, memory_tag tag) {
+void pek_free(void* block, u64 size, memory_tag tag) {
     if (tag == MEMORY_TAG_UNKNOWN) {
-        LOG_WARN("pekora_free called using MEMORY_TAG_UNKNOWN. Re-class this allocation.");
+        LOG_WARN("pek_free called using MEMORY_TAG_UNKNOWN. Re-class this allocation.");
     }
 
     stats.total_allocated -= size;
     stats.tagged_allocations[tag] -= size;
 
     // TODO(parsecffo): Memory alignment
-    platform_free(block, false);
+    platform_free(block);
 }
 
-void* pekora_zero_memory(void* block, u64 size) {
+void* pek_zero_memory(void* block, u64 size) {
     return platform_zero_memory(block, size);
 }
 
-void* pekora_copy_memory(void* dest, const void* source, u64 size) {
+void* pek_copy_memory(void* dest, const void* source, u64 size) {
     return platform_copy_memory(dest, source, size);
 }
 
-void* pekora_set_memory(void* dest, i32 value, u64 size) {
+void* pek_set_memory(void* dest, i32 value, u64 size) {
     return platform_set_memory(dest, value, size);
 }
 

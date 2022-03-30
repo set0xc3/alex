@@ -1,7 +1,7 @@
-#if !defined(PEKORA_APPLICATION_H)
-#define PEKORA_APPLICATION_H
+#ifndef PK_APPLICATION_H
+#define PK_APPLICATION_H
 
-#include "pekora_defines.h"
+#include "..\pk_defines.h"
 
 struct game;
 
@@ -16,4 +16,4 @@ typedef struct application_config {
 PEKORA_API b8 application_create(struct game *game_inst);
 PEKORA_API b8 application_run();
 
-#endif  // PEKORA_APPLICATION_H
+#endif // PK_APPLICATION_H

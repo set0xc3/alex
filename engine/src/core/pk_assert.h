@@ -1,7 +1,7 @@
-#if !defined(PEKORA_ASSERT_H)
-#define PEKORA_ASSERT_H
+#ifndef PK_ASSERT_H
+#define PK_ASSERT_H
 
-#include "pekora_defines.h"
+#include "..\pk_defines.h"
 
 #define ASSERTIONS_ENABLED
 
@@ -52,4 +52,4 @@ PEKORA_API void report_assertion_failed(const char* expr, const char* msg, const
 #define ASSERT_DEBUG(expr)
 #endif
 
-#endif  // PEKORA_ASSERT_H
+#endif  // PK_ASSERT_H

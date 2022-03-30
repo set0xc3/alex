@@ -1,5 +1,5 @@
-#if !defined(PEKORA_DEFINES_H)
-#define PEKORA_DEFINES_H
+#ifndef PK_DEFINES_H
+#define PK_DEFINES_H
 
 // Unsigned int types.
 typedef unsigned char u8;
@@ -84,4 +84,4 @@ STATIC_ASSERT(sizeof(f64) == 8, "Expected f64 to be 8 bytes.");
 #endif
 #endif
 
-#endif  // PEKORA_DEFINES_H
+#endif // PK_DEFINES_H

@@ -1,7 +1,7 @@
-#if !defined(PEKORA_GAME_TYPES_H)
-#define PEKORA_GAME_TYPES_H
+#ifndef PK_GAME_TYPES_H
+#define PK_GAME_TYPES_H
 
-#include "core/pekora_application.h"
+#include "core\pk_application.h"
 
 typedef struct game {
     application_config app_config;
@@ -12,4 +12,4 @@ typedef struct game {
     void* state;
 } game;
 
-#endif  // PEKORA_GAME_TYPES_H
+#endif  // PK_GAME_TYPES_H

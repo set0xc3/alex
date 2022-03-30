@@ -48,5 +48,12 @@
         //"backgroundColor": "#ffab00",
         "overviewRulerColor": "rgba(0,0,0,0)",
         "isWholeLine": false,
+    },
+    "files.associations": {
+        "pek_defines.h": "c",
+        "pek_logger.h": "c",
+        "pek_platform.h": "c",
+        "pek_memory.h": "c",
+        "sandbox.h": "c"
     }
 }

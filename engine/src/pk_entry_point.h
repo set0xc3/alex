@@ -1,11 +1,11 @@
-#if !defined(PEKORA_ENTRY_POINT_H)
-#define PEKORA_ENTRY_POINT_H
+#ifndef PK_ENTRY_POINT_H
+#define PK_ENTRY_POINT_H
 
-#include "core/pekora_application.h"
-#include "core/pekora_logger.h"
-#include "core/pekora_memory.h"
-#include "pekora_defines.h"
-#include "pekora_game_types.h"
+#include "core/pk_application.h"
+#include "core/pk_logger.h"
+#include "core/pk_memory.h"
+#include "pk_defines.h"
+#include "pk_game_types.h"
 
 extern b8 create_game(game *out_game);
 
@@ -44,4 +44,4 @@ int main(void) {
     return 0;
 }
 
-#endif  // PEKORA_ENTRY_POINT_H
+#endif  // PK_ENTRY_POINT_H

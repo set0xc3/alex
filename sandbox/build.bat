@@ -12,7 +12,7 @@ REM echo "Files:" %cFilenames%
 
 SET assembly=sandbox
 SET compilerFlags=-g 
-REM -Wall -Werror
+REM -Wvarargs -Wall -Werror -Wextra
 SET includeFlags=-Isrc -I../engine/src/
 SET linkerFlags=-L../bin/ -lengine.lib
 SET defines=-D_DEBUG -DKIMPORT

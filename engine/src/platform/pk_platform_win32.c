@@ -1,5 +1,5 @@
-#include "core/pekora_logger.h"
-#include "pekora_platform.h"
+#include "core/pk_logger.h"
+#include "pk_platform.h"
 
 #if PLATFORM_WINDOWS
 
@@ -34,10 +34,24 @@ platform_startup(
     i32 width,
     i32 height) {
     platform->internal_state = malloc(sizeof(internal_state));
-    internal_state* state = (internal_state*)platform->internal_state;
 
+    platform_create_window(platform, title, pos_x, pos_y, width, height);
+
+    return true;
+}
+
+internal b8
+platform_create_window(
+    platform_state* platform,
+    const char* title,
+    i32 pos_x,
+    i32 pos_y,
+    i32 width,
+    i32 height) {
+    internal_state* state = (internal_state*)platform->internal_state;
     state->h_instance = GetModuleHandleA(0);
 
+    // Class registration
     HICON h_icon = LoadIcon(state->h_instance, IDI_APPLICATION);
     WNDCLASS wc;
     memset(&wc, 0, sizeof(wc));
@@ -56,7 +70,6 @@ platform_startup(
         return false;
     }
 
-    // Create window
     u32 client_x = pos_x;
     u32 client_y = pos_y;
     u32 client_width = width;
@@ -116,7 +129,7 @@ platform_shutdown(platform_state* platform) {
 }
 
 internal b8
-platform_poll_message(platform_state* platform) {
+platform_poll_message() {
     b8 b_ret = 0;
     MSG msg;
     while ((b_ret = PeekMessageA(&msg, NULL, 0, 0, PM_REMOVE) != 0) && b_ret != -1) {
@@ -176,12 +189,12 @@ LRESULT CALLBACK win32_process_message(HWND hwnd, u32 msg, WPARAM w_param, LPARA
 }
 
 internal void*
-platform_allocate(u64 size, b8 aligned) {
+platform_allocate(u64 size) {
     return malloc(size);
 }
 
 internal void
-platform_free(void* block, b8 aligned) {
+platform_free(void* block) {
     free(block);
 }
 

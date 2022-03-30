@@ -1,6 +1,6 @@
-#include "sandbox.h"
+#include "pk_sandbox.h"
 
-#include <core/pekora_logger.h>
+#include <core/pk_logger.h>
 
 internal b8
 sandbox_initialize(game *game_inst) {
