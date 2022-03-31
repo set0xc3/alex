@@ -1,7 +1,7 @@
 #ifndef PK_GAME_TYPES_H
 #define PK_GAME_TYPES_H
 
-#include "core\pk_application.h"
+#include "core/pk_application.h"
 
 typedef struct game {
     application_config app_config;

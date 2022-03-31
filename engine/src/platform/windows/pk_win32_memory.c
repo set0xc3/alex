@@ -16,7 +16,6 @@ struct memory_stats {
 global const char* memory_tag_strings[MEMORY_TAG_MAX_TAGS] = {
     "UNKNOWN    ",
     "ARRAY      ",
-    "DARRAY     ",
     "DICT       ",
     "RING_QUEUE ",
     "BST        ",
@@ -35,7 +34,7 @@ global const char* memory_tag_strings[MEMORY_TAG_MAX_TAGS] = {
 global struct memory_stats stats;
 
 void memory_initialize() {
-    memory_zero(&stats, sizeof(stats));
+    memory_set(&stats, 0, sizeof(stats));
 }
 
 void memory_shutdown() {
@@ -51,7 +50,7 @@ void* memory_allocate(u64 size, memory_tag tag) {
 
     // TODO(parsecffo): Memory alignment
     void* block = malloc(size);
-    memory_zero(block, size);
+    memory_set(block, 0, size);
     return block;
 }
 
@@ -65,10 +64,6 @@ void memory_free(void* block, u64 size, memory_tag tag) {
 
     // TODO(parsecffo): Memory alignment
     free(block);
-}
-
-void* memory_zero(void* block, u64 size) {
-    return memset(block, 0, size);
 }
 
 void* memory_copy(void* dest, const void* source, u64 size) {

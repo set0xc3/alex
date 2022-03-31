@@ -3,7 +3,7 @@
 
 #include "pk_defines.h"
 
-b8 audio_startup();
+b8 audio_initialize();
 b8 audio_shutdow();
 
-#endif  // PK_AUDIO_H
+#endif // PK_AUDIO_H

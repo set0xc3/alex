@@ -5,4 +5,4 @@
 
 void sleep(u64 ms);
 
-#endif  // PK_COMMON_H
+#endif // PK_COMMON_H

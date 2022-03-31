@@ -55,4 +55,4 @@ PK_API void log_output(log_level level, const char* message, ...);
 #define LOG_TRACE(message, ...)
 #endif
 
-#endif  // PK_LOGGER_H
+#endif // PK_LOGGER_H

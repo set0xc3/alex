@@ -14,7 +14,7 @@ int main(void) {
     memory_initialize();
 
     game game_inst;
-    memory_zero(&game_inst, sizeof(game_inst));
+    memory_set(&game_inst, 0, sizeof(game_inst));
 
     if (!create_game(&game_inst)) {
         ASSERT_MSG(false, "create_game failed.");
@@ -43,4 +43,4 @@ int main(void) {
     return 0;
 }
 
-#endif  // PK_ENTRY_POINT_H
+#endif // PK_ENTRY_POINT_H

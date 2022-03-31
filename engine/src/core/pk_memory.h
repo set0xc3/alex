@@ -6,7 +6,6 @@
 typedef enum memory_tag {
     MEMORY_TAG_UNKNOWN,
     MEMORY_TAG_ARRAY,
-    MEMORY_TAG_DARRAY,
     MEMORY_TAG_DICT,
     MEMORY_TAG_RING_QUEUE,
     MEMORY_TAG_BST,
@@ -30,7 +29,6 @@ PK_API void memory_shutdown();
 
 PK_API void* memory_allocate(u64 size, memory_tag tag);
 PK_API void memory_free(void* block, u64 size, memory_tag tag);
-PK_API void* memory_zero(void* block, u64 size);
 PK_API void* memory_copy(void* dest, const void* source, u64 size);
 PK_API void* memory_set(void* dest, i32 value, u64 size);
 PK_API char* get_memory_usage_str();
