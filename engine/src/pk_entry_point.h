@@ -11,36 +11,33 @@
 extern b8 create_game(game *out_game);
 
 int main(void) {
-    memory_initialize();
+  memory_initialize();
 
-    game game_inst;
-    memory_set(&game_inst, 0, sizeof(game_inst));
+  game game_inst = {};
+  memory_set(&game_inst, 0, sizeof(game_inst));
 
-    if (!create_game(&game_inst)) {
-        ASSERT_MSG(false, "create_game failed.");
-    }
+  if (!create_game(&game_inst)) {
+    ASSERT_MSG(false, "create_game failed.");
+  }
 
-    if (
-        !game_inst.initialize ||
-        !game_inst.update ||
-        !game_inst.render ||
-        !game_inst.on_resize) {
-        ASSERT_MSG(false, "The game's function pointers must be assigned.");
-    }
+  if (!game_inst.initialize || !game_inst.update || !game_inst.render ||
+      !game_inst.on_resize) {
+    ASSERT_MSG(false, "The game's function pointers must be assigned.");
+  }
 
-    // Initialization.
-    if (!application_create(&game_inst)) {
-        ASSERT_MSG(false, "Applicaion failed to create.");
-    }
+  // Initialization.
+  if (!application_create(&game_inst)) {
+    ASSERT_MSG(false, "Applicaion failed to create.");
+  }
 
-    // The main game loop.
-    if (!application_run()) {
-        ASSERT_MSG(false, "Applicaion did not shutdown gracefully.");
-    }
+  // The main game loop.
+  if (!application_run()) {
+    ASSERT_MSG(false, "Applicaion did not shutdown gracefully.");
+  }
 
-    memory_shutdown();
+  memory_shutdown();
 
-    return 0;
+  return 0;
 }
 
-#endif // PK_ENTRY_POINT_H
+#endif /* PK_ENTRY_POINT_H */

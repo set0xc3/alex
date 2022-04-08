@@ -5,8 +5,9 @@
 #include <windows.h>
 
 internal void
-sleep(u64 ms) {
-    Sleep(ms);
+sleep (u64 ms)
+{
+  Sleep (ms);
 }
 
 #endif

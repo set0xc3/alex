@@ -8,12 +8,12 @@ sandbox_initialize(game *game_inst) {
 }
 
 internal b8
-sandbox_update(game *game_inst, f32 delta_time) {
+sandbox_update(game *game_inst, f64 delta_time) {
     return true;
 }
 
 internal b8
-sandbox_render(game *game_inst, f32 delta_time) {
+sandbox_render(game *game_inst, f64 delta_time) {
     return true;
 }
 

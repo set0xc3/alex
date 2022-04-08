@@ -3,7 +3,8 @@
 
 #include "pk_defines.h"
 
-typedef enum system_event_code {
+typedef enum
+{
     EVENT_CODE_APPLICATION_QUIT = 0x01,
     EVENT_CODE_KEY_PRESSED = 0x02,
     EVENT_CODE_KEY_RELEASED = 0x03,
@@ -15,34 +16,37 @@ typedef enum system_event_code {
     MAX_EVENT_CODE = 0xFF
 } system_event_code;
 
-typedef struct event_context {
+typedef struct event_context
+{
     // 128 bytes
-    union {
+    union
+    {
         i64 i64[2];
         u64 u64[2];
         f64 f64[2];
-
+        
         i32 i32[4];
         u32 u32[4];
         f32 f32[4];
-
+        
         i16 i16[8];
         u16 u16[8];
-
+        
         i8 i8[16];
         u8 u8[16];
-
+        
         char c[16];
     } data;
 } event_context;
 
-typedef b8 (*on_event)(u16 code, void* sender, void* listener, event_context event);
+typedef b8 (*on_event) (u16 code, void *sender, void *listener,
+                        event_context event);
 
-void event_initialize();
-void event_shutdown();
+void event_initialize ();
+void event_shutdown ();
 
-PK_API b8 event_register(u16 code, void* listener, on_event on_event);
-PK_API b8 event_unregister(u16 code, void* listener, on_event on_event);
-PK_API b8 event_fire(u16 code, void* sender, event_context context);
+PK_API b8 event_register (u16 code, void *listener, on_event on_event);
+PK_API b8 event_unregister (u16 code, void *listener, on_event on_event);
+PK_API b8 event_fire (u16 code, void *sender, event_context context);
 
-#endif // PK_EVENT_H
+#endif

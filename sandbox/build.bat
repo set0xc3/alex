@@ -11,9 +11,14 @@ FOR /R %%f in (*.c) do (
 REM echo "Files:" %cFilenames%
 
 SET assembly=sandbox
-SET compilerFlags=-g 
+
+: Debug
+SET compilerFlags=-O0 -g -Wvarargs -Wall -Wextra
+: Release
+@REM SET compilerFlags=-O3 -s -DNDEBUG -Wvarargs -Wall -WextraET compilerFlags=-g 
 REM -Wvarargs -Wall -Werror -Wextra
-SET includeFlags=-Isrc -I../engine/src/
+
+SET includeFlags=-Isrc -I../engine/src/ 
 SET linkerFlags=-L../bin/ -lengine.lib
 SET defines=-D_DEBUG -DKIMPORT
 

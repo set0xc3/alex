@@ -56,10 +56,10 @@
             "type": "shell",
             "label": "Build Everything",
             "windows": {
-                "command": "${workspaceFolder}/build-all.bat",
+                "command": "${workspaceFolder}/build.bat",
             },
             "linux": {
-                "command": "${workspaceFolder}/build-all.sh",
+                "command": "${workspaceFolder}/build.sh",
             },
             "options": {
                 "cwd": "${workspaceFolder}"

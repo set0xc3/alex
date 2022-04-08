@@ -4,7 +4,7 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/engine/src/**",
-                "${VULKAN_SDK}/Include"
+                "${workspaceFolder}/third-party/glad/include"
             ],
             "defines": [
                 "_DEBUG",
@@ -22,7 +22,7 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/engine/src/**",
-                "${VULKAN_SDK}/Include"
+                "${workspaceFolder}/third-party/glad/include"
             ],
             "defines": [
                 "_DEBUG",

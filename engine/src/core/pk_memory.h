@@ -3,7 +3,8 @@
 
 #include "pk_defines.h"
 
-typedef enum memory_tag {
+typedef enum
+{
     MEMORY_TAG_UNKNOWN,
     MEMORY_TAG_ARRAY,
     MEMORY_TAG_DICT,
@@ -20,17 +21,17 @@ typedef enum memory_tag {
     MEMORY_TAG_ENTITY,
     MEMORY_TAG_ENTITY_NODE,
     MEMORY_TAG_SCENE,
-
+    
     MEMORY_TAG_MAX_TAGS
 } memory_tag;
 
 PK_API void memory_initialize();
 PK_API void memory_shutdown();
 
-PK_API void* memory_allocate(u64 size, memory_tag tag);
-PK_API void memory_free(void* block, u64 size, memory_tag tag);
-PK_API void* memory_copy(void* dest, const void* source, u64 size);
-PK_API void* memory_set(void* dest, i32 value, u64 size);
-PK_API char* get_memory_usage_str();
+PK_API void *memory_allocate(u64 size, memory_tag tag);
+PK_API void memory_free(void *block, u64 size, memory_tag tag);
+PK_API void *memory_copy(void *dest, const void *source, u64 size);
+PK_API void *memory_set(void *dest, i32 value, u64 size);
+PK_API char *get_memory_usage_str();
 
-#endif  // PK_MEMORY_H
+#endif

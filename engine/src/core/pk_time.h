@@ -3,7 +3,7 @@
 
 #include "pk_defines.h"
 
-void clock_setup();
-f64 get_absolute_time();
+void clock_setup ();
+f64 get_absolute_time ();
 
-#endif  // PK_TIME_H
+#endif

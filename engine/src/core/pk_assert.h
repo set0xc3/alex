@@ -8,40 +8,50 @@
 #ifdef ASSERTIONS_ENABLED
 #if _MSC_VER
 #include <intrin.h>
-#define DEBUGBREAK() __debugbreak()
+#define DEBUGBREAK() __debugbreak ()
 #else
-#define DEBUGBREAK() __buildtin_trap()
+#define DEBUGBREAK() __buildtin_trap ()
 #endif
 
-PK_API void report_assertion_failed(const char* expr, const char* msg, const char* file, i32 line);
+PK_API void report_assertion_failed (const char *expr, const char *msg,
+                                     const char *file, i32 line);
 
-#define ASSERT(expr)                                                \
-    {                                                               \
-        if (expr) {                                                 \
-        } else {                                                    \
-            report_assertion_failed(#expr, "", __FILE__, __LINE__); \
-            DEBUGBREAK();                                           \
-        }                                                           \
-    }
+#define ASSERT(expr)                                                          \
+  {                                                                           \
+    if (expr)                                                                 \
+      {                                                                       \
+      }                                                                       \
+    else                                                                      \
+      {                                                                       \
+        report_assertion_failed (#expr, "", __FILE__, __LINE__);              \
+        DEBUGBREAK ();                                                        \
+      }                                                                       \
+  }
 
-#define ASSERT_MSG(expr, msg)                                        \
-    {                                                                \
-        if (expr) {                                                  \
-        } else {                                                     \
-            report_assertion_failed(#expr, msg, __FILE__, __LINE__); \
-            DEBUGBREAK();                                            \
-        }                                                            \
-    }
+#define ASSERT_MSG(expr, msg)                                                 \
+  {                                                                           \
+    if (expr)                                                                 \
+      {                                                                       \
+      }                                                                       \
+    else                                                                      \
+      {                                                                       \
+        report_assertion_failed (#expr, msg, __FILE__, __LINE__);             \
+        DEBUGBREAK ();                                                        \
+      }                                                                       \
+  }
 
 #ifdef _DEBUG
-#define ASSERT_DEBUG(expr)                                          \
-    {                                                               \
-        if (expr) {                                                 \
-        } else {                                                    \
-            report_assertion_failed(#expr, "", __FILE__, __LINE__); \
-            DEBUGBREAK();                                           \
-        }                                                           \
-    }
+#define ASSERT_DEBUG(expr)                                                    \
+  {                                                                           \
+    if (expr)                                                                 \
+      {                                                                       \
+      }                                                                       \
+    else                                                                      \
+      {                                                                       \
+        report_assertion_failed (#expr, "", __FILE__, __LINE__);              \
+        DEBUGBREAK ();                                                        \
+      }                                                                       \
+  }
 #else
 #define ASSERT_DEBUG(expr)
 #endif
@@ -52,4 +62,4 @@ PK_API void report_assertion_failed(const char* expr, const char* msg, const cha
 #define ASSERT_DEBUG(expr)
 #endif
 
-#endif // PK_ASSERT_H
+#endif /* PK_ASSERT_H */

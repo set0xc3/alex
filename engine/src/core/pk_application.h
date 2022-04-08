@@ -5,7 +5,8 @@
 
 struct game;
 
-typedef struct application_config {
+typedef struct application_config
+{
     i16 pos_x;
     i16 pos_y;
     i16 width;
@@ -13,7 +14,7 @@ typedef struct application_config {
     char *name;
 } application_config;
 
-PK_API b8 application_create(struct game *game_inst);
-PK_API b8 application_run();
+PK_API b8 application_create (struct game *game_inst);
+PK_API b8 application_run ();
 
-#endif // PK_APPLICATION_H
+#endif
