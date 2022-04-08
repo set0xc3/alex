@@ -1,3 +1,3 @@
 @ECHO OFF
 
-call .\bin\sandbox.exe
+start /b cmd /c .\bin\sandbox.exe

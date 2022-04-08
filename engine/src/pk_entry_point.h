@@ -10,34 +10,53 @@
 
 extern b8 create_game(game *out_game);
 
-int main(void) {
-  memory_initialize();
-
-  game game_inst = {};
-  memory_set(&game_inst, 0, sizeof(game_inst));
-
-  if (!create_game(&game_inst)) {
-    ASSERT_MSG(false, "create_game failed.");
-  }
-
-  if (!game_inst.initialize || !game_inst.update || !game_inst.render ||
-      !game_inst.on_resize) {
-    ASSERT_MSG(false, "The game's function pointers must be assigned.");
-  }
-
-  // Initialization.
-  if (!application_create(&game_inst)) {
-    ASSERT_MSG(false, "Applicaion failed to create.");
-  }
-
-  // The main game loop.
-  if (!application_run()) {
-    ASSERT_MSG(false, "Applicaion did not shutdown gracefully.");
-  }
-
-  memory_shutdown();
-
-  return 0;
+b8 
+init()
+{
+    memory_initialize();
+    
+    game game_inst = {};
+    memory_set(&game_inst, 0, sizeof(game_inst));
+    
+    if (!create_game(&game_inst)) {
+        ASSERT_MSG(false, "create_game failed.");
+        return false;
+    }
+    
+    if (!game_inst.initialize || !game_inst.update || !game_inst.render ||
+        !game_inst.on_resize) {
+        ASSERT_MSG(false, "The game's function pointers must be assigned.");
+        return false;
+    }
+    
+    // Initialization.
+    if (!application_create(&game_inst)) {
+        ASSERT_MSG(false, "Applicaion failed to create.");
+        return false;
+    }
+    
+    // The main game loop.
+    if (!application_run()) {
+        ASSERT_MSG(false, "Applicaion did not shutdown gracefully.");
+        return false;
+    }
+    
+    memory_shutdown();
+    
+    return true;
 }
+
+#if PK_PLATFORM_WINDOWS
+
+#include "windows.h"
+
+int WINAPI 
+WinMain(HINSTANCE h_instance, HINSTANCE h_prev_instance, PSTR lp_cmd_line, int  n_cmd_show)
+{
+    init();
+    
+    return 0;
+}
+#endif /* PK_PLATFORM_WINDOWS */
 
 #endif /* PK_ENTRY_POINT_H */
