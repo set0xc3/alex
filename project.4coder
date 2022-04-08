@@ -12,13 +12,15 @@ patterns = {
 
 blacklist_patterns =
 {
-    ".*",
+	".git",
+	"assets",
+	"bin",
+	"third-party",
 };
 
 load_paths_custom =
 {
-    {".\engine"},
-    {".\sandbox"},
+	{"."},
 };
 
 load_paths =
