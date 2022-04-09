@@ -1,9 +1,10 @@
 .vs
-bin
+build
 
 *.lib
 *.dll
 *.o
 *.exp
+*.exe
 *.pdb
 *.ilk

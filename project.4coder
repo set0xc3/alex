@@ -14,7 +14,7 @@ blacklist_patterns =
 {
 	".git",
 	"assets",
-	"bin",
+	"build",
 	"third-party",
 };
 
@@ -33,12 +33,12 @@ command_list =
 {
     { .name = "build",
       .out = "*compilation*", .footer_panel = true, .save_dirty_files = true,
-      .cmd = { {".\build.bat", .os = "win"}, {".\build.sh", .os = "linux"}, },
+      .cmd = { {".\bin\build-all-win.bat", .os = "win"}, {".\build-all-linux.sh", .os = "linux"}, },
     },
  
     { .name = "run",
       .out = "*compilation*", .footer_panel = true, .save_dirty_files = true,
-      .cmd = { {".\run.bat", .os = "win"}, {".\run.sh", .os = "linux"}, },
+      .cmd = { {".\bin\run-win.bat", .os = "win"}, {".\bin\run-linux.sh", .os = "linux"}, },
     },
 };
 
