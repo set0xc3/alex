@@ -25,12 +25,12 @@ for /R "%root_dir%\third-party" %%f in (*.c) do (
 )
 
 set assembly=engine
-set compiler_flags=-O0 -g -shared -Wvarargs -Wall -Wextra
-if "%type_build%" == "release" set compiler_flags=-O3 -shared -DNDEBUG -Wvarargs -Wall -Wextra
+set compiler_flags=-O0 -g -Wvarargs -Wall -Wextra
+if "%type_build%" == "release" set compiler_flags=-O3 -DNDEBUG -Wvarargs -Wall -Wextra
 
 set include_flags=-I"%root_dir%\%name_dir%" -I"%root_dir%\third-party\glad\include"
 set linker_flags=-lUser32 -lOpengl32 -lGdi32 
 set defines=-D_DEBUG -DPK_EXPORT -D_CRT_SECURE_NO_WARNINGS
 
 echo "Building %assembly%%..."
-clang %cpp_files% %compiler_flags% -o "%build_path%\%assembly%.dll" %defines% %include_flags% %linker_flags%
+clang %cpp_files% %compiler_flags% -o "%build_path%\%assembly%.exe" %defines% %include_flags% %linker_flags%

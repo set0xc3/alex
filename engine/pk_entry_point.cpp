@@ -6,36 +6,22 @@
 #include "core/pk_logger.h"
 #include "core/pk_memory.h"
 #include "pk_defines.h"
-#include "pk_game_types.h"
-
-extern bool create_game(Game *game);
 
 bool 
 init()
 {
     memory_init();
     
-    Game game = {};
-    
-    if (!create_game(&game)) {
-        ASSERT_MSG(false, "create_game failed.");
-        return false;
-    }
-    
-    if (!game.initialize || !game.update || !game.render ||
-        !game.on_resize) {
-        ASSERT_MSG(false, "The game's function pointers must be assigned.");
-        return false;
-    }
-    
     // Initialization.
-    if (!application_create(&game)) {
+    if (!application_create())
+    {
         ASSERT_MSG(false, "Applicaion failed to create.");
         return false;
     }
     
     // The main game loop.
-    if (!application_run()) {
+    if (!application_run()) 
+    {
         ASSERT_MSG(false, "Applicaion did not shutdown gracefully.");
         return false;
     }
@@ -54,6 +40,12 @@ WinMain(HINSTANCE h_instance, HINSTANCE h_prev_instance, PSTR lp_cmd_line, int  
 {
     init();
     
+    return 0;
+}
+#else
+int main(void)
+{
+    init();
     return 0;
 }
 #endif /* PK_PLATFORM_WINDOWS */

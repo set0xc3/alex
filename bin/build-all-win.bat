@@ -27,7 +27,7 @@ popd
 if %ERRORLEVEL% NEQ 0 (echo Error:%ERRORLEVEL% && exit)
 
 pushd "%root_dir%\sandbox\bin"
-call build_%platform%-win.bat "%root_dir%\build\%type_build%" %type_build%
+REM call build_%platform%-win.bat "%root_dir%\build\%type_build%" %type_build%
 popd
 if %ERRORLEVEL% NEQ 0 (echo Error:%ERRORLEVEL% && exit)
 

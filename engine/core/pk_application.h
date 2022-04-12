@@ -3,8 +3,6 @@
 
 #include "pk_defines.h"
 
-struct Game;
-
 struct Application_Config
 {
     i32 pos_x;
@@ -14,7 +12,7 @@ struct Application_Config
     char *name;
 };
 
-PK_API bool application_create(Game *game);
+PK_API bool application_create();
 PK_API bool application_run();
 
 #endif

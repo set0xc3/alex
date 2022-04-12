@@ -8,33 +8,27 @@
 #include "core/pk_time.h"
 #include "core/pk_window.h"
 #include "pk_common.h"
-#include "pk_game_types.h"
 
 struct application_state 
 {
     bool is_running;
     bool is_suspended;
-    i32 width;
-    i32 height;
     f64 last_time;
     Clock clock;
-    Game *game;
     Window_State window;
 };
 
-global bool g_initialized = false;
+global bool initialized = false;
 global application_state app = {};
 
 bool 
-application_create(Game *game) 
+application_create() 
 {
-    if (g_initialized) 
+    if (initialized) 
     {
         LOG_ERROR("application_create failed.");
         return false;
     }
-    
-    app.game = game;
     
     // Initialize sybsystems
     input_initialize();
@@ -51,24 +45,15 @@ application_create(Game *game)
     app.is_running = true;
     app.is_suspended = false;
     
-    if (!window_initialize(&app.window, game->app.name,
-                           game->app.pos_x, game->app.pos_y,
-                           game->app.width, game->app.height)) 
+    if (!window_initialize(&app.window, "Pekora Engine",
+                           100, 100,
+                           1280, 720)) 
     {
         LOG_ERROR("window_initialize failed.");
         return false;
     }
     
-    // Initialize the game
-    if (!app.game->initialize()) 
-    {
-        LOG_FATAL("Game failed to initialize.");
-        return false;
-    }
-    
-    app.game->on_resize(app.width, app.height);
-    
-    g_initialized = true;
+    initialized = true;
     return true;
 }
 
@@ -102,8 +87,6 @@ application_run()
         if (!app.is_suspended) 
         {
             input_update(delta_time);
-            app.game->update(delta_time);
-            app.game->render(delta_time);
             window_update(&app.window);
         }
         
