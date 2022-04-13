@@ -8,7 +8,7 @@ cd ..
 set root_dir=%cd%
 popd
 
-set assembly=engine
+set assembly=alex
 set type_build=debug
 if "%2%" == "release" set type_build=release
 

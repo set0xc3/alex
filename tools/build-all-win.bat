@@ -20,15 +20,10 @@ if not exist "%root_dir%\build\%type_build%" mkdir "%root_dir%\build\%type_build
 if %ERRORLEVEL% NEQ 0 (echo Error:%ERRORLEVEL% && exit)
 
 
-echo "Building everything..."
-pushd "%root_dir%\engine\bin"
+echo "Building..."
+pushd "%root_dir%\code\tools"
 call build_%platform%-win.bat "%root_dir%\build\%type_build%" %type_build%
 popd
 if %ERRORLEVEL% NEQ 0 (echo Error:%ERRORLEVEL% && exit)
 
-pushd "%root_dir%\sandbox\bin"
-REM call build_%platform%-win.bat "%root_dir%\build\%type_build%" %type_build%
-popd
-if %ERRORLEVEL% NEQ 0 (echo Error:%ERRORLEVEL% && exit)
-
-echo "All assemblies built successfully."
+echo "Successfully."
