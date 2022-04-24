@@ -12,15 +12,12 @@ patterns = {
 
 blacklist_patterns =
 {
-	".git",
-	"assets",
-	"build",
-	"third-party",
 };
 
 load_paths_custom =
 {
-	{"."},
+	{"code"},
+	{"tools"},
 };
 
 load_paths =
@@ -31,16 +28,22 @@ load_paths =
 
 command_list =
 {
+	{ .name = "run",
+      .out = "*compilation*", .footer_panel = true, .save_dirty_files = true,
+      .cmd = { {"tools\run-win.bat", .os = "win"}, {"tools/run-linux.sh", .os = "linux"}, },
+    },
+
     { .name = "build",
       .out = "*compilation*", .footer_panel = true, .save_dirty_files = true,
-      .cmd = { {"tools\build-all-win.bat", .os = "win"}, {"tools\build-all-linux.sh", .os = "linux"}, },
+      .cmd = { {"tools\build-all-win.bat", .os = "win"}, {"code/tools/build_x64-linux.sh", .os = "linux"}, },
     },
- 
-    { .name = "run",
+
+	{ .name = "combo",
       .out = "*compilation*", .footer_panel = true, .save_dirty_files = true,
-      .cmd = { {"tools\run-win.bat", .os = "win"}, {"tools\run-linux.sh", .os = "linux"}, },
+      .cmd = { {"tools\combo-win.bat", .os = "win"}, {"code/tools/build_x64-linux.sh && tools/run-linux.sh", .os = "linux"}, },
     },
 };
 
 fkey_command[5] = "run";
 fkey_command[6] = "build";
+fkey_command[7] = "combo";

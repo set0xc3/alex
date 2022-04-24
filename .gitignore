@@ -1,5 +1,6 @@
 .vs
 build
+third-party
 
 *.lib
 *.dll
