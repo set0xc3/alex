@@ -14,6 +14,7 @@ includes="
 "
 
 libs="
+-lm
 -lGL 
 -lSDL2
 "

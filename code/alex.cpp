@@ -7,10 +7,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 
-#include <glm/vec3.hpp>
-#include <glm/vec4.hpp>
-#include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale, glm::perspective
+#include <glm/gtc/type_ptr.hpp>
 
 global_variable bool applicaton_quit = false;
 global_variable i32 screen_width = 1280;
@@ -41,9 +39,12 @@ u32 indices[] =
 const char *vertexShaderSource = 
 "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
+"\n"
+"uniform mat4 transform;\n"
+"\n"
 "void main()\n"
 "{\n"
-"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+"   gl_Position = transform * vec4(aPos, 1.0f);\n"
 "}\0";
 
 const char *fragmentShaderSource = 
@@ -168,14 +169,27 @@ main(int arg, char** arv)
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(f32), (void*)0);
     glEnableVertexAttribArray(0);  
     
+    glm::mat4 transform = glm::mat4(1.0f);
+    transform = glm::translate(transform, glm::vec3(0.0f, 0.0f, 0.0f));
+    transform = glm::rotate(transform, 0.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+    transform = glm::scale(transform, glm::vec3(1.0f, 1.0f, 1.0f));
+    
+    // NOTE(alex): remove this.
+    SDL_Delay(50);
+    
     while (!applicaton_quit)
     {
         SDL_Event e;
         while(SDL_PollEvent(&e) != 0)
         {
-            if(e.type == SDL_QUIT)
+            switch (e.type)
             {
-                applicaton_quit = true;
+                case SDL_QUIT:
+                case SDL_KEYDOWN:
+                {
+                    applicaton_quit = true;
+                    break;
+                }
             }
         }
         
@@ -183,6 +197,11 @@ main(int arg, char** arv)
         glClear(GL_COLOR_BUFFER_BIT);
         
         // Draw
+        transform = glm::rotate(transform, 0.01f, glm::vec3(0.0f, 0.0f, 1.0f));
+        
+        u32 transformLoc = glGetUniformLocation(shaderProgram, "transform");
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+        
         glUseProgram(shaderProgram);
         glBindVertexArray(VAO);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);

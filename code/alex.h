@@ -22,7 +22,4 @@ typedef double f64;
 #define local_variable static
 #define global_variable static
 
-
-void game_update_and_render();
-
 #endif /* PEKORA_H */
