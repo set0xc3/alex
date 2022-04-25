@@ -10,6 +10,22 @@
 #include <glm/gtc/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale, glm::perspective
 #include <glm/gtc/type_ptr.hpp>
 
+#include "input.h"
+
+struct Entiry
+{
+    f32 x, y, z;
+};
+
+struct App 
+{
+	SDL_Window *window;
+	SDL_GLContext *context;
+    bool quit;
+};
+global_variable App app = {};
+global_variable Entiry player = {};
+
 global_variable bool applicaton_quit = false;
 global_variable i32 screen_width = 1280;
 global_variable i32 screen_height = 720;
@@ -66,8 +82,8 @@ main(int arg, char** arv)
     SDL_GL_LoadLibrary(0); // Default OpenGL is fine.
     
     // Create Window
-    u32 flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;
-    window = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screen_width, screen_height, flags);
+    u32 window_flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;
+    window = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screen_width, screen_height, window_flags);
     if(!window)
     {
         printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
@@ -174,30 +190,67 @@ main(int arg, char** arv)
     transform = glm::rotate(transform, 0.0f, glm::vec3(0.0f, 0.0f, 1.0f));
     transform = glm::scale(transform, glm::vec3(1.0f, 1.0f, 1.0f));
     
-    // NOTE(alex): remove this.
-    SDL_Delay(50);
-    
     while (!applicaton_quit)
     {
-        SDL_Event e;
-        while(SDL_PollEvent(&e) != 0)
+        SDL_Event event;
+        while(SDL_PollEvent(&event) != 0)
         {
-            switch (e.type)
+            switch (event.type)
             {
                 case SDL_QUIT:
-                case SDL_KEYDOWN:
                 {
                     applicaton_quit = true;
                     break;
                 }
+                
+                case SDL_KEYDOWN:
+                {
+                    if (event.key.keysym.sym == KeyCode::Key_W)
+                    {
+                        SDL_Log("Down: W");
+                    }
+                    break;
+                }
+                
+                case SDL_KEYUP:
+                {
+                    if (event.key.keysym.sym == KeyCode::Key_W)
+                    {
+                        SDL_Log("Up: W");
+                    }
+                    break;
+                }
+                
+                default:
+                break;
             }
         }
+        
+        
+        
+        // Test Input
+        if (is_key_down(KeyCode::Key_W)){
+            
+        }
+        if (is_key_up(KeyCode::Key_W)){
+            
+        }
+        
+        if (is_mouse_down(MouseButton::Button_Left)){
+            
+        }
+        if (is_mouse_up(MouseButton::Button_Right)){
+            
+        }
+        
+        
+        
         
         glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         
         // Draw
-        transform = glm::rotate(transform, 0.01f, glm::vec3(0.0f, 0.0f, 1.0f));
+        transform = glm::translate(transform, glm::vec3(player.x, player.y, player.z));
         
         u32 transformLoc = glGetUniformLocation(shaderProgram, "transform");
         glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
