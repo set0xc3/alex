@@ -1,89 +1,106 @@
-/* date = April 25th 2022 7:18 am */
+#ifndef ALEX_INPUT_H
+#define ALEX_INPUT_H
 
-#ifndef INPUT_H
-#define INPUT_H
+#include "alex.h"
 
-enum MouseButton
+#include <vector>
+#include <cstring>
+
+namespace Alex
 {
-    Button_Left = SDL_BUTTON_LEFT,
-    Button_Middle = SDL_BUTTON_LEFT,
-    Button_Right = SDL_BUTTON_LEFT,
-    
-    Button_Total
-};
-
-enum KeyCode
-{
-    KeyCode_Unknown = -1,
-    
-    Key_0 = SDLK_0,
-    Key_1 = SDLK_1,
-    Key_2 = SDLK_2,
-    Key_3 = SDLK_3,
-    Key_4 = SDLK_4,
-    Key_5 = SDLK_5,
-    Key_6 = SDLK_6,
-    Key_7 = SDLK_7,
-    Key_8 = SDLK_8,
-    Key_9 = SDLK_9,
-    
-    Key_A = SDLK_a,
-    Key_B = SDLK_b,
-    Key_C = SDLK_c,
-    Key_D = SDLK_d,
-    Key_E = SDLK_e,
-    Key_F = SDLK_f,
-    Key_G = SDLK_g,
-    Key_H = SDLK_h,
-    Key_I = SDLK_i,
-    Key_J = SDLK_j,
-    Key_K = SDLK_k,
-    Key_L = SDLK_l,
-    Key_M = SDLK_m,
-    Key_N = SDLK_n,
-    Key_O = SDLK_o,
-    Key_P = SDLK_p,
-    Key_Q = SDLK_q,
-    Key_R = SDLK_r,
-    Key_S = SDLK_s,
-    Key_T = SDLK_t,
-    Key_U = SDLK_u,
-    Key_V = SDLK_v,
-    Key_W = SDLK_w,
-    Key_X = SDLK_x,
-    Key_Y = SDLK_y,
-    Key_Z = SDLK_z,
-    
-    Key_Total
-};
-
-global_variable u32 last_keyboard[256] = {};
-global_variable u32 keyboard[256] = {};
-
-void input_update(u32 code)
-{
+    namespace Input
+    {
+        enum MouseButton
+        {
+            MouseButton_Left = 0,
+            MouseButton_Middle,
+            MouseButton_Right,
+            
+            MouseButton_Count
+        };
+        
+        enum Key
+        {
+            Key_0 = 0,
+            Key_1 = 0,
+            Key_2 = 0,
+            Key_3 = 0,
+            Key_4 = 0,
+            Key_5 = 0,
+            Key_6 = 0,
+            Key_7 = 0,
+            Key_8 = 0,
+            Key_9 = 0,
+            
+            Key_A = 0,
+            Key_B = 0,
+            Key_C = 0,
+            Key_D = 0,
+            Key_E = 0,
+            Key_F = 0,
+            Key_G = 0,
+            Key_H = 0,
+            Key_I = 0,
+            Key_J = 0,
+            Key_K = 0,
+            Key_L = 0,
+            Key_M = 0,
+            Key_N = 0,
+            Key_O = 0,
+            Key_P = 0,
+            Key_Q = 0,
+            Key_R = 0,
+            Key_S = 0,
+            Key_T = 0,
+            Key_U = 0,
+            Key_V = 0,
+            Key_W = 0,
+            Key_X = 0,
+            Key_Y = 0,
+            Key_Z = 0,
+            
+            Key_Count
+        };
+        
+        struct KeyData
+        {
+            bool down;
+        };
+        
+        enum InputEventType
+        {
+            InputEventType_None = 0,
+            InputEventType_MouseButton,
+            InputEventType_Key,
+            
+            InputEventType_Count
+        };
+        
+        enum InputSource
+        {
+            InputSource_None = 0,
+            InputSource_Mouse,
+            InputSource_Keyboard,
+            
+            InputSource_Count
+        };
+        
+        struct InputEventMouseButton { i32 button; bool down; };
+        struct InputEventKey { Key key; bool down; };
+        
+        struct InputEvent
+        {
+            InputEventType type;
+            InputSource source;
+            union
+            {
+                InputEventKey key;
+                InputEventMouseButton mouse_button;
+            };
+            
+            InputEvent() { memset(this, 0, sizeof(*this)); }
+        };
+    }
 }
 
-// Keyboard
-bool is_key_down(const KeyCode code)
-{
-    return keyboard[code];
-}
-
-bool is_key_up(const KeyCode code)
-{
-    return !keyboard[code] && last_keyboard[code];
-}
-
-// MouseButton
-bool is_mouse_down(const MouseButton button)
-{
-    return true;
-}
-
-bool is_mouse_up(const MouseButton button)
-{
-    return true;
-}
-
-#endif //INPUT_H
+#endif // ALEX_INPUT_H

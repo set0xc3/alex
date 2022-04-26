@@ -1,0 +1,4 @@
+#ifndef ALEX_ENTRY_POINT_H
+#define ALEX_ENTRY_POINT_H
+
+#endif // ENTRY_POINT_H

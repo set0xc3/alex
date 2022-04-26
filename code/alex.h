@@ -22,4 +22,4 @@ typedef double f64;
 #define local_variable static
 #define global_variable static
 
-#endif /* PEKORA_H */
+#endif // ALEX_H
