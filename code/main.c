@@ -16,6 +16,7 @@
 - Memory
 - Jobs
 - Threads
+ - Collision
 
 # Systems:
 - Input
@@ -30,8 +31,8 @@
 - AI
 
 # Tools:
-- Editor
 - Sandbox
+- Editor
 
 */
 
@@ -44,6 +45,8 @@
 
 // Basic types
 #include "alex.h"
+#include "events.h"
+#include "mouse.h"
 #include "window.h"
 
 // SDL2
@@ -64,9 +67,14 @@ global_variable char *window_title = "Engine";
 global_variable i32 screen_width = 1280;
 global_variable i32 screen_height = 720;
 
+// Mouse
+global_variable Mouse_t mouse;
+
 int 
 main(void)
 {
+    mouse_init(&mouse);
+    
     u32 window_flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;
     window_create(window, window_title,
                   screen_width, screen_height, 
@@ -74,6 +82,8 @@ main(void)
     
     while (!quit)
     {
+        mouse_pre_poll(&mouse);
+        
         SDL_Event event;
         while(SDL_PollEvent(&event) != 0)
         {
@@ -85,21 +95,19 @@ main(void)
                 
                 // KeyState
                 case  SDL_KEYDOWN: {
-                    //input_update_keyboard(event.key.keysym.sym, true);
                     break;
                 }
                 case SDL_KEYUP: {
-                    //input_update_keyboard(event.key.keysym.sym, -1);
                     break;
                 }
                 
                 //  ButtonState
                 case SDL_MOUSEBUTTONDOWN: {
-                    //input_update_mouse(event.button.button, true);
+                    mouse_on_button_down(&mouse, event.button.button);
                     break;
                 }
                 case SDL_MOUSEBUTTONUP: {
-                    //input_update_mouse(event.button.button, -1);
+                    mouse_on_button_up(&mouse, event.button.button);
                     break;
                 }
                 
@@ -107,6 +115,19 @@ main(void)
                 break;
             }
         }
+        mouse_post_poll(&mouse);
+        
+        // NOTE(alex): Remove this
+        if (mouse_is_down(&mouse, 1)){
+            //SDL_Log("mouse:left:down");
+        }
+        if (mouse_is_pressed(&mouse, 1)){
+            SDL_Log("mouse:left:pressed");
+        }
+        if (mouse_is_released(&mouse, 1)){
+            SDL_Log("mouse:left:released");
+        }
+        
         
         // NOTE(alex): Renderer
 #if 0
@@ -117,6 +138,7 @@ main(void)
         window_update(window);
         
         SDL_Delay(1);
+        
     }
     
     return 0;
