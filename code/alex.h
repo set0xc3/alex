@@ -1,24 +1,29 @@
 #ifndef ALEX_H
 #define ALEX_H
 
-#include <cstdint>
+#include <stdint.h>
 
-// Unsigned int types.
-typedef std::uint8_t u8;
-typedef std::uint16_t u16;
-typedef std::uint32_t u32;
-typedef std::uint64_t u64;
+typedef uint8_t u8;
+typedef uint16_t u16;
+typedef uint32_t u32;
+typedef uint64_t u64;
 
-typedef std::int8_t i8;
-typedef std::int16_t i16;
-typedef std::int32_t i32;
-typedef std::int64_t i64;
+typedef int8_t i8;
+typedef int16_t i16;
+typedef int32_t i32;
+typedef int64_t i64;
 
-// Floating point types
 typedef float f32;
 typedef double f64;
 
+// Bool
+typedef uint8_t b8;
+
+#define true 1
+#define false 0
+
 #define internal static
+#define function static
 #define local_variable static
 #define global_variable static
 

@@ -3,8 +3,7 @@
 root=/home/cpp/Projects/alex
 
 files="
-$root/code/application.cpp
-$root/code/entry_point.cpp
+$root/code/main.c
 
 $root/third-party/glad/src/glad.c
 "
@@ -14,8 +13,9 @@ includes="
 -I$root/third-party/glm/
 "
 
+# -lstdc++
+
 libs="
--lstdc++
 -lm
 -lGL 
 -lSDL2
