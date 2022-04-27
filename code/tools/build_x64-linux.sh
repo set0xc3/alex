@@ -4,6 +4,7 @@ root=/home/cpp/Projects/alex
 
 files="
 $root/code/main.c
+$root/code/window.c
 
 $root/third-party/glad/src/glad.c
 "

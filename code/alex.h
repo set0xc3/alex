@@ -23,7 +23,6 @@ typedef uint8_t b8;
 #define false 0
 
 #define internal static
-#define function static
 #define local_variable static
 #define global_variable static
 
