@@ -68,7 +68,7 @@ global_variable i32 screen_width = 1280;
 global_variable i32 screen_height = 720;
 
 // Mouse
-global_variable Mouse_t mouse;
+global_variable Mouse mouse;
 
 int 
 main(void)
