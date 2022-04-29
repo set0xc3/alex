@@ -1,144 +1,44 @@
-
-/* Index of this file:
-     
-[SECTION] Headers
-      [SECTION] Global variable
- 
-*/
-
-/* TODO:
-
-# Core:
- - Logger
-- Time
-- String
-- Dynamic Arrays
-- Memory
-- Jobs
-- Threads
- - Collision
-
-# Systems:
-- Input
-- Event
-- Audio
-- Network
-- Graphics
-- Resources
-- IMGUI/GUI
-- Physics
- - Profiler
-- AI
-
-# Tools:
-- Sandbox
-- Editor
-
-*/
-
-//-----------------------------------------------
-// [SECTION] Headers
-//-----------------------------------------------
-
-// Standard headers
-#include <stdio.h> // printf
-
-// Basic types
 #include "alex.h"
-#include "events.h"
-#include "mouse.h"
-#include "window.h"
 
-// SDL2
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_opengl.h>
+typedef struct AlexContext
+{
+    b8 quit;
+    
+    InputContext input;
+    WindowContext window;
+    
+} AlexContext;
 
-//-----------------------------------------------
-// [SECTION] Global variable
-//-----------------------------------------------
-
-global_variable b8 quit = false;
-
-// Window
-global_variable SDL_Window *window = 0;
-global_variable SDL_GLContext context = 0;
-global_variable char *window_title = "Engine";
-
-global_variable i32 screen_width = 1280;
-global_variable i32 screen_height = 720;
-
-// Mouse
-global_variable Mouse mouse;
+global_variable AlexContext context;
 
 int 
 main(void)
 {
-    mouse_init(&mouse);
+    memset(&context, 0, sizeof(context));
     
-    u32 window_flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;
-    window_create(window, window_title,
-                  screen_width, screen_height, 
-                  window_flags);
+    input_init(&context.input);
+    window_init(&context.window);
     
-    while (!quit)
+    while (!context.quit)
     {
-        mouse_pre_poll(&mouse);
-        
-        SDL_Event event;
-        while(SDL_PollEvent(&event) != 0)
+        if (!window_event_poll(&context.input))
         {
-            switch (event.type) {
-                case SDL_QUIT: {
-                    quit = true;
-                    break;
-                }
-                
-                // KeyState
-                case  SDL_KEYDOWN: {
-                    break;
-                }
-                case SDL_KEYUP: {
-                    break;
-                }
-                
-                //  ButtonState
-                case SDL_MOUSEBUTTONDOWN: {
-                    mouse_on_button_down(&mouse, event.button.button);
-                    break;
-                }
-                case SDL_MOUSEBUTTONUP: {
-                    mouse_on_button_up(&mouse, event.button.button);
-                    break;
-                }
-                
-                default:
-                break;
-            }
-        }
-        mouse_post_poll(&mouse);
-        
-        // NOTE(alex): Remove this
-        if (mouse_is_down(&mouse, 1)){
-            //SDL_Log("mouse:left:down");
-        }
-        if (mouse_is_pressed(&mouse, 1)){
-            SDL_Log("mouse:left:pressed");
-        }
-        if (mouse_is_released(&mouse, 1)){
-            SDL_Log("mouse:left:released");
+            context.quit = true;
+            break;
         }
         
+        input_update(&context.input);
+        window_update(&context.window);
         
-        // NOTE(alex): Renderer
-#if 0
-        glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-#endif
+        if (input_is_mouse_pressed(&context.input, MouseButton_Left)){
+            SDL_Log("pressed");
+        }
+        if (input_is_mouse_released(&context.input, MouseButton_Left)){
+            SDL_Log("released");
+        }
         
-        window_update(window);
-        
+        input_reset(&context.input);
         SDL_Delay(1);
-        
     }
     
     return 0;

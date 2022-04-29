@@ -3,10 +3,8 @@
 root=/home/cpp/Projects/alex
 
 files="
-$root/code/events.c
+$root/code/alex.c
 $root/code/main.c
-$root/code/mouse.c
-$root/code/window.c
 
 $root/third-party/glad/src/glad.c
 "

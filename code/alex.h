@@ -1,7 +1,61 @@
 #ifndef ALEX_H
 #define ALEX_H
 
-#include <stdint.h>
+/* Index of this file:
+     
+[SECTION] Headers
+      [SECTION] Defines
+[SECTION] Input
+ [SECTION] Window
+
+*/
+
+/* TODO:
+
+# Core:
+ - Logger
+- Time
+- String
+- Dynamic Arrays
+- Memory
+- Jobs
+- Threads
+ - Collision
+
+# Systems:
+- Input
+- Event
+- Audio
+- Network
+- Graphics
+- Resources
+- IMGUI/GUI
+- Physics
+ - Profiler
+- AI
+
+# Tools:
+- Sandbox
+- Editor
+
+*/
+
+//-----------------------------------------------
+// [SECTION] Headers
+//-----------------------------------------------
+
+// Standard headers
+#include <stdint.h> 
+#include <stdio.h>  // printf
+#include <string.h> // memset
+
+// SDL2
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_opengl.h>
+
+//-----------------------------------------------
+// [SECTION] Defines
+//-----------------------------------------------
 
 typedef uint8_t u8;
 typedef uint16_t u16;
@@ -25,5 +79,127 @@ typedef uint8_t b8;
 #define internal static
 #define local_variable static
 #define global_variable static
+
+#define ARRAY_SIZE(a) sizeof(a) / sizeof(a[0])
+
+//-----------------------------------------------
+// [SECTION] Input
+//-----------------------------------------------
+
+typedef enum
+{
+    InputEventType_None = 0,
+    InputEventType_MouseButton,
+    InputEventType_Key,
+    InputEventType_Text,
+    InputEventType_Count
+        
+} InputEventType;
+
+typedef enum
+{
+    InputSource_None = 0,
+    InputSource_Mouse,
+    InputSource_Keyboard,
+    InputSource_Count
+        
+} InputSource;
+
+typedef struct
+{
+    InputEventType type;
+    InputSource source;
+    
+    struct
+    {
+        i8 button;
+        b8 down;
+    } button;
+    
+    struct
+    {
+        i32 key;
+        b8 down;
+    } key;
+    
+    struct
+    {
+        u8 c;
+    } text;
+    
+} InputEvent;
+
+
+typedef enum 
+{
+    MouseButton_Unknown = -1,
+    MouseButton_Left = 0,
+    MouseButton_Middle = 1,
+    MouseButton_Right = 2
+        
+} MouseButton;
+
+typedef enum
+{
+    KeyCode_Unknown = -1
+        
+} KeyCode;
+
+typedef struct
+{
+    b8 mouse_down[3];
+    b8 mouse_prev_down[3];
+    b8 mouse_pressed[3];
+    b8 mouse_released[3];
+    
+    InputEvent events;
+    
+} InputContext;
+
+void input_init (InputContext *input);
+
+// Events
+void input_add_key_event          (InputContext *input, const KeyCode key, const b8 down);  
+void input_add_mouse_button_event (InputContext *input, const MouseButton button, const b8 down);  
+void input_add_character_event    (InputContext *input, const u8 c);  
+
+void input_update (InputContext *input);
+void input_reset  (InputContext *input);
+
+// Keyboard
+b8 input_is_key_down     (const InputContext *input, const KeyCode key);
+b8 input_is_key_pressed  (const InputContext *input, const KeyCode key);
+b8 input_is_key_released (const InputContext *input, const KeyCode key);
+
+// Mouse
+b8 input_is_mouse_down     (const InputContext *input, const MouseButton button);
+b8 input_is_mouse_pressed  (const InputContext *input, const MouseButton button);
+b8 input_is_mouse_released (const InputContext *input, const MouseButton button);
+
+//-----------------------------------------------
+// [SECTION] Window
+//-----------------------------------------------
+
+typedef struct
+{
+    i32 x;
+    i32 y;
+    i32 width;
+    i32 height;
+    u32 flags;
+    char *title;
+    
+} WindowData;
+
+typedef struct
+{
+    SDL_Window *window;
+    SDL_GLContext gl_context;
+    
+} WindowContext;
+
+b8 window_init(WindowContext *context);
+void window_update(WindowContext *context);
+b8 window_event_poll(InputContext *context);
 
 #endif // ALEX_H
