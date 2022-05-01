@@ -5,6 +5,7 @@
      
 [SECTION] Headers
       [SECTION] Defines
+[SECTION] Logger
 [SECTION] Input
  [SECTION] Window
 
@@ -47,6 +48,7 @@
 // Standard headers
 #include <stdint.h> 
 #include <stdio.h>
+#include <stdarg.h>
 #include <string.h>
 
 // SDL2
@@ -81,6 +83,31 @@ typedef uint8_t b8;
 #define global_variable static
 
 #define ARRAY_SIZE(a) sizeof(a) / sizeof(a[0])
+#define PI 3.14159f
+
+//-----------------------------------------------
+// [SECTION] Logger
+//-----------------------------------------------
+
+typedef enum
+{
+    LogType_Info,
+    LogType_Debug,
+    LogType_Warn,
+    LogType_Error,
+    LogType_Fatal,
+    
+} LogType;
+
+void logger_init();
+void logger_print(const LogType type, const char *fmt, ...);
+
+#define LOG_INFO(fmt, ...)  logger_print (LogType_Info, fmt, __VA_ARGS__)
+#define LOG_WARN(fmt, ...)  logger_print (LogType_Warn, fmt, __VA_ARGS__)
+#define LOG_DEBUG(fmt, ...) logger_print (LogType_Debug, fmt, __VA_ARGS__)
+#define LOG_TRACE(fmt, ...) logger_print (LogType_Trace, fmt, __VA_ARGS__)
+#define LOG_ERROR(fmt, ...) logger_print (LogType_Error, fmt, __VA_ARGS__)
+#define LOG_FATAL(fmt, ...) logger_print (LogType_Fatal, fmt, __VA_ARGS__)
 
 //-----------------------------------------------
 // [SECTION] Input

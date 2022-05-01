@@ -25,4 +25,4 @@ libs="
 binary=$root/build/sandbox
 flags="-O0 -g"
 
-clang $files $includes $flags $libs -o $binary
+gcc $files $includes $flags $libs -o $binary

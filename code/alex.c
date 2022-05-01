@@ -6,9 +6,33 @@
       [SECTION] Defines
 [SECTION] Global variable
 [SECTION] Input
+[SECTION] Logger
  [SECTION] Window
 
 */
+
+//-----------------------------------------------
+// [SECTION] Input
+//-----------------------------------------------
+
+void 
+logger_init()
+{
+}
+
+void 
+logger_print(const LogType type, 
+             const char *fmt, ...)
+{
+    char buffer[256] = "";
+    
+    printf("[INFO]: ");
+    va_list arg_list;
+    va_start(arg_list, fmt);
+    vprintf(fmt, arg_list);
+    va_end(arg_list);
+    printf("\n");
+}
 
 //-----------------------------------------------
 // [SECTION] Input

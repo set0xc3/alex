@@ -16,8 +16,11 @@ main(void)
 {
     memset(&context, 0, sizeof(context));
     
+    logger_init();
     input_init(&context.input);
     window_init(&context.window);
+    
+    LOG_INFO("PI: %f", PI);
     
     while (!context.quit)
     {
