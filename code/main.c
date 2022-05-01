@@ -30,11 +30,17 @@ main(void)
         input_update(&context.input);
         window_update(&context.window);
         
-        if (input_is_mouse_pressed(&context.input, MouseButton_Left)){
+        if (input_is_mouse_pressed(&context.input, MouseButton_Left))
             SDL_Log("pressed");
-        }
-        if (input_is_mouse_released(&context.input, MouseButton_Left)){
+        if (input_is_mouse_released(&context.input, MouseButton_Left))
             SDL_Log("released");
+        
+        for (i64 i = 0; i < 256; ++i)
+        {
+            if (input_is_key_pressed(&context.input, i))
+                SDL_Log("pressed");
+            if (input_is_key_released(&context.input, i))
+                SDL_Log("released");
         }
         
         input_reset(&context.input);

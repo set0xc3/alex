@@ -46,8 +46,8 @@
 
 // Standard headers
 #include <stdint.h> 
-#include <stdio.h>  // printf
-#include <string.h> // memset
+#include <stdio.h>
+#include <string.h>
 
 // SDL2
 #include <SDL2/SDL.h>
@@ -132,17 +132,69 @@ typedef struct
 
 typedef enum 
 {
-    MouseButton_Unknown = -1,
     MouseButton_Left = 0,
     MouseButton_Middle = 1,
-    MouseButton_Right = 2
+    MouseButton_Right = 2,
+    
+    MouseButton_Unknown = -1
         
 } MouseButton;
 
 typedef enum
 {
-    KeyCode_Unknown = -1
-        
+    KeyCode_0 = 0,
+    KeyCode_1,
+    KeyCode_2,
+    KeyCode_3,
+    KeyCode_4,
+    KeyCode_5,
+    KeyCode_6,
+    KeyCode_7,
+    KeyCode_8,
+    KeyCode_9,
+    
+    KeyCode_F1,
+    KeyCode_F2,
+    KeyCode_F3,
+    KeyCode_F4,
+    KeyCode_F5,
+    KeyCode_F6,
+    KeyCode_F7,
+    KeyCode_F8,
+    KeyCode_F9,
+    KeyCode_F10,
+    KeyCode_F11,
+    KeyCode_F12,
+    
+    KeyCode_A,
+    KeyCode_B,
+    KeyCode_C,
+    KeyCode_D,
+    KeyCode_E,
+    KeyCode_F,
+    KeyCode_G,
+    KeyCode_H,
+    KeyCode_I,
+    KeyCode_J,
+    KeyCode_K,
+    KeyCode_L,
+    KeyCode_M,
+    KeyCode_N,
+    KeyCode_O,
+    KeyCode_P,
+    KeyCode_Q,
+    KeyCode_R,
+    KeyCode_S,
+    KeyCode_T,
+    KeyCode_U,
+    KeyCode_V,
+    KeyCode_W,
+    KeyCode_X,
+    KeyCode_Y,
+    KeyCode_Z,
+    
+    KeyCode_Unknown = -1,
+    
 } KeyCode;
 
 typedef struct
@@ -151,6 +203,11 @@ typedef struct
     b8 mouse_prev_down[3];
     b8 mouse_pressed[3];
     b8 mouse_released[3];
+    
+    b8 key_down[256];
+    b8 key_prev_down[256];
+    b8 key_pressed[256];
+    b8 key_released[256];
     
     InputEvent events;
     
@@ -198,8 +255,8 @@ typedef struct
     
 } WindowContext;
 
-b8 window_init(WindowContext *context);
-void window_update(WindowContext *context);
-b8 window_event_poll(InputContext *context);
+b8 window_init       (WindowContext *context);
+void window_update   (WindowContext *context);
+b8 window_event_poll (InputContext *context);
 
 #endif // ALEX_H
