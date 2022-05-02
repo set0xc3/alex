@@ -50,6 +50,8 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
+#include <errno.h>
+#include <time.h>
 
 // SDL2
 #include <SDL2/SDL.h>
@@ -82,32 +84,39 @@ typedef uint8_t b8;
 #define local_variable static
 #define global_variable static
 
+#define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
 #define ARRAY_SIZE(a) sizeof(a) / sizeof(a[0])
+#define MAX_STR_LEN (4095)
+
+// Math
 #define PI 3.14159f
+
+// Time
+#define UTC (3) // Europe/Moscow
+
+// Color
+#define ANSI_COLOR_RED(str)     "\x1b[31m" str "\x1b[0m"
+#define ANSI_COLOR_REDBG(str)   "\x1b[30;41m" str "\x1b[0m"
+#define ANSI_COLOR_GREEN(str)   "\x1b[32m" str "\x1b[0m"
+#define ANSI_COLOR_YELLOW(str)  "\x1b[33m" str "\x1b[0m"
+#define ANSI_COLOR_BLUE(str)    "\x1b[34m" str "\x1b[0m"
+#define ANSI_COLOR_MAGENTA(str) "\x1b[35m" str "\x1b[0m"
+#define ANSI_COLOR_CYAN(str)    "\x1b[36m" str "\x1b[0m"
+#define ANSI_COLOR_WHITE(str)   "\x1b[37m" str "\x1b[0m"
 
 //-----------------------------------------------
 // [SECTION] Logger
 //-----------------------------------------------
 
-typedef enum
-{
-    LogType_Info,
-    LogType_Debug,
-    LogType_Warn,
-    LogType_Error,
-    LogType_Fatal,
-    
-} LogType;
-
 void logger_init();
-void logger_print(const LogType type, const char *fmt, ...);
+void logger_print(const char *header, const char *fmt, ...);
 
-#define LOG_INFO(fmt, ...)  logger_print (LogType_Info, fmt, __VA_ARGS__)
-#define LOG_WARN(fmt, ...)  logger_print (LogType_Warn, fmt, __VA_ARGS__)
-#define LOG_DEBUG(fmt, ...) logger_print (LogType_Debug, fmt, __VA_ARGS__)
-#define LOG_TRACE(fmt, ...) logger_print (LogType_Trace, fmt, __VA_ARGS__)
-#define LOG_ERROR(fmt, ...) logger_print (LogType_Error, fmt, __VA_ARGS__)
-#define LOG_FATAL(fmt, ...) logger_print (LogType_Fatal, fmt, __VA_ARGS__)
+#define LOG_INFO(...)  logger_print (ANSI_COLOR_WHITE("[INFO]"),  __VA_ARGS__)
+#define LOG_WARN(...)  logger_print (ANSI_COLOR_YELLOW("[WARN]"),  __VA_ARGS__)
+#define LOG_DEBUG(...) logger_print (ANSI_COLOR_BLUE("[DEBUG]"), __VA_ARGS__)
+#define LOG_TRACE(...) logger_print (ANSI_COLOR_CYAN("[TRACE]"), __VA_ARGS__)
+#define LOG_ERROR(...) logger_print (ANSI_COLOR_RED("[ERROR]"), __VA_ARGS__)
+#define LOG_FATAL(...) logger_print (ANSI_COLOR_REDBG("[FATAL]"), __VA_ARGS__)
 
 //-----------------------------------------------
 // [SECTION] Input

@@ -15,23 +15,44 @@
 // [SECTION] Input
 //-----------------------------------------------
 
-void 
+void
 logger_init()
 {
+    LOG_INFO("PI: %f", PI);
+    LOG_WARN("PI: %f", PI);
+    LOG_DEBUG("PI: %f", PI);
+    LOG_TRACE("PI: %f", PI);
+    LOG_ERROR("PI: %f", PI);
+    LOG_FATAL("PI: %f", PI);
 }
 
 void 
-logger_print(const LogType type, 
-             const char *fmt, ...)
+logger_print(const char *header, const char *fmt, ...)
 {
-    char buffer[256] = "";
+    // Time
+    char time_buff[MAX_STR_LEN] = "";
+    time_t rawtime;
+    struct tm *ptm;
+    time(&rawtime);
+    ptm = gmtime(&rawtime);
+    sprintf(time_buff, "%2d:%02d", (ptm->tm_hour+UTC)%24, ptm->tm_min);
     
-    printf("[INFO]: ");
+    // Header
+    char header_buff[MAX_STR_LEN] = "";
+    sprintf(header_buff, "[%s]%s[%s:%i] ", time_buff, header, __FILENAME__, __LINE__); 
+    
     va_list arg_list;
     va_start(arg_list, fmt);
-    vprintf(fmt, arg_list);
+    
+    // Final string
+    char str_buff[MAX_STR_LEN] = "";
+    vsprintf(str_buff, fmt, arg_list);
+    strcat(header_buff, str_buff);
+    
+    sprintf(header_buff, "%s", header_buff);
+    fprintf(stderr, "%s\n", header_buff);
+    
     va_end(arg_list);
-    printf("\n");
 }
 
 //-----------------------------------------------
