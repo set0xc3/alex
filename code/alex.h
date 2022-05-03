@@ -2,28 +2,26 @@
 #define ALEX_H
 
 /* Index of this file:
-     
+
 [SECTION] Headers
-      [SECTION] Defines
+[SECTION] Defines
 [SECTION] Logger
 [SECTION] Input
- [SECTION] Window
+[SECTION] Window
 
 */
 
 /* TODO:
 
-# Core:
- - Logger
+- Logger
 - Time
 - String
 - Dynamic Arrays
 - Memory
 - Jobs
 - Threads
- - Collision
+- Collision
 
-# Systems:
 - Input
 - Event
 - Audio
@@ -32,10 +30,9 @@
 - Resources
 - IMGUI/GUI
 - Physics
- - Profiler
+- Profiler
 - AI
 
-# Tools:
 - Sandbox
 - Editor
 
