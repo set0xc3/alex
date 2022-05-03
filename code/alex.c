@@ -1,13 +1,13 @@
 #include "alex.h"
 
 /* Index of this file:
-     
+
 [SECTION] Headers
-      [SECTION] Defines
+[SECTION] Defines
 [SECTION] Global variable
 [SECTION] Input
 [SECTION] Logger
- [SECTION] Window
+[SECTION] Window
 
 */
 
@@ -35,7 +35,7 @@ logger_print(const char *header, const char *fmt, ...)
     struct tm *ptm;
     time(&rawtime);
     ptm = gmtime(&rawtime);
-    sprintf(time_buff, "%2d:%02d", (ptm->tm_hour+UTC)%24, ptm->tm_min);
+    sprintf(time_buff, "%02d:%02d", (ptm->tm_hour+UTC)%24, ptm->tm_min);
     
     // Header
     char header_buff[MAX_STR_LEN] = "";
