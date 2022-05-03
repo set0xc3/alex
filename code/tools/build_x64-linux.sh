@@ -23,6 +23,6 @@ libs="
 "
 
 binary=$root/build/sandbox
-flags="-O0 -g"
+flags="-O0 -g -std=c11"
 
 gcc $files $includes $flags $libs -o $binary
