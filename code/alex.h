@@ -6,6 +6,7 @@
 [SECTION] Headers
 [SECTION] Defines
 [SECTION] Logger
+[SECTION] Event
 [SECTION] Input
 [SECTION] Window
 
@@ -116,6 +117,27 @@ void logger_print(const char *header, const char *fmt, ...);
 #define LOG_FATAL(...) logger_print (ANSI_COLOR_REDBG("[FATAL]"), __VA_ARGS__)
 
 //-----------------------------------------------
+// [SECTION] Event
+//-----------------------------------------------
+
+typedef enum
+{
+    EventType_MouseMoved,
+    EventType_MouseScrolled,
+    EventType_MouseButtonPressed,
+    EventType_MouseButtonReleased,
+    
+    EventType_KeyPressed,
+    EventType_KeyReleased,
+    
+    EventType_WindowClose,
+    EventType_WindowResize,
+    EventType_WindowFocus,
+    EventType_WindowMoved,
+    
+} EventType;
+
+//-----------------------------------------------
 // [SECTION] Input
 //-----------------------------------------------
 
@@ -138,7 +160,7 @@ typedef enum
         
 } InputSource;
 
-typedef struct
+typedef struct InputEvent
 {
     InputEventType type;
     InputSource source;
@@ -230,7 +252,7 @@ typedef enum
     
 } KeyCode;
 
-typedef struct
+typedef struct InputContext
 {
     b8 mouse_down[3];
     b8 mouse_prev_down[3];
@@ -270,7 +292,7 @@ b8 input_is_mouse_released (const InputContext *input, const MouseButton button)
 // [SECTION] Window
 //-----------------------------------------------
 
-typedef struct
+typedef struct WindowData
 {
     i32 x;
     i32 y;
@@ -281,7 +303,7 @@ typedef struct
     
 } WindowData;
 
-typedef struct
+typedef struct WindowContext
 {
     SDL_Window *window;
     SDL_GLContext gl_context;
