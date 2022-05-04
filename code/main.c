@@ -22,7 +22,7 @@ main(void)
     
     while (!context.quit)
     {
-        if (!window_event_poll(&context.input))
+        if (!window_handle_event(&context.input))
         {
             context.quit = true;
             break;
@@ -32,16 +32,16 @@ main(void)
         window_update(&context.window);
         
         if (input_is_mouse_pressed(&context.input, MouseButton_Left))
-            LOG_INFO("pressed");
+            LOG_DEBUG("pressed");
         if (input_is_mouse_released(&context.input, MouseButton_Left))
-            LOG_INFO("released");
+            LOG_DEBUG("released");
         
         for (i64 i = 0; i < 256; ++i)
         {
             if (input_is_key_pressed(&context.input, i))
-                LOG_INFO("pressed");
+                LOG_DEBUG("pressed");
             if (input_is_key_released(&context.input, i))
-                LOG_INFO("released");
+                LOG_DEBUG("released");
         }
         
         input_reset(&context.input);

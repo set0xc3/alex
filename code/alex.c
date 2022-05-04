@@ -27,8 +27,20 @@ logger_init()
 }
 
 void 
-logger_print(const char *header, const char *fmt, ...)
+logger_print(const LogType type, 
+             const char *file_name, const i32 line,
+             const char *fmt, ...)
 {
+    const char *type_str[LogType_Count] = 
+    { 
+        "Info", 
+        "Warn", 
+        "Debug", 
+        "Trace", 
+        "Error", 
+        "Fatal" 
+    };
+    
     // Time
     char time_buff[MAX_STR_LEN] = "";
     time_t rawtime;
@@ -39,17 +51,16 @@ logger_print(const char *header, const char *fmt, ...)
     
     // Header
     char header_buff[MAX_STR_LEN] = "";
-    sprintf(header_buff, "[%s]%s[%s:%i] ", time_buff, header, __FILENAME__, __LINE__); 
+    sprintf(header_buff, "[%s][%s][%s:%i] ", time_buff, type_str[type], file_name, line); 
     
     va_list arg_list;
     va_start(arg_list, fmt);
     
-    // Final string
-    char str_buff[MAX_STR_LEN] = "";
-    vsprintf(str_buff, fmt, arg_list);
-    strcat(header_buff, str_buff);
+    // End string
+    char end_buff[MAX_STR_LEN] = "";
+    vsprintf(end_buff, fmt, arg_list);
+    strcat(header_buff, end_buff);
     
-    sprintf(header_buff, "%s", header_buff);
     fprintf(stderr, "%s\n", header_buff);
     
     va_end(arg_list);
@@ -186,7 +197,7 @@ window_init(WindowContext *context)
     
     if(SDL_Init(SDL_INIT_VIDEO) < 0)
     {
-        printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+        LOG_ERROR("SDL_Init failed: %s", SDL_GetError());
         return false;
     }
     // Default OpenGL is fine.
@@ -199,7 +210,20 @@ window_init(WindowContext *context)
                                        wd.flags);
     if(!context->window)
     {
-        printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
+        LOG_ERROR("SDL_CreateWindow failed: %s", SDL_GetError());
+        return false;
+    }
+    
+    context->gl_context = SDL_GL_CreateContext(context->window);
+    if(!context->gl_context)
+    {
+        LOG_ERROR("SDL_GL_CreateContext failed: %s", SDL_GetError());
+        return false;
+    }
+    
+    if (!gladLoadGL())
+    {
+        LOG_ERROR("gladLoadGL failed");
         return false;
     }
     
@@ -213,10 +237,9 @@ window_init(WindowContext *context)
     // Use Vsync
     if(SDL_GL_SetSwapInterval(true) < 0)
     {
-        printf("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
+        LOG_WARN("Unable to set VSync: %s\n", SDL_GetError());
         return false;
     }
-    
     return true;
 }
 
@@ -227,7 +250,7 @@ window_update(WindowContext *context)
 }
 
 b8 
-window_event_poll(InputContext *input)
+window_handle_event(InputContext *input)
 {
     SDL_Event event;
     while(SDL_PollEvent(&event) != 0)

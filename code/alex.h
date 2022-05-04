@@ -51,6 +51,8 @@
 #include <errno.h>
 #include <time.h>
 
+#include <glad/glad.h>
+
 // SDL2
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
@@ -92,29 +94,44 @@ typedef uint8_t b8;
 // Time
 #define UTC (3) // Europe/Moscow
 
-// Color
-#define ANSI_COLOR_RED(str)     "\x1b[31m" str "\x1b[0m"
-#define ANSI_COLOR_REDBG(str)   "\x1b[30;41m" str "\x1b[0m"
-#define ANSI_COLOR_GREEN(str)   "\x1b[32m" str "\x1b[0m"
-#define ANSI_COLOR_YELLOW(str)  "\x1b[33m" str "\x1b[0m"
-#define ANSI_COLOR_BLUE(str)    "\x1b[34m" str "\x1b[0m"
-#define ANSI_COLOR_MAGENTA(str) "\x1b[35m" str "\x1b[0m"
-#define ANSI_COLOR_CYAN(str)    "\x1b[36m" str "\x1b[0m"
-#define ANSI_COLOR_WHITE(str)   "\x1b[37m" str "\x1b[0m"
+// TODO
+// Color "\x1b[0m"
+#define ANSI_COLOR_RED     "\x1b[31m"
+#define ANSI_COLOR_REDBG   "\x1b[30;41m"
+#define ANSI_COLOR_GREEN   "\x1b[32m"
+#define ANSI_COLOR_YELLOW  "\x1b[33m"
+#define ANSI_COLOR_BLUE    "\x1b[34m"
+#define ANSI_COLOR_MAGENTA "\x1b[35m"
+#define ANSI_COLOR_CYAN    "\x1b[36m"
+#define ANSI_COLOR_WHITE   "\x1b[37m" 
 
 //-----------------------------------------------
 // [SECTION] Logger
 //-----------------------------------------------
 
-void logger_init();
-void logger_print(const char *header, const char *fmt, ...);
+typedef enum
+{
+    LogType_Info = 0,
+    LogType_Warn,
+    LogType_Debug,
+    LogType_Trace,
+    LogType_Error,
+    LogType_Fatal,
+    LogType_Count
+        
+} LogType;
 
-#define LOG_INFO(...)  logger_print (ANSI_COLOR_WHITE("[INFO]"),  __VA_ARGS__)
-#define LOG_WARN(...)  logger_print (ANSI_COLOR_YELLOW("[WARN]"),  __VA_ARGS__)
-#define LOG_DEBUG(...) logger_print (ANSI_COLOR_BLUE("[DEBUG]"), __VA_ARGS__)
-#define LOG_TRACE(...) logger_print (ANSI_COLOR_CYAN("[TRACE]"), __VA_ARGS__)
-#define LOG_ERROR(...) logger_print (ANSI_COLOR_RED("[ERROR]"), __VA_ARGS__)
-#define LOG_FATAL(...) logger_print (ANSI_COLOR_REDBG("[FATAL]"), __VA_ARGS__)
+void logger_init();
+void logger_print(const LogType type, 
+                  const char *file_name, const i32 line,
+                  const char *fmt, ...);
+
+#define LOG_INFO(...)  logger_print (LogType_Info,  __FILENAME__, __LINE__, __VA_ARGS__)
+#define LOG_WARN(...)  logger_print (LogType_Warn,  __FILENAME__, __LINE__, __VA_ARGS__)
+#define LOG_DEBUG(...) logger_print (LogType_Debug, __FILENAME__, __LINE__, __VA_ARGS__)
+#define LOG_TRACE(...) logger_print (LogType_Trace, __FILENAME__, __LINE__, __VA_ARGS__)
+#define LOG_ERROR(...) logger_print (LogType_Error, __FILENAME__, __LINE__, __VA_ARGS__)
+#define LOG_FATAL(...) logger_print (LogType_Fatal, __FILENAME__, __LINE__, __VA_ARGS__)
 
 //-----------------------------------------------
 // [SECTION] Event
@@ -310,8 +327,8 @@ typedef struct WindowContext
     
 } WindowContext;
 
-b8 window_init       (WindowContext *context);
-void window_update   (WindowContext *context);
-b8 window_event_poll (InputContext *context);
+b8 window_init         (WindowContext *context);
+void window_update     (WindowContext *context);
+b8 window_handle_event (InputContext *context);
 
 #endif // ALEX_H
