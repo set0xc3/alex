@@ -2,57 +2,51 @@
 #include "alex_logger.h"
 #include "alex_window.h"
 #include "alex_world.h"
+#include "alex_renderer.h"
 
 struct Game_State
 {
     Game_World world;
 };
 
-struct Application
+struct Application_State
 {
     b8 running;
     
+    Game_State game;
     Input_State input;
     Window_State window;
-    Game_State game;
+    Renderer_State renderer;
 };
 
 int 
 main(void)
 {
-    Application app;
+    Application_State app;
     memset(&app, 0, sizeof(app));
     
     logger_init();
     input_init(&app.input);
     window_init(&app.window);
+    renderer_init(&app.renderer);
     
     app.running = true;
     while (app.running)
     {
+        input_reset(&app.input);
         if (!window_handle_event(&app.input))
         {
             app.running = false;
             break;
         }
-        
         input_update(&app.input);
+        
+        renderer_begin(&app.renderer);
+        renderer_submit(&app.renderer);
+        renderer_end(&app.renderer);
+        
         window_update(&app.window);
         
-        if (input_is_mouse_pressed(&app.input, MouseButton_Left))
-            LOG_DEBUG("pressed");
-        if (input_is_mouse_released(&app.input, MouseButton_Left))
-            LOG_DEBUG("released");
-        
-        for (i64 i = 0; i < 256; ++i)
-        {
-            if (input_is_key_pressed(&app.input, (Key_Code)i))
-                LOG_DEBUG("pressed");
-            if (input_is_key_released(&app.input, (Key_Code)i))
-                LOG_DEBUG("released");
-        }
-        
-        input_reset(&app.input);
         SDL_Delay(1);
     }
     

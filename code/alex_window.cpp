@@ -12,15 +12,13 @@ window_init(Window_State *window)
     wd.y = 0;
     wd.width = 800;
     wd.height = 720;
-    wd.flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL; 
+    wd.flags = SDL_WINDOW_OPENGL; 
     
     if(SDL_Init(SDL_INIT_VIDEO) < 0)
     {
         LOG_ERROR("SDL_Init failed: %s", SDL_GetError());
         return false;
     }
-    // Default OpenGL is fine.
-    SDL_GL_LoadLibrary(0);
     
     // Create Window
     window->window = SDL_CreateWindow(wd.title, 
@@ -53,12 +51,9 @@ window_init(Window_State *window)
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     
-    // Use Vsync
-    if(SDL_GL_SetSwapInterval(true) < 0)
-    {
-        LOG_WARN("Unable to set VSync: %s\n", SDL_GetError());
-        return false;
-    }
+    window_set_vsync(window, true);
+    window_visible(window, true);
+    
     return true;
 }
 
@@ -173,5 +168,26 @@ window_handle_event(Input_State *input)
         }
     }
     
+    return true;
+}
+
+internal 
+void window_visible(const Window_State *window, const b8 visible)
+{
+    if (visible)
+        SDL_ShowWindow(window->window);
+    else
+        SDL_HideWindow(window->window);
+}
+
+internal 
+b8 window_set_vsync(const Window_State *window, const b8 interval)
+{
+    // Use Vsync
+    if(SDL_GL_SetSwapInterval(true) < 0)
+    {
+        LOG_WARN("Unable to set VSync: %s", SDL_GetError());
+        return false;
+    }
     return true;
 }

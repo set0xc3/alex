@@ -34,6 +34,7 @@ typedef uint8_t b8;
 
 #define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
 #define ARRAY_SIZE(a) sizeof(a) / sizeof(a[0])
+
 #define MAX_STR_LEN (4095)
 
 // Math
