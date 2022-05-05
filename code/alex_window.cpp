@@ -1,195 +1,14 @@
-#include "alex.h"
+#include "alex_window.h"
 
-/* Index of this file:
-
-[SECTION] Headers
-[SECTION] Defines
-[SECTION] Global variable
-[SECTION] Input
-[SECTION] Logger
-[SECTION] Window
-
-*/
-
-//-----------------------------------------------
-// [SECTION] Input
-//-----------------------------------------------
-
-void
-logger_init()
+internal b8
+window_init(Window_State *window)
 {
-    LOG_INFO("PI: %f", PI);
-    LOG_WARN("PI: %f", PI);
-    LOG_DEBUG("PI: %f", PI);
-    LOG_TRACE("PI: %f", PI);
-    LOG_ERROR("PI: %f", PI);
-    LOG_FATAL("PI: %f", PI);
-}
-
-void 
-logger_print(const LogType type, 
-             const char *file_name, const i32 line,
-             const char *fmt, ...)
-{
-    const char *type_str[LogType_Count] = 
-    { 
-        "Info", 
-        "Warn", 
-        "Debug", 
-        "Trace", 
-        "Error", 
-        "Fatal" 
-    };
+    memset(window, 0, sizeof(*window));
     
-    // Time
-    char time_buff[MAX_STR_LEN] = "";
-    time_t rawtime;
-    struct tm *ptm;
-    time(&rawtime);
-    ptm = gmtime(&rawtime);
-    sprintf(time_buff, "%02d:%02d", (ptm->tm_hour+UTC)%24, ptm->tm_min);
-    
-    // Header
-    char header_buff[MAX_STR_LEN] = "";
-    sprintf(header_buff, "[%s][%s][%s:%i] ", time_buff, type_str[type], file_name, line); 
-    
-    va_list arg_list;
-    va_start(arg_list, fmt);
-    
-    // End string
-    char end_buff[MAX_STR_LEN] = "";
-    vsprintf(end_buff, fmt, arg_list);
-    strcat(header_buff, end_buff);
-    
-    fprintf(stderr, "%s\n", header_buff);
-    
-    va_end(arg_list);
-}
-
-//-----------------------------------------------
-// [SECTION] Input
-//-----------------------------------------------
-
-void 
-input_init(InputContext *input)
-{
-    memset(input, 0, sizeof(*input));
-}
-
-void 
-input_add_key_event(InputContext *input, const KeyCode key, const b8 down)
-{
-    InputEvent e  = {};
-    e.type        = InputEventType_Key;
-    e.source      = InputSource_Keyboard;
-    e.key.key     = key;
-    e.key.down    = down;
-    input->events = e;
-}
-
-void 
-input_add_mouse_button_event(InputContext *input, const MouseButton button, const b8 down)
-{
-    InputEvent e    = {};
-    e.type          = InputEventType_MouseButton;
-    e.source        = InputSource_Mouse;
-    e.button.button = button;
-    e.button.down   = down;
-    input->events   = e;
-}
-
-void 
-input_add_character_event(InputContext *input, u8 c)
-{
-    InputEvent e  = {};
-    e.type        = InputEventType_Text;
-    e.source      = InputSource_Keyboard;
-    e.text.c      = c;
-    input->events = e;
-}
-
-void 
-input_update(InputContext *input)
-{
-    InputEvent *e = &input->events;
-    
-    if (e->source != MouseButton_Unknown && 
-        e->type == InputEventType_MouseButton)
-    {
-        memcpy(&input->mouse_prev_down, &input->mouse_down, sizeof(input->mouse_down));
-        
-        input->mouse_down[e->button.button] = e->button.down;
-        input->mouse_pressed[e->button.button] = input->mouse_down[e->button.button] && !input->mouse_prev_down[e->button.button];
-        input->mouse_released[e->button.button] = !input->mouse_down[e->button.button] && input->mouse_prev_down[e->button.button];
-    }
-    else if (e->type == InputEventType_Key)
-    {
-        memcpy(&input->key_prev_down, &input->key_down, sizeof(input->key_down));
-        
-        input->key_down[e->key.key] = e->key.down;
-        input->key_pressed[e->key.key] = input->key_down[e->key.key] && !input->key_prev_down[e->key.key];
-        input->key_released[e->key.key] = !input->key_down[e->key.key] && input->key_prev_down[e->key.key];
-    }
-}
-
-void 
-input_reset(InputContext *input)
-{
-    memset(&input->mouse_pressed, 0, sizeof(*input->mouse_pressed));
-    memset(&input->mouse_released, 0, sizeof(*input->mouse_released));
-    
-    memset(&input->key_pressed, 0, sizeof(*input->key_pressed));
-    memset(&input->key_released, 0, sizeof(*input->key_released));
-}
-
-b8
-input_is_key_down(const InputContext *input, const KeyCode key)
-{
-    return input->key_down[key];
-}
-
-b8
-input_is_key_pressed(const InputContext *input, const KeyCode key)
-{
-    return input->key_pressed[key];
-}
-
-b8
-input_is_key_released(const InputContext *input, const KeyCode key)
-{
-    return input->key_released[key];
-}
-
-b8
-input_is_mouse_down(const InputContext *input, const MouseButton button)
-{
-    return input->mouse_down[button];
-}
-
-b8
-input_is_mouse_pressed(const InputContext *input, const MouseButton button)
-{
-    return input->mouse_pressed[button];
-}
-
-b8
-input_is_mouse_released(const InputContext *input, const MouseButton button)
-{
-    return input->mouse_released[button];
-}
-
-//-----------------------------------------------
-// [SECTION] Window
-//-----------------------------------------------
-
-b8
-window_init(WindowContext *context)
-{
-    memset(context, 0, sizeof(*context));
-    
-    WindowData wd;
-    wd.title = "Engine";
-    wd.x = 0;
+    Window_Data wd;
+    memset(&wd, 0, sizeof(wd));
+    sprintf(wd.title, "Engine");
+    wd.x = 800;
     wd.y = 0;
     wd.width = 800;
     wd.height = 720;
@@ -204,18 +23,18 @@ window_init(WindowContext *context)
     SDL_GL_LoadLibrary(0);
     
     // Create Window
-    context->window = SDL_CreateWindow(wd.title, 
-                                       wd.x,wd.y, 
-                                       wd.width, wd.height, 
-                                       wd.flags);
-    if(!context->window)
+    window->window = SDL_CreateWindow(wd.title, 
+                                      wd.x,wd.y, 
+                                      wd.width, wd.height, 
+                                      wd.flags);
+    if(!window->window)
     {
         LOG_ERROR("SDL_CreateWindow failed: %s", SDL_GetError());
         return false;
     }
     
-    context->gl_context = SDL_GL_CreateContext(context->window);
-    if(!context->gl_context)
+    window->gl_context = SDL_GL_CreateContext(window->window);
+    if(!window->gl_context)
     {
         LOG_ERROR("SDL_GL_CreateContext failed: %s", SDL_GetError());
         return false;
@@ -243,14 +62,14 @@ window_init(WindowContext *context)
     return true;
 }
 
-void 
-window_update(WindowContext *context)
+internal void 
+window_update(Window_State *window)
 {
-    SDL_GL_SwapWindow(context->window);
+    SDL_GL_SwapWindow(window->window);
 }
 
-b8 
-window_handle_event(InputContext *input)
+internal b8 
+window_handle_event(Input_State *input)
 {
     SDL_Event event;
     while(SDL_PollEvent(&event) != 0)
@@ -267,7 +86,7 @@ window_handle_event(InputContext *input)
             case SDL_KEYUP:
             {
                 b8 down = false;
-                KeyCode key = KeyCode_Unknown;
+                Key_Code key = KeyCode_Unknown;
                 switch (event.key.keysym.sym)
                 {
                     case SDLK_0: key = KeyCode_0; break;
@@ -336,7 +155,7 @@ window_handle_event(InputContext *input)
             case SDL_MOUSEBUTTONUP:
             {
                 b8 down = false;
-                MouseButton button = MouseButton_Unknown;
+                Mouse_Button button = MouseButton_Unknown;
                 switch (event.button.button)
                 {
                     case SDL_BUTTON_LEFT:   button = MouseButton_Left;   break;

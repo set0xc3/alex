@@ -3,18 +3,13 @@
 root=/home/cpp/Projects/alex
 
 files="
-$root/code/alex.c
-$root/code/main.c
-
-$root/third-party/glad/src/glad.c
+$root/code/alex.cpp
 "
 
 includes="
 -I$root/third-party/glad/include/ 
 -I$root/third-party/glm/
 "
-
-# -lstdc++
 
 libs="
 -lm
@@ -23,6 +18,6 @@ libs="
 "
 
 binary=$root/build/sandbox
-flags="-O0 -g -std=c11"
+flags="-O0 -g"
 
-gcc $files $includes $flags $libs -o $binary
+clang $files $includes $flags $libs -o $binary

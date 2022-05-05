@@ -1,0 +1,4 @@
+#ifndef ALEX_RENDERER_H
+#define ALEX_RENDERER_H
+
+#endif // ALEX_RENDERER_H
