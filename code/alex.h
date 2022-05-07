@@ -33,14 +33,20 @@ typedef uint8_t b8;
 #define global_variable static
 
 #define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
-#define ARRAY_SIZE(a) sizeof(a) / sizeof(a[0])
+#define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
 
 #define MAX_STR_LEN (4095)
 
 // Math
-#define PI 3.14159f
+#define PI (3.14159f)
 
 // Time
 #define UTC (3) // Europe/Moscow
+
+struct String_u8
+{
+    u8 *str;
+    u64 size;
+};
 
 #endif // ALEX_H

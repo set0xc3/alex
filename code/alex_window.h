@@ -26,7 +26,7 @@ internal b8 window_init         (Window_State *window);
 internal void window_update     (Window_State *window);
 internal b8 window_handle_event (Input_State *input);
 
-internal void window_visible(const Window_State *window, const b8 visible);
-internal b8 window_set_vsync(const Window_State *window, const b8 interval);
+internal void window_visible (const Window_State *window, const b8 visible);
+internal b8 window_set_vsync (const Window_State *window, const b8 interval);
 
 #endif // ALEX_WINDOW_H

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-root=/home/cpp/Projects/alex
+root=$PWD
 
 files="
 $root/code/alex.cpp

@@ -10,16 +10,13 @@ const char *vertex_shader_source =
 ""
 "    layout (location = 0) in vec3 a_position;\n"
 "    layout (location = 1) in vec3 a_color;\n"
-"    layout (location = 2) in vec2 a_texture;\n"
 ""
 "    out vec3 our_color;\n"
-"    out vec2 texture_coords;\n"
 ""
 "    void main()\n"
 "    {\n"
 "       gl_Position = vec4(a_position, 1.0);\n"
 "       our_color = a_color;\n"
-"       texture_coords = a_texture;\n"
 "    }\n\0";
 
 const char *fragment_shader_source = 
@@ -28,28 +25,11 @@ const char *fragment_shader_source =
 "    out vec4 FragColor;\n"
 ""
 "    in vec3 our_color;\n"
-"    in vec2 texture_coords;\n"
-""
-"    uniform sampler2D our_texture;\n"
 ""
 "    void main()\n"
 "    {\n"
-"       FragColor = texture(our_texture, texture_coords);\n"
+"       FragColor = vec4(our_color, 1.0f);\n"
 "    }\n\0";
-
-f32 vertices[] = {
-    // positions          // colors           // texture coords
-    0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
-    0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
-    -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
-    -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
-};
-
-u32 indices[] = 
-{ 
-    0, 1, 3,  // first Triangle
-    1, 2, 3   // second Triangle
-};
 
 internal 
 void renderer_init(Renderer_State *renderer)
@@ -58,6 +38,10 @@ void renderer_init(Renderer_State *renderer)
     
     i32 success = false;
     char info_log[MAX_STR_LEN] = "";
+    
+    // ----------------------------------------------------------------------------------------------------------
+    // Load Shaders
+    // ----------------------------------------------------------------------------------------------------------
     
     // Vertex Shader
     u32 vertex_shader = glCreateShader(GL_VERTEX_SHADER);
@@ -92,38 +76,13 @@ void renderer_init(Renderer_State *renderer)
         glGetProgramInfoLog(shader_program_id, MAX_STR_LEN, NULL, info_log);
         LOG_ERROR("Shader program compilation failed: %s", info_log);
     }
-    renderer->shader.id = shader_program_id;
     glDeleteShader(vertex_shader);
     glDeleteShader(fragment_shader);
     
-    u32 VBO, VAO, EBO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
-    glBindVertexArray(VAO);
+    // ----------------------------------------------------------------------------------------------------------
+    // Load Texture
+    // ----------------------------------------------------------------------------------------------------------
     
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-    
-    // Position
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(f32), (void*)0);
-    glEnableVertexAttribArray(0);
-    
-    // Color
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(f32), (void*)(3* sizeof(f32)));
-    glEnableVertexAttribArray(1);
-    
-    // Texture
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(f32), (void*)(6 * sizeof(f32)));
-    glEnableVertexAttribArray(2);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, 0); 
-    glBindVertexArray(0);
-    
-    // STB
     stbi_set_flip_vertically_on_load(true);
     i32 width, height, nr_channels;
     u8 *data = stbi_load("assets/test1.png", &width, &height, &nr_channels, 0); 
@@ -144,29 +103,65 @@ void renderer_init(Renderer_State *renderer)
         LOG_ERROR("stbi_load failed");
     }
     stbi_image_free(data);
-    renderer->texture.id = texture_id;
     
-    renderer->mesh.vao_id = VAO;
+    renderer->shader.id = shader_program_id;
+    
+    create_triangle(renderer);
 }
 
-internal
-void renderer_begin(Renderer_State *renderer)
+internal 
+void renderer_draw(Renderer_State *renderer)
 {
     glViewport(0, 0, 800, 720);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-}
-
-internal 
-void renderer_submit(Renderer_State *renderer)
-{
+    
     glUseProgram(renderer->shader.id);
-    glBindTexture(GL_TEXTURE_2D, renderer->texture.id);
     glBindVertexArray(renderer->mesh.vao_id);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 }
 
 internal 
-void renderer_end(Renderer_State *renderer)
+void create_triangle(Renderer_State *renderer)
 {
+    Mesh mesh = {0};
+    
+    u32 VBO, VAO, EBO;
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
+    glBindVertexArray(VAO);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    local_variable f32 positions[] = {
+        0.5f,  0.5f, 0.0f,  1.0f, 1.0f, 1.0f,
+        0.5f, -0.5f, 0.0f,  1.0f, 1.0f, 1.0f,
+        -0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f,
+    };
+    local_variable u32 indices[] = { 
+        0, 1, 2,
+    };
+    
+    // fill buffer
+    glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_STATIC_DRAW);
+    
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    
+    // Position
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(f32), 0); 
+    glEnableVertexAttribArray(0);
+    
+    // Color
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(f32), (void*)(3 * sizeof(f32)));
+    glEnableVertexAttribArray(1);
+    
+    // Texture
+    //glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)(sizeof(positions) + sizeof(colors))); 
+    //glEnableVertexAttribArray(2);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, 0); 
+    glBindVertexArray(0);
+    
+    renderer->mesh.vao_id = VAO;
 }

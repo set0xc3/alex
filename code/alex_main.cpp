@@ -1,19 +1,12 @@
 #include "alex_input.h"
 #include "alex_logger.h"
 #include "alex_window.h"
-#include "alex_world.h"
 #include "alex_renderer.h"
-
-struct Game_State
-{
-    Game_World world;
-};
 
 struct Application_State
 {
     b8 running;
     
-    Game_State game;
     Input_State input;
     Window_State window;
     Renderer_State renderer;
@@ -30,6 +23,8 @@ main(void)
     window_init(&app.window);
     renderer_init(&app.renderer);
     
+    String_u8 string;
+    
     app.running = true;
     while (app.running)
     {
@@ -41,9 +36,7 @@ main(void)
         }
         input_update(&app.input);
         
-        renderer_begin(&app.renderer);
-        renderer_submit(&app.renderer);
-        renderer_end(&app.renderer);
+        renderer_draw(&app.renderer);
         
         window_update(&app.window);
         
