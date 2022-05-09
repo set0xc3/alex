@@ -89,3 +89,10 @@ Shader shader_create(const char *vert_path, const char *frag_path)
     
     return shader;
 }
+
+internal 
+void shader_set_math4(const Shader *shader, const char *name, const glm::mat4 &v)
+{
+    int loc = glGetUniformLocation(shader->id, name);
+    glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(v));
+}

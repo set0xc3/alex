@@ -8,10 +8,10 @@ window_init(Window *window)
     Window_Data wd;
     memset(&wd, 0, sizeof(wd));
     sprintf(wd.title, "Engine");
-    wd.x = 800;
+    wd.x = 0;
     wd.y = 0;
     wd.width = 800;
-    wd.height = 720;
+    wd.height = 600;
     wd.flags = SDL_WINDOW_OPENGL; 
     
     if(SDL_Init(SDL_INIT_VIDEO) < 0)

@@ -49,37 +49,6 @@ struct String_u8
     u64 size;
 };
 
-struct Texture 
-{
-    u32 id;
-};
-typedef Texture Texture2D;
-
-struct Vertex
-{
-    f32 position[3];
-    f32 color[3];
-};
-
-struct Mesh 
-{
-    u32 vao_id;
-    u32 indices;
-};
-
-struct Camera
-{
-};
-
-struct Entity
-{
-    f32 position[3];
-    f32 scale[3];
-    f32 rotation[3];
-    
-    Mesh mesh;
-};
-
 internal char *get_data_from_file(const char *path);
 
 #endif // ALEX_H
