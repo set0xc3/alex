@@ -1,37 +1,16 @@
 #ifndef ALEX_RENDERER_H
 #define ALEX_RENDERER_H
 
-struct Shader 
+#include "alex_shader.h"
+
+struct Renderer
 {
-    u32 id;
 };
 
-struct Texture 
-{
-    u32 id;
-};
-typedef Texture Texture2D;
+internal void renderer_init(Renderer *renderer);
+internal void renderer_draw(Renderer *renderer, const Shader *shader, 
+                            const Entity *mesh);
 
-struct Mesh 
-{
-    u32 vao_id;
-    
-    u32 indices;
-    
-    i32 vertex_count;
-    i32 triangle_count;
-};
-
-struct Renderer_State
-{
-    Mesh      mesh;
-    Shader    shader;
-    Texture2D texture;
-};
-
-internal void renderer_init (Renderer_State *renderer);
-internal void renderer_draw (Renderer_State *renderer);
-
-internal void create_triangle (Renderer_State *renderer);
+internal Mesh create_triangle(Renderer *renderer);
 
 #endif // ALEX_RENDERER_H

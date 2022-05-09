@@ -16,17 +16,17 @@ struct Window_Data
     char title[MAX_STR_LEN];
 };
 
-struct Window_State
+struct Window
 {
     SDL_Window *window;
     SDL_GLContext gl_context;
 };
 
-internal b8 window_init         (Window_State *window);
-internal void window_update     (Window_State *window);
-internal b8 window_handle_event (Input_State *input);
+internal b8 window_init         (Window *window);
+internal void window_update     (Window *window);
+internal b8 window_handle_event (Input *input);
 
-internal void window_visible (const Window_State *window, const b8 visible);
-internal b8 window_set_vsync (const Window_State *window, const b8 interval);
+internal void window_visible (const Window *window, const b8 visible);
+internal b8 window_set_vsync (const Window *window, const b8 interval);
 
 #endif // ALEX_WINDOW_H

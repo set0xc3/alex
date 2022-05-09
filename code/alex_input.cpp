@@ -1,13 +1,13 @@
 #include "alex_input.h"
 
 internal void 
-input_init(Input_State *input)
+input_init(Input *input)
 {
     memset(input, 0, sizeof(*input));
 }
 
 internal void 
-input_add_key_event(Input_State *input, const Key_Code key, const b8 down)
+input_add_key_event(Input *input, const Key_Code key, const b8 down)
 {
     Input_Event e = {};
     e.type        = InputEventType_Key;
@@ -18,7 +18,7 @@ input_add_key_event(Input_State *input, const Key_Code key, const b8 down)
 }
 
 internal void 
-input_add_mouse_button_event(Input_State *input, const Mouse_Button button, const b8 down)
+input_add_mouse_button_event(Input *input, const Mouse_Button button, const b8 down)
 {
     Input_Event e   = {};
     e.type          = InputEventType_MouseButton;
@@ -29,7 +29,7 @@ input_add_mouse_button_event(Input_State *input, const Mouse_Button button, cons
 }
 
 internal void 
-input_add_character_event(Input_State *input, u8 c)
+input_add_character_event(Input *input, u8 c)
 {
     Input_Event e = {};
     e.type        = InputEventType_Text;
@@ -39,7 +39,7 @@ input_add_character_event(Input_State *input, u8 c)
 }
 
 internal void 
-input_update(Input_State *input)
+input_update(Input *input)
 {
     Input_Event *e = &input->events;
     
@@ -64,47 +64,47 @@ input_update(Input_State *input)
 }
 
 internal void 
-input_reset(Input_State *input)
+input_reset(Input *input)
 {
-    memset(&input->mouse_pressed, 0, sizeof(*input->mouse_pressed));
-    memset(&input->mouse_released, 0, sizeof(*input->mouse_released));
+    memset(&input->mouse_pressed, 0, sizeof(input->mouse_pressed));
+    memset(&input->mouse_released, 0, sizeof(input->mouse_released));
     
-    memset(&input->key_pressed, 0, sizeof(*input->key_pressed));
-    memset(&input->key_released, 0, sizeof(*input->key_released));
+    memset(&input->key_pressed, 0, sizeof(input->key_pressed));
+    memset(&input->key_released, 0, sizeof(input->key_released));
 }
 
 internal b8
-input_is_key_down(const Input_State *input, const Key_Code key)
+input_is_key_down(const Input *input, const Key_Code key)
 {
     return input->key_down[key];
 }
 
 internal b8
-input_is_key_pressed(const Input_State *input, const Key_Code key)
+input_is_key_pressed(const Input *input, const Key_Code key)
 {
     return input->key_pressed[key];
 }
 
 b8
-input_is_key_released(const Input_State *input, const Key_Code key)
+input_is_key_released(const Input *input, const Key_Code key)
 {
     return input->key_released[key];
 }
 
 b8
-input_is_mouse_down(const Input_State *input, const Mouse_Button button)
+input_is_mouse_down(const Input *input, const Mouse_Button button)
 {
     return input->mouse_down[button];
 }
 
 b8
-input_is_mouse_pressed(const Input_State *input, const Mouse_Button button)
+input_is_mouse_pressed(const Input *input, const Mouse_Button button)
 {
     return input->mouse_pressed[button];
 }
 
 b8
-input_is_mouse_released(const Input_State *input, const Mouse_Button button)
+input_is_mouse_released(const Input *input, const Mouse_Button button)
 {
     return input->mouse_released[button];
 }

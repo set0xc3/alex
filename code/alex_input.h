@@ -105,7 +105,7 @@ enum Key_Code
     KeyCode_Unknown = -1,
 };
 
-struct Input_State
+struct Input
 {
     b8 mouse_down[3];
     b8 mouse_prev_down[3];
@@ -120,24 +120,24 @@ struct Input_State
     Input_Event events;
 };
 
-internal void input_init (Input_State *input);
+internal void input_init (Input *input);
 
 // Events
-internal void input_add_key_event          (Input_State *input, const Key_Code key, const b8 down);  
-internal void input_add_mouse_button_event (Input_State *input, const Mouse_Button button, const b8 down);  
-internal void input_add_character_event    (Input_State *input, const u8 c);  
+internal void input_add_key_event          (Input *input, const Key_Code key, const b8 down);  
+internal void input_add_mouse_button_event (Input *input, const Mouse_Button button, const b8 down);  
+internal void input_add_character_event    (Input *input, const u8 c);  
 
-internal void input_update (Input_State *input);
-internal void input_reset  (Input_State *input);
+internal void input_update (Input *input);
+internal void input_reset  (Input *input);
 
 // Keyboard
-internal b8 input_is_key_down     (const Input_State *input, const Key_Code key);
-internal b8 input_is_key_pressed  (const Input_State *input, const Key_Code key);
-internal b8 input_is_key_released (const Input_State *input, const Key_Code key);
+internal b8 input_is_key_down     (const Input *input, const Key_Code key);
+internal b8 input_is_key_pressed  (const Input *input, const Key_Code key);
+internal b8 input_is_key_released (const Input *input, const Key_Code key);
 
 // Mouse
-internal b8 input_is_mouse_down     (const Input_State *input, const Mouse_Button button);
-internal b8 input_is_mouse_pressed  (const Input_State *input, const Mouse_Button button);
-internal b8 input_is_mouse_released (const Input_State *input, const Mouse_Button button);
+internal b8 input_is_mouse_down     (const Input *input, const Mouse_Button button);
+internal b8 input_is_mouse_pressed  (const Input *input, const Mouse_Button button);
+internal b8 input_is_mouse_released (const Input *input, const Mouse_Button button);
 
 #endif // ALEX_INPUT_H

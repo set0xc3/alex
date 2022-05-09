@@ -1,7 +1,7 @@
 #include "alex_window.h"
 
 internal b8
-window_init(Window_State *window)
+window_init(Window *window)
 {
     memset(window, 0, sizeof(*window));
     
@@ -58,13 +58,13 @@ window_init(Window_State *window)
 }
 
 internal void 
-window_update(Window_State *window)
+window_update(Window *window)
 {
     SDL_GL_SwapWindow(window->window);
 }
 
 internal b8 
-window_handle_event(Input_State *input)
+window_handle_event(Input *input)
 {
     SDL_Event event;
     while(SDL_PollEvent(&event) != 0)
@@ -172,7 +172,7 @@ window_handle_event(Input_State *input)
 }
 
 internal 
-void window_visible(const Window_State *window, const b8 visible)
+void window_visible(const Window *window, const b8 visible)
 {
     if (visible)
         SDL_ShowWindow(window->window);
@@ -181,7 +181,7 @@ void window_visible(const Window_State *window, const b8 visible)
 }
 
 internal 
-b8 window_set_vsync(const Window_State *window, const b8 interval)
+b8 window_set_vsync(const Window *window, const b8 interval)
 {
     // Use Vsync
     if(SDL_GL_SetSwapInterval(true) < 0)
