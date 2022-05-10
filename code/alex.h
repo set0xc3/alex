@@ -21,12 +21,7 @@ typedef int64_t i64;
 
 typedef float  f32;
 typedef double f64;
-
-// Bool
-typedef uint8_t b8;
-
-#define true  1
-#define false 0
+typedef bool   b8;
 
 #define internal        static
 #define local_variable  static
@@ -43,10 +38,24 @@ typedef uint8_t b8;
 // Time
 #define UTC (3) // Europe/Moscow
 
+struct String_char
+{
+    char *str;
+    u64 size;
+};
+
 struct String_u8
 {
     u8 *str;
     u64 size;
+};
+
+struct Color
+{
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 a;
 };
 
 internal char *get_data_from_file(const char *path);

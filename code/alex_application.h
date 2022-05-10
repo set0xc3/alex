@@ -1,6 +1,10 @@
 #ifndef ALEX_APPLICATION_H
 #define ALEX_APPLICATION_H
 
+#include "alex_input.h"
+#include "alex_renderer.h"
+#include "alex_window.h"
+
 struct Application
 {
     b8 running;

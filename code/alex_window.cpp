@@ -165,6 +165,20 @@ window_handle_event(Input *input)
                 input_add_mouse_button_event(input, button, down);
                 break;
             }
+            
+            case SDL_MOUSEMOTION:
+            {
+                v2 position = { (f32)event.motion.x, (f32)event.motion.y };
+                input_add_mouse_position_event(input, position);
+                break;
+            }
+            
+            case SDL_MOUSEWHEEL:
+            {
+                i32 wheel = event.wheel.y;
+                input_add_mouse_wheel_event(input, wheel);
+                break;
+            }
         }
     }
     

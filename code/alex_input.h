@@ -5,6 +5,8 @@ enum Input_Event_Type
 {
     InputEventType_None = 0,
     InputEventType_MouseButton,
+    InputEventType_MouseMoved,
+    InputEventType_MouseWheel,
     InputEventType_Key,
     InputEventType_Text,
     InputEventType_Count
@@ -39,6 +41,9 @@ struct Input_Event
     {
         u8 c;
     } text;
+    
+    v2 mouse_position;
+    i32 mouse_wheel;
 };
 
 
@@ -117,27 +122,39 @@ struct Input
     b8 key_pressed[256];
     b8 key_released[256];
     
+    v2 mouse_position;
+    v2 mouse_prev_position;
+    v2 mouse_delta;
+    i32 mouse_wheel;
+    
     Input_Event events;
 };
 
-internal void input_init (Input *input);
+internal void input_init(Input *input);
 
 // Events
-internal void input_add_key_event          (Input *input, const Key_Code key, const b8 down);  
-internal void input_add_mouse_button_event (Input *input, const Mouse_Button button, const b8 down);  
-internal void input_add_character_event    (Input *input, const u8 c);  
+internal void input_add_key_event(Input *input, const Key_Code key, const b8 down);  
+internal void input_add_character_event(Input *input, const u8 c);  
 
-internal void input_update (Input *input);
-internal void input_reset  (Input *input);
+internal void input_add_mouse_button_event(Input *input, const Mouse_Button button, const b8 down);  
+internal void input_add_mouse_position_event(Input *input, const v2 position);  
+internal void input_add_mouse_wheel_event(Input *input, const i32 wheel);  
+
+internal void input_update(Input *input);
+internal void input_reset(Input *input);
 
 // Keyboard
-internal b8 input_is_key_down     (const Input *input, const Key_Code key);
-internal b8 input_is_key_pressed  (const Input *input, const Key_Code key);
-internal b8 input_is_key_released (const Input *input, const Key_Code key);
+internal b8 input_is_key_down(const Input *input, const Key_Code key);
+internal b8 input_is_key_pressed(const Input *input, const Key_Code key);
+internal b8 input_is_key_released(const Input *input, const Key_Code key);
 
 // Mouse
-internal b8 input_is_mouse_down     (const Input *input, const Mouse_Button button);
-internal b8 input_is_mouse_pressed  (const Input *input, const Mouse_Button button);
-internal b8 input_is_mouse_released (const Input *input, const Mouse_Button button);
+internal b8 input_is_mouse_down(const Input *input, const Mouse_Button button);
+internal b8 input_is_mouse_pressed(const Input *input, const Mouse_Button button);
+internal b8 input_is_mouse_released(const Input *input, const Mouse_Button button);
+
+internal v2 input_get_mouse_position(const Input *input);
+internal v2 input_get_mouse_delta(const Input *input);
+internal i32 input_get_mouse_wheel(const Input *input);
 
 #endif // ALEX_INPUT_H

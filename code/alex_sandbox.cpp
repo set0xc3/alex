@@ -88,8 +88,6 @@ void sandbox_init(Application *app)
         
         sb.entity.mesh.vao_id = VAO;
     }
-    
-    
 }
 
 internal
@@ -100,6 +98,8 @@ void sandbox_on_update(Application *app)
 internal
 void sandbox_on_event(Application *app)
 {
+    Input_Event &e = app->input.events;
+    
     if(sb.camera.pitch > 89.0f)
         sb.camera.pitch = 89.0f;
     if(sb.camera.pitch < -89.0f)
