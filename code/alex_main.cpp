@@ -21,7 +21,6 @@ main(void)
     app.running = true;
     while (app.running)
     {
-        input_reset(&app.input);
         if (!window_handle_event(&app.input))
         {
             app.running = false;

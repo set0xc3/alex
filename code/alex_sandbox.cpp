@@ -25,6 +25,10 @@ struct Sandbox
 
 global_variable Sandbox sb;
 
+global_variable i64 event_count = 0;
+global_variable Input_Event events[256];
+
+
 internal
 void sandbox_init(Application *app)
 {
@@ -100,6 +104,23 @@ void sandbox_on_event(Application *app)
 {
     Input_Event &e = app->input.events;
     
+    if (input_is_mouse_pressed(&app->input, MouseButton_Left))
+    {
+        events[event_count].button.down = true;
+        
+        LOG_DEBUG("[%i] Add event", event_count);
+        
+        event_count++;
+    }
+    
+    if (input_is_mouse_down(&app->input, MouseButton_Right))
+    {
+        v2 delta = input_get_mouse_delta(&app->input);
+        f32 sen = 0.1f;
+        sb.camera.yaw   += delta.x * sen;
+        sb.camera.pitch += delta.y * sen;
+    }
+    
     if(sb.camera.pitch > 89.0f)
         sb.camera.pitch = 89.0f;
     if(sb.camera.pitch < -89.0f)
@@ -107,13 +128,13 @@ void sandbox_on_event(Application *app)
     
     glm::vec3 direction;
     direction.x = cos(glm::radians(sb.camera.yaw)) * cos(glm::radians(sb.camera.pitch));
-    direction.y = sin(glm::radians(sb.camera.pitch));
+    direction.y = sin(glm::radians(-sb.camera.pitch));
     direction.z = sin(glm::radians(sb.camera.yaw)) * cos(glm::radians(sb.camera.pitch));
     sb.camera.front = glm::normalize(direction);
     
     // Input Camera
     {
-#if 0
+#if 1
         f32 speed = 0.05f;
         if (input_is_key_down(&app->input, KeyCode_W))
             sb.camera.pos += speed * sb.camera.front;
@@ -132,6 +153,7 @@ void sandbox_on_event(Application *app)
     
     // Input Entity
     {
+#if 0
         f32 speed = 0.05f;
         if (input_is_key_down(&app->input, KeyCode_W))
             sb.entity.position.x += speed;
@@ -141,6 +163,7 @@ void sandbox_on_event(Application *app)
             sb.entity.position.z -= speed;
         if (input_is_key_down(&app->input, KeyCode_D))
             sb.entity.position.z += speed;
+#endif
     }
 }
 

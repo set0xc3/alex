@@ -64,6 +64,15 @@ input_update(Input *input)
 {
     Input_Event *e = &input->events;
     
+    memset(&input->mouse_pressed, 0, sizeof(input->mouse_pressed));
+    memset(&input->mouse_released, 0, sizeof(input->mouse_released));
+    
+    memset(&input->key_pressed, 0, sizeof(input->key_pressed));
+    memset(&input->key_released, 0, sizeof(input->key_released));
+    
+    input->mouse_wheel = 0;
+    input->mouse_delta = {0};
+    
     if (e->button.button != MouseButton_Unknown && e->type == InputEventType_MouseButton)
     {
         memcpy(&input->mouse_prev_down, &input->mouse_prev_down, sizeof(input->mouse_down));
@@ -74,7 +83,7 @@ input_update(Input *input)
     }
     else if (e->key.key != KeyCode_Unknown && e->type == InputEventType_Key)
     {
-        memcpy(&input->key_prev_down, &input->key_down, sizeof(input->key_down));
+        memcpy(&input->key_prev_down, &input->key_prev_down, sizeof(input->key_down));
         
         input->key_down[e->key.key] = e->key.down;
         input->key_pressed[e->key.key] = input->key_down[e->key.key] && !input->key_prev_down[e->key.key];
@@ -93,21 +102,8 @@ input_update(Input *input)
     {
         input->mouse_wheel = e->mouse_wheel;
     }
-}
-
-internal void 
-input_reset(Input *input)
-{
+    
     memset(&input->events, 0, sizeof(input->events));
-    
-    memset(&input->mouse_pressed, 0, sizeof(input->mouse_pressed));
-    memset(&input->mouse_released, 0, sizeof(input->mouse_released));
-    
-    memset(&input->key_pressed, 0, sizeof(input->key_pressed));
-    memset(&input->key_released, 0, sizeof(input->key_released));
-    
-    input->mouse_wheel = 0;
-    input->mouse_delta = {0};
 }
 
 internal b8

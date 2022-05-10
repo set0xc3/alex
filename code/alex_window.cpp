@@ -12,7 +12,7 @@ window_init(Window *window)
     wd.y = 0;
     wd.width = 800;
     wd.height = 600;
-    wd.flags = SDL_WINDOW_OPENGL; 
+    wd.flags = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE; 
     
     if(SDL_Init(SDL_INIT_VIDEO) < 0)
     {
@@ -157,7 +157,7 @@ window_handle_event(Input *input)
                     case SDL_BUTTON_MIDDLE: button = MouseButton_Middle; break;
                     case SDL_BUTTON_RIGHT:  button = MouseButton_Right;  break;
                 }
-                switch (event.key.type)
+                switch (event.button.type)
                 {
                     case SDL_MOUSEBUTTONDOWN: down = true;  break;
                     case SDL_MOUSEBUTTONUP:   down = false; break;

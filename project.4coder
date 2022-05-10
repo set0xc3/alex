@@ -2,12 +2,12 @@ version(1);
 project_name = "4coder";
 
 patterns = {
-"*.c",
-"*.cpp",
-"*.h",
-"*.bat",
-"*.sh",
-"*.4coder",
+    "*.c",
+    "*.cpp",
+    "*.h",
+    "*.bat",
+    "*.sh",
+    "*.4coder",
 };
 
 blacklist_patterns =
@@ -29,18 +29,18 @@ load_paths =
 command_list =
 {
 	{ .name = "run",
-      .out = "*compilation*", .footer_panel = true, .save_dirty_files = true,
-      .cmd = { {"tools\run-win.bat", .os = "win"}, {"tools/run-linux.sh", .os = "linux"}, },
+        .out = "*compilation*", .footer_panel = true, .save_dirty_files = true,
+        .cmd = { {"tools\run-win.bat", .os = "win"}, {"tools/run-linux.sh", .os = "linux"}, },
     },
-
+    
     { .name = "build",
-      .out = "*compilation*", .footer_panel = true, .save_dirty_files = true,
-      .cmd = { {"tools\build-all-win.bat", .os = "win"}, {"code/tools/build_x64-linux.sh", .os = "linux"}, },
+        .out = "*compilation*", .footer_panel = true, .save_dirty_files = true,
+        .cmd = { {"tools\build-all-win.bat", .os = "win"}, {"code/tools/build_x64-linux.sh", .os = "linux"}, },
     },
-
+    
 	{ .name = "combo",
-      .out = "*compilation*", .footer_panel = true, .save_dirty_files = true,
-      .cmd = { {"tools\combo-win.bat", .os = "win"}, {"code/tools/build_x64-linux.sh && tools/run-linux.sh", .os = "linux"}, },
+        .out = "*compilation*", .footer_panel = true, .save_dirty_files = true,
+        .cmd = { {"tools\combo-win.bat", .os = "win"}, {"code/tools/build_x64-linux.sh && tools/run-linux.sh", .os = "linux"}, },
     },
 };
 
