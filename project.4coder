@@ -28,19 +28,22 @@ load_paths =
 
 command_list =
 {
-	{ .name = "run",
+	{ 
+        .name = "run",
         .out = "*compilation*", .footer_panel = true, .save_dirty_files = true,
-        .cmd = { {"tools\run-win.bat", .os = "win"}, {"tools/run-linux.sh", .os = "linux"}, },
+        .cmd = { {"tools/run.sh", .os = "linux"}, },
     },
     
-    { .name = "build",
+    { 
+        .name = "build",
         .out = "*compilation*", .footer_panel = true, .save_dirty_files = true,
-        .cmd = { {"tools\build-all-win.bat", .os = "win"}, {"code/tools/build_x64-linux.sh", .os = "linux"}, },
+        .cmd = { {"tools/build.sh", .os = "linux"}, },
     },
     
-	{ .name = "combo",
+	{ 
+        .name = "combo",
         .out = "*compilation*", .footer_panel = true, .save_dirty_files = true,
-        .cmd = { {"tools\combo-win.bat", .os = "win"}, {"code/tools/build_x64-linux.sh && tools/run-linux.sh", .os = "linux"}, },
+        .cmd = { {"tools/build.sh && tools/run.sh", .os = "linux"}, },
     },
 };
 
