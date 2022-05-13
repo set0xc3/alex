@@ -24,9 +24,7 @@ struct Sandbox
 };
 
 global_variable Sandbox sb;
-
 global_variable i64 event_count = 0;
-global_variable Input_Event events[256];
 
 
 internal
@@ -43,8 +41,8 @@ void sandbox_init(Application *app)
     
     
     // Create Shaders
-    sb.shader = shader_create("assets/shaders/flat_color.vs", 
-                              "assets/shaders/flat_color.fs");
+    sb.shader = shader_create("./assets/shaders/flat_color.vs", 
+                              "./assets/shaders/flat_color.fs");
     // Create Triangle
     {
         local_variable Vertex vertecs[]
@@ -102,23 +100,14 @@ void sandbox_on_update(Application *app)
 internal
 void sandbox_on_event(Application *app)
 {
-    Input_Event &e = app->input.events;
-    
-    if (input_is_mouse_pressed(&app->input, MouseButton_Left))
-    {
-        events[event_count].button.down = true;
-        
-        LOG_DEBUG("[%i] Add event", event_count);
-        
-        event_count++;
-    }
-    
     if (input_is_mouse_down(&app->input, MouseButton_Right))
     {
         v2 delta = input_get_mouse_delta(&app->input);
-        f32 sen = 0.1f;
+        f32 sen = 0.4f;
         sb.camera.yaw   += delta.x * sen;
         sb.camera.pitch += delta.y * sen;
+        
+        //LOG_DEBUG("mouse:delta2(%f,%f)", delta.x, delta.y);
     }
     
     if(sb.camera.pitch > 89.0f)
@@ -171,7 +160,7 @@ internal
 void sandbox_on_render(Application *app)
 {
     renderer_set_viewport(0, 0, 800, 600);
-    renderer_set_color(0.2f, 0.3f, 0.3f, 1.0f);
+    renderer_set_color(0.08f, 0.08f, 0.08f, 1.0f);
     
     // Camera
     {

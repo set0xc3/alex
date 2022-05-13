@@ -10,68 +10,50 @@ input_init(Input *input)
 internal void 
 input_add_key_event(Input *input, const Key_Code key, const b8 down)
 {
-    Input_Event e = {};
-    e.type        = InputEventType_Key;
-    e.source      = InputSource_Keyboard;
-    e.key.key     = key;
-    e.key.down    = down;
-    input->events = e;
+    input->key_down[key] = down;
 }
 
 internal void 
 input_add_character_event(Input *input, u8 c)
 {
-    Input_Event e = {};
-    e.type        = InputEventType_Text;
-    e.source      = InputSource_Keyboard;
-    e.text.c      = c;
-    input->events = e;
 }
 
 internal void 
 input_add_mouse_button_event(Input *input, const Mouse_Button button, const b8 down)
 {
-    Input_Event e   = {};
-    e.type          = InputEventType_MouseButton;
-    e.source        = InputSource_Mouse;
-    e.button.button = button;
-    e.button.down   = down;
-    input->events   = e;
+    input->mouse_down[button] = down;
 }
 
 internal
 void input_add_mouse_position_event(Input *input, const v2 position)
 {
-    Input_Event e    = {};
-    e.type           = InputEventType_MouseMoved;
-    e.source         = InputSource_Mouse;
-    e.mouse_position = position;
-    input->events    = e;
+    input->mouse_prev_position = input->mouse_position;
+    input->mouse_position = position;
+    
+    // Calc delta
+    input->mouse_delta.x = input->mouse_position.x - input->mouse_prev_position.x;
+    input->mouse_delta.y = input->mouse_position.y - input->mouse_prev_position.y;
 }
 
 internal
 void input_add_mouse_wheel_event(Input *input, const i32 wheel)
 {
-    Input_Event e = {};
-    e.type        = InputEventType_MouseWheel;
-    e.source      = InputSource_Mouse;
-    e.mouse_wheel = wheel;
-    input->events = e;
+    input->mouse_wheel = wheel;
 }
 
 internal void 
 input_update(Input *input)
 {
-    Input_Event *e = &input->events;
+    //LOG_DEBUG("mouse:delta(%f,%f)", input->mouse_delta.x, input->mouse_delta.y);
+    //LOG_DEBUG("mouse:wheel(%i)", input->mouse_wheel);
     
-    memset(&input->mouse_pressed, 0, sizeof(input->mouse_pressed));
-    memset(&input->mouse_released, 0, sizeof(input->mouse_released));
+#if 0
     
-    memset(&input->key_pressed, 0, sizeof(input->key_pressed));
-    memset(&input->key_released, 0, sizeof(input->key_released));
+    //memset(&input->mouse_pressed, 0, sizeof(input->mouse_pressed));
+    //memset(&input->mouse_released, 0, sizeof(input->mouse_released));
     
-    input->mouse_wheel = 0;
-    input->mouse_delta = {0};
+    //memset(&input->key_pressed, 0, sizeof(input->key_pressed));
+    //memset(&input->key_released, 0, sizeof(input->key_released));
     
     if (e->button.button != MouseButton_Unknown && e->type == InputEventType_MouseButton)
     {
@@ -91,19 +73,22 @@ input_update(Input *input)
     }
     else if (e->type == InputEventType_MouseMoved)
     {
-        input->mouse_prev_position = input->mouse_position;
-        input->mouse_position = e->mouse_position;
-        
-        // Calc delta
-        input->mouse_delta.x = input->mouse_position.x - input->mouse_prev_position.x;
-        input->mouse_delta.y = input->mouse_position.y - input->mouse_prev_position.y;
+        //input->mouse_prev_position = input->mouse_position;
+        //input->mouse_position = e->mouse_position;
     }
     else if (e->type == InputEventType_MouseWheel)
     {
-        input->mouse_wheel = e->mouse_wheel;
+        //input->mouse_wheel = e->mouse_wheel;
     }
     
-    memset(&input->events, 0, sizeof(input->events));
+    //memset(&input->event, 0, sizeof(input->event));
+#endif
+}
+
+internal void input_reset(Input *input)
+{
+    input->mouse_wheel = 0;
+    input->mouse_delta = {0};
 }
 
 internal b8

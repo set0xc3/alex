@@ -26,7 +26,6 @@ main(void)
             app.running = false;
             break;
         }
-        input_update(&app.input);
         
         // Update modules
         sandbox_on_event(&app);
@@ -35,8 +34,10 @@ main(void)
         
         window_update(&app.window);
         
-        SDL_Delay(1);
+        LOG_DEBUG("TEST");
+        SDL_Delay(1000/60);
     }
+    SDL_Quit();
     
     return 0;
 }

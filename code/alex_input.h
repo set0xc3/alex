@@ -127,7 +127,7 @@ struct Input
     v2 mouse_delta;
     i32 mouse_wheel;
     
-    Input_Event events;
+    //Input_Event event;
 };
 
 internal void input_init(Input *input);
@@ -141,6 +141,7 @@ internal void input_add_mouse_position_event(Input *input, const v2 position);
 internal void input_add_mouse_wheel_event(Input *input, const i32 wheel);  
 
 internal void input_update(Input *input);
+internal void input_reset(Input *input);
 
 // Keyboard
 internal b8 input_is_key_down(const Input *input, const Key_Code key);

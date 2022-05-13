@@ -14,10 +14,12 @@ includes="
 libs="
 -lm
 -lGL 
+-lX11
 -lSDL2
 "
 
 binary=$root/build/sandbox
-flags="-O0 -g"
+flags="-O0 -g3"
 
-g++ $files $includes $flags $libs -o $binary
+mkdir -p $root/build/
+clang++ $files $includes $flags $libs -o $binary

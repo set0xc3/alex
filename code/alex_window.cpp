@@ -14,7 +14,7 @@ window_init(Window *window)
     wd.height = 600;
     wd.flags = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE; 
     
-    if(SDL_Init(SDL_INIT_VIDEO) < 0)
+    if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
         LOG_ERROR("SDL_Init failed: %s", SDL_GetError());
         return false;
@@ -25,14 +25,14 @@ window_init(Window *window)
                                       wd.x,wd.y, 
                                       wd.width, wd.height, 
                                       wd.flags);
-    if(!window->window)
+    if (!window->window)
     {
         LOG_ERROR("SDL_CreateWindow failed: %s", SDL_GetError());
         return false;
     }
     
     window->gl_context = SDL_GL_CreateContext(window->window);
-    if(!window->gl_context)
+    if (!window->gl_context)
     {
         LOG_ERROR("SDL_GL_CreateContext failed: %s", SDL_GetError());
         return false;
@@ -66,6 +66,7 @@ window_update(Window *window)
 internal b8 
 window_handle_event(Input *input)
 {
+    input_reset(input);
     SDL_Event event;
     while(SDL_PollEvent(&event) != 0)
     {
@@ -180,6 +181,7 @@ window_handle_event(Input *input)
                 break;
             }
         }
+        input_update(input);
     }
     
     return true;
