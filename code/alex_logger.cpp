@@ -1,16 +1,5 @@
 #include "alex_logger.h"
 
-internal void
-logger_init()
-{
-    LOG_INFO("PI: %f", PI);
-    LOG_WARN("PI: %f", PI);
-    LOG_DEBUG("PI: %f", PI);
-    LOG_TRACE("PI: %f", PI);
-    LOG_ERROR("PI: %f", PI);
-    LOG_FATAL("PI: %f", PI);
-}
-
 internal void 
 logger_print(const Log_Type type, 
              const char *file_name, const i32 line,

@@ -12,7 +12,6 @@ enum Log_Type
     LogType_Count
 };
 
-internal void logger_init();
 internal void logger_print(const Log_Type type, 
                            const char *file_name, const i32 line,
                            const char *fmt, ...);

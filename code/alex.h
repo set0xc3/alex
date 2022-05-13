@@ -38,18 +38,6 @@ typedef bool   b8;
 // Time
 #define UTC (3) // Europe/Moscow
 
-struct String_char
-{
-    char *str;
-    u64 size;
-};
-
-struct String_u8
-{
-    u8 *str;
-    u64 size;
-};
-
 struct Color
 {
     u8 r;

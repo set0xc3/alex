@@ -126,8 +126,6 @@ struct Input
     v2 mouse_prev_position;
     v2 mouse_delta;
     i32 mouse_wheel;
-    
-    //Input_Event event;
 };
 
 internal void input_init(Input *input);

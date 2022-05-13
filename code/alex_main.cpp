@@ -5,13 +5,23 @@
 #include "alex_sandbox.h"
 
 int 
-main(void)
+main(int argc, char *argv[])
 {
     Application app;
     memset(&app, 0, sizeof(app));
     
     // Load Modules
-    logger_init();
+    
+    // Test Log
+#if 1
+    LOG_INFO("PI: %f", PI);
+    LOG_WARN("PI: %f", PI);
+    LOG_DEBUG("PI: %f", PI);
+    LOG_TRACE("PI: %f", PI);
+    LOG_ERROR("PI: %f", PI);
+    LOG_FATAL("PI: %f", PI);
+#endif
+    
     input_init(&app.input);
     window_init(&app.window);
     renderer_init(&app.renderer);
@@ -34,8 +44,8 @@ main(void)
         
         window_update(&app.window);
         
-        LOG_DEBUG("TEST");
-        SDL_Delay(1000/60);
+        //LOG_DEBUG("TEST");
+        SDL_Delay(1000/144);
     }
     SDL_Quit();
     
