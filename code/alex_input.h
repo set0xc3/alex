@@ -42,7 +42,7 @@ struct Input_Event
         u8 c;
     } text;
     
-    v2 mouse_position;
+    f32 mouse_position[2];
     i32 mouse_wheel;
 };
 
@@ -110,8 +110,39 @@ enum Key_Code
     KeyCode_Unknown = -1,
 };
 
-struct Input
+class Input
 {
+    public:
+    
+    void update();
+    void reset();
+    
+    // Keyboard
+    b8 is_key_down(const Key_Code key);
+    b8 is_key_pressed(const Key_Code key);
+    b8 is_key_released(const Key_Code key);
+    
+    // Mouse
+    b8 is_mouse_down(const Mouse_Button button);
+    b8 is_mouse_pressed(const Mouse_Button button);
+    b8 is_mouse_released(const Mouse_Button button);
+    
+    void get_mouse_position();
+    void get_mouse_delta();
+    void get_mouse_wheel();
+    
+    private:
+    
+    // Events
+    void add_key_event(const Key_Code key, const b8 down);  
+    void add_character_event(const u8 c);  
+    
+    void add_mouse_button_event(const Mouse_Button button, const b8 down);  
+    void add_mouse_position_event(const f32 x, const f32 y);  
+    void add_mouse_wheel_event(const f32 x, const f32 y);  
+    
+    private:
+    
     b8 mouse_down[3];
     b8 mouse_prev_down[3];
     b8 mouse_pressed[3];
@@ -122,37 +153,10 @@ struct Input
     b8 key_pressed[256];
     b8 key_released[256];
     
-    v2 mouse_position;
-    v2 mouse_prev_position;
-    v2 mouse_delta;
-    i32 mouse_wheel;
+    f32 mouse_position[2];
+    f32 mouse_prev_position[2];
+    f32 mouse_delta[2];
+    f32 mouse_wheel[2];
 };
-
-internal void input_init(Input *input);
-
-// Events
-internal void input_add_key_event(Input *input, const Key_Code key, const b8 down);  
-internal void input_add_character_event(Input *input, const u8 c);  
-
-internal void input_add_mouse_button_event(Input *input, const Mouse_Button button, const b8 down);  
-internal void input_add_mouse_position_event(Input *input, const v2 position);  
-internal void input_add_mouse_wheel_event(Input *input, const i32 wheel);  
-
-internal void input_update(Input *input);
-internal void input_reset(Input *input);
-
-// Keyboard
-internal b8 input_is_key_down(const Input *input, const Key_Code key);
-internal b8 input_is_key_pressed(const Input *input, const Key_Code key);
-internal b8 input_is_key_released(const Input *input, const Key_Code key);
-
-// Mouse
-internal b8 input_is_mouse_down(const Input *input, const Mouse_Button button);
-internal b8 input_is_mouse_pressed(const Input *input, const Mouse_Button button);
-internal b8 input_is_mouse_released(const Input *input, const Mouse_Button button);
-
-internal v2 input_get_mouse_position(const Input *input);
-internal v2 input_get_mouse_delta(const Input *input);
-internal i32 input_get_mouse_wheel(const Input *input);
 
 #endif // ALEX_INPUT_H

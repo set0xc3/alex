@@ -1,7 +1,6 @@
 #include "alex.h"
-#include "alex_math.h"
-#include "alex_application.h"
 
+#include "alex_application.cpp"
 #include "alex_camera.cpp"
 #include "alex_input.cpp"
 #include "alex_logger.cpp"

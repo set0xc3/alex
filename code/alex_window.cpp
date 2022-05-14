@@ -75,7 +75,6 @@ window_update(Window *window)
 internal b8 
 window_handle_event(Input *input)
 {
-    input_reset(input);
     SDL_Event event;
     while(SDL_PollEvent(&event) != 0)
     {
@@ -150,7 +149,6 @@ window_handle_event(Input *input)
                     case SDL_KEYDOWN: down = true;  break;
                     case SDL_KEYUP:   down = false; break;
                 }
-                input_add_key_event(input, key, down);
                 break;
             }
             break;
@@ -172,25 +170,21 @@ window_handle_event(Input *input)
                     case SDL_MOUSEBUTTONDOWN: down = true;  break;
                     case SDL_MOUSEBUTTONUP:   down = false; break;
                 }
-                input_add_mouse_button_event(input, button, down);
                 break;
             }
             
             case SDL_MOUSEMOTION:
             {
                 v2 position = { (f32)event.motion.x, (f32)event.motion.y };
-                input_add_mouse_position_event(input, position);
                 break;
             }
             
             case SDL_MOUSEWHEEL:
             {
                 i32 wheel = event.wheel.y;
-                input_add_mouse_wheel_event(input, wheel);
                 break;
             }
         }
-        input_update(input);
     }
     
     return true;

@@ -1,6 +1,8 @@
 #ifndef ALEX_CAMERA_H
 #define ALEX_CAMERA_H
 
+#include "alex_math.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -53,7 +55,7 @@ struct Camera3D
 
 internal void camera_init(Application *app);
 internal void camera_update(Application *app);
-internal void camera_on_rescale(Application *app);
+internal void camera_on_rescale(v2 offset, v2 scale);
 
 internal m4 get_camera_matrix(Camera3D camera);
 

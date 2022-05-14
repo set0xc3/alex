@@ -5,8 +5,14 @@
 #include "alex_renderer.h"
 #include "alex_window.h"
 
-struct Application
+class Application
 {
+    public:
+    
+    void run();
+    
+    public:
+    
     b8 running;
     
     Input input;

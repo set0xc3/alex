@@ -36,11 +36,7 @@ void sandbox_init(Application *app)
     memset(&box, 0, sizeof(box));
     
     // Camera
-    box.camera.yaw   = 0.0f;
-    box.camera.pitch = 0.0f;
-    box.camera.pos   = glm::vec3(-4.0f, 0.0f, 0.0f);
-    box.camera.front = glm::vec3(0.0f, 0.0f, 0.0f);
-    box.camera.up    = glm::vec3(0.0f, 1.0f, 0.0f);
+    camera_init(&box.camera);
     
     // Create Shaders
     sandbox_create_shaders();
@@ -59,60 +55,7 @@ void sandbox_on_update(Application *app)
 internal
 void sandbox_on_event(Application *app)
 {
-    if (input_is_mouse_down(&app->input, MouseButton_Right))
-    {
-        v2 delta = input_get_mouse_delta(&app->input);
-        f32 sen = 0.4f;
-        box.camera.yaw   += delta.x * sen;
-        box.camera.pitch += delta.y * sen;
-        
-        //LOG_DEBUG("mouse:delta2(%f,%f)", delta.x, delta.y);
-    }
     
-    if(box.camera.pitch > 89.0f)
-        box.camera.pitch = 89.0f;
-    if(box.camera.pitch < -89.0f)
-        box.camera.pitch = -89.0f;
-    
-    glm::vec3 direction;
-    direction.x = cos(glm::radians(box.camera.yaw)) * cos(glm::radians(box.camera.pitch));
-    direction.y = sin(glm::radians(-box.camera.pitch));
-    direction.z = sin(glm::radians(box.camera.yaw)) * cos(glm::radians(box.camera.pitch));
-    box.camera.front = glm::normalize(direction);
-    
-    // Input Camera
-    {
-#if 1
-        f32 speed = 0.05f;
-        if (input_is_key_down(&app->input, KeyCode_W))
-            box.camera.pos += speed * box.camera.front;
-        if (input_is_key_down(&app->input, KeyCode_S))
-            box.camera.pos -= speed * box.camera.front;
-        if (input_is_key_down(&app->input, KeyCode_A))
-            box.camera.pos -= glm::normalize(glm::cross(box.camera.front, box.camera.up)) * speed;
-        if (input_is_key_down(&app->input, KeyCode_D))
-            box.camera.pos += glm::normalize(glm::cross(box.camera.front, box.camera.up)) * speed;
-        if (input_is_key_down(&app->input, KeyCode_Q))
-            box.camera.yaw -= 0.5f;
-        if (input_is_key_down(&app->input, KeyCode_E))
-            box.camera.yaw += 0.5f;
-#endif
-    }
-    
-    // Input Entity
-    {
-#if 0
-        f32 speed = 0.05f;
-        if (input_is_key_down(&app->input, KeyCode_W))
-            box.entity.position.x += speed;
-        if (input_is_key_down(&app->input, KeyCode_S))
-            box.entity.position.x -= speed;
-        if (input_is_key_down(&app->input, KeyCode_A))
-            box.entity.position.z -= speed;
-        if (input_is_key_down(&app->input, KeyCode_D))
-            box.entity.position.z += speed;
-#endif
-    }
 }
 
 internal
