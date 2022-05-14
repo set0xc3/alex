@@ -4,7 +4,6 @@
 struct Vertex
 {
     f32 position[3];
-    f32 color[3];
 };
 
 struct Mesh 

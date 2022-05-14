@@ -14,6 +14,7 @@ void renderer_draw(Renderer *renderer, const Shader *shader, const Mesh *mesh)
     glUseProgram(shader->id);
     glBindVertexArray(mesh->vao_id);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    //glDrawArrays(GL_TRIANGLES, 6, 0);
 }
 
 internal 
