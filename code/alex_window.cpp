@@ -1,10 +1,7 @@
 #include "alex_window.h"
 
-internal b8
-window_init(Window *window)
+void Window::init()
 {
-    memset(window, 0, sizeof(*window));
-    
     Window_Data wd;
     memset(&wd, 0, sizeof(wd));
     sprintf(wd.title, "Engine");
@@ -17,31 +14,31 @@ window_init(Window *window)
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
         LOG_ERROR("SDL_Init failed: %s", SDL_GetError());
-        return false;
+        exit(-1);
     }
     
     // Create Window
-    window->window = SDL_CreateWindow(wd.title, 
-                                      wd.x,wd.y, 
-                                      wd.width, wd.height, 
-                                      wd.flags);
-    if (!window->window)
+    window = SDL_CreateWindow(wd.title, 
+                              wd.x,wd.y, 
+                              wd.width, wd.height, 
+                              wd.flags);
+    if (!window)
     {
         LOG_ERROR("SDL_CreateWindow failed: %s", SDL_GetError());
-        return false;
+        exit(-1);
     }
     
-    window->gl_context = SDL_GL_CreateContext(window->window);
-    if (!window->gl_context)
+    gl_context = SDL_GL_CreateContext(window);
+    if (!gl_context)
     {
         LOG_ERROR("SDL_GL_CreateContext failed: %s", SDL_GetError());
-        return false;
+        exit(-1);
     }
     
     if (!gladLoadGL())
     {
         LOG_ERROR("gladLoadGL failed");
-        return false;
+        exit(-1);
     }
     
     {
@@ -60,20 +57,16 @@ window_init(Window *window)
         LOG_INFO("OpenGL v%i.%i", major, minor);
     }
     
-    window_set_vsync(window, true);
-    window_visible(window, true);
-    
-    return true;
+    set_vsync(true);
+    set_visible(true);
 }
 
-internal void 
-window_update(Window *window)
+void Window::update()
 {
-    SDL_GL_SwapWindow(window->window);
+    SDL_GL_SwapWindow(window);
 }
 
-internal b8 
-window_handle_event(Input *input)
+b8 Window::handle_event()
 {
     SDL_Event event;
     while(SDL_PollEvent(&event) != 0)
@@ -175,13 +168,15 @@ window_handle_event(Input *input)
             
             case SDL_MOUSEMOTION:
             {
-                v2 position = { (f32)event.motion.x, (f32)event.motion.y };
+                // TODO(alex): Callback
+                //send((f32)event.motion.x, (f32)event.motion.y);  
                 break;
             }
             
             case SDL_MOUSEWHEEL:
             {
-                i32 wheel = event.wheel.y;
+                // TODO(alex): Callback
+                //send((f32)event.wheel.x, (f32)event.wheel.y);  
                 break;
             }
         }
@@ -190,23 +185,19 @@ window_handle_event(Input *input)
     return true;
 }
 
-internal 
-void window_visible(const Window *window, const b8 visible)
+void Window::set_visible(const b8 visible)
 {
     if (visible)
-        SDL_ShowWindow(window->window);
+        SDL_ShowWindow(window);
     else
-        SDL_HideWindow(window->window);
+        SDL_HideWindow(window);
 }
 
-internal 
-b8 window_set_vsync(const Window *window, const b8 interval)
+void Window::set_vsync(const b8 interval)
 {
     // Use Vsync
-    if(SDL_GL_SetSwapInterval(true) < 0)
+    if(SDL_GL_SetSwapInterval(interval) < 0)
     {
         LOG_WARN("Unable to set VSync: %s", SDL_GetError());
-        return false;
     }
-    return true;
 }

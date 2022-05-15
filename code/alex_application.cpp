@@ -2,10 +2,14 @@
 
 #include "alex_logger.h"
 
-void Application::run()
+#include <SDL2/SDL.h>
+
+void Application::init()
 {
+    running = true;
+    
     // Test Log
-#if 1
+#if 0
     LOG_INFO("PI: %f", PI);
     LOG_WARN("PI: %f", PI);
     LOG_DEBUG("PI: %f", PI);
@@ -14,26 +18,20 @@ void Application::run()
     LOG_FATAL("PI: %f", PI);
 #endif
     
-    //window_init(&app.window);
-    //renderer_init(&app.renderer);
-    //sandbox_init(&app);
-    
-    // MainLoop
-    running = true;
+    window.init();
+}
+
+void Application::run()
+{
     while (running)
     {
-        //if (!window_handle_event(&app.input))
+        if (!window.handle_event())
         {
-            //app.running = false;
-            //break;
+            running = false;
+            break;
         }
         
-        // Update modules
-        //sandbox_on_event(&app);
-        //sandbox_on_update(&app);
-        //sandbox_on_render(&app);
-        
-        //window_update(&app.window);
+        window.update();
         
         //LOG_DEBUG("TEST");
         SDL_Delay(1000/144);

@@ -2,22 +2,21 @@
 #define ALEX_APPLICATION_H
 
 #include "alex_input.h"
-#include "alex_renderer.h"
 #include "alex_window.h"
 
 class Application
 {
     public:
     
+    void init();
     void run();
     
-    public:
+    private:
     
     b8 running;
     
     Input input;
     Window window;
-    Renderer renderer;
 };
 
 #endif //ALEX_APPLICATION_H

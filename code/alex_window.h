@@ -8,25 +8,27 @@
 
 struct Window_Data
 {
-    i32 x;
-    i32 y;
-    i32 width;
-    i32 height;
+    i32 x, y;
+    i32 width, height;
     u32 flags;
     char title[MAX_STR_LEN];
 };
 
-struct Window
+class Window
 {
+    public:
+    
+    void init();
+    void update();
+    b8 handle_event();
+    
+    void set_visible(const b8 visible);
+    void set_vsync(const b8 interval);
+    
+    private:
+    
     SDL_Window *window;
     SDL_GLContext gl_context;
 };
-
-internal b8 window_init         (Window *window);
-internal void window_update     (Window *window);
-internal b8 window_handle_event (Input *input);
-
-internal void window_visible (const Window *window, const b8 visible);
-internal b8 window_set_vsync (const Window *window, const b8 interval);
 
 #endif // ALEX_WINDOW_H
