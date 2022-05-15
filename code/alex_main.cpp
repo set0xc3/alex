@@ -2,11 +2,7 @@
 
 int main(int argc, char *argv[])
 {
-    Application app;
-    memset(&app, 0, sizeof(app));
-    
-    app.init();
-    app.run(); 
+    create_application();
     
     return 0;
 }

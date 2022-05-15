@@ -2,14 +2,11 @@
 
 #include <glad/glad.h>
 
-internal 
-void renderer_init(Renderer *renderer)
+void Renderer::init()
 {
-    memset(renderer, 0, sizeof(*renderer));
 }
 
-internal 
-void renderer_draw(Renderer *renderer, const Shader *shader, const Mesh *mesh)
+void Renderer::draw(const Shader *shader, const Mesh *mesh)
 {
     glUseProgram(shader->id);
     glBindVertexArray(mesh->vao_id);
@@ -17,14 +14,12 @@ void renderer_draw(Renderer *renderer, const Shader *shader, const Mesh *mesh)
     //glDrawArrays(GL_TRIANGLES, 6, 0);
 }
 
-internal 
-void renderer_set_viewport(i32 x, i32 y, i32 width, i32 height)
+void Renderer::set_viewport(i32 x, i32 y, i32 width, i32 height)
 {
     glViewport(x, y, width, height);
 }
 
-internal
-void renderer_set_color(f32 r, f32 g, f32 b, f32 a)
+void Renderer::set_color(f32 r, f32 g, f32 b, f32 a)
 {
     glClearColor(r, g, b, a);
     glClear(GL_COLOR_BUFFER_BIT);

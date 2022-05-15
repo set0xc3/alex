@@ -1,15 +1,12 @@
 #include "alex_window.h"
 
-void Window::init()
+#include "alex_input.h"
+
+internal void 
+create_window(const Window_Data *wd, Window *window)
 {
-    Window_Data wd;
-    memset(&wd, 0, sizeof(wd));
-    sprintf(wd.title, "Engine");
-    wd.x = 0;
-    wd.y = 0;
-    wd.width = 800;
-    wd.height = 600;
-    wd.flags = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE; 
+    window = (Window*)malloc(sizeof(Window));
+    ZERO_STRUCT(window);
     
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
@@ -18,26 +15,26 @@ void Window::init()
     }
     
     // Create Window
-    window = SDL_CreateWindow(wd.title, 
-                              wd.x,wd.y, 
-                              wd.width, wd.height, 
-                              wd.flags);
-    if (!window)
+    window->sdl_window = SDL_CreateWindow(wd->title, 
+                                          wd->pos_x,wd->pos_y, 
+                                          wd->width, wd->height, 
+                                          SDL_WINDOW_OPENGL);
+    if (!window->sdl_window)
     {
-        LOG_ERROR("SDL_CreateWindow failed: %s", SDL_GetError());
+        LOG_ERROR("[SDL] Failed: %s", SDL_GetError());
         exit(-1);
     }
     
-    gl_context = SDL_GL_CreateContext(window);
-    if (!gl_context)
+    window->gl_context = SDL_GL_CreateContext(window->sdl_window);
+    if (!window->gl_context)
     {
-        LOG_ERROR("SDL_GL_CreateContext failed: %s", SDL_GetError());
+        LOG_ERROR("[SDL] Failed: %s", SDL_GetError());
         exit(-1);
     }
     
     if (!gladLoadGL())
     {
-        LOG_ERROR("gladLoadGL failed");
+        LOG_ERROR("[GLAD] Failed");
         exit(-1);
     }
     
@@ -57,16 +54,18 @@ void Window::init()
         LOG_INFO("OpenGL v%i.%i", major, minor);
     }
     
-    set_vsync(true);
-    set_visible(true);
+    window_set_vsync(window, true);
+    window_set_visible(window, true);
 }
 
-void Window::update()
+internal void 
+window_display(Window *window)
 {
-    SDL_GL_SwapWindow(window);
+    SDL_GL_SwapWindow(window->sdl_window);
 }
 
-b8 Window::handle_event()
+internal b8 
+window_handle_event()
 {
     SDL_Event event;
     while(SDL_PollEvent(&event) != 0)
@@ -185,15 +184,17 @@ b8 Window::handle_event()
     return true;
 }
 
-void Window::set_visible(const b8 visible)
+internal void 
+window_set_visible(Window *window, const b8 visible)
 {
     if (visible)
-        SDL_ShowWindow(window);
+        SDL_ShowWindow(window->sdl_window);
     else
-        SDL_HideWindow(window);
+        SDL_HideWindow(window->sdl_window);
 }
 
-void Window::set_vsync(const b8 interval)
+internal void 
+window_set_vsync(Window *window, const b8 interval)
 {
     // Use Vsync
     if(SDL_GL_SetSwapInterval(interval) < 0)

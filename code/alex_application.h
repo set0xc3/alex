@@ -1,22 +1,17 @@
 #ifndef ALEX_APPLICATION_H
 #define ALEX_APPLICATION_H
 
-#include "alex_input.h"
+#include "alex_logger.h"
 #include "alex_window.h"
 
-class Application
+struct Application
 {
-    public:
-    
-    void init();
-    void run();
-    
-    private:
-    
     b8 running;
     
-    Input input;
-    Window window;
+    Window *window;
 };
+global_variable Application *app;
+
+internal void create_application();
 
 #endif //ALEX_APPLICATION_H

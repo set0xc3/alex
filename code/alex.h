@@ -32,6 +32,9 @@ typedef bool   b8;
 
 #define MAX_STR_LEN (4095)
 
+// Memory
+#define ZERO_STRUCT(s) (memset(s, 0, sizeof(*s)))
+
 // Math
 #define PI (3.14159f)
 
