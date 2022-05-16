@@ -5,8 +5,7 @@
 internal void 
 create_application()
 {
-    app = (Application*)malloc(sizeof(Application));
-    ZERO_STRUCT(app);
+    ZERO_STRUCT(&app);
     
     // Test Log
 #if 1
@@ -18,6 +17,7 @@ create_application()
     LOG_FATAL("PI: %f\n", PI);
 #endif
     
+    // Create Window
     Window_Data wd;
     ZERO_STRUCT(&wd);
     sprintf(wd.title, "Engine");
@@ -25,17 +25,24 @@ create_application()
     wd.pos_y = 0;
     wd.width = 800;
     wd.height = 600;
-    create_window(&wd, app->window);
+    create_window(&wd, &app.window);
     
-    app->running = true;
-    while (app->running)
+    // Create Renderer
+    create_renderer(&app.renderer);
+    renderer_set_viewport(0, 0, 800, 600);
+    
+    app.running = true;
+    while (app.running)
     {
         if (!window_handle_event())
         {
-            app->running = false;
+            app.running = false;
             LOG_DEBUG("Shutdown");
             break;
         }
+        
+        renderer_set_color(1.f, 0.f, 1.f);
+        window_display(&app.window);
         
         //LOG_DEBUG("TEST");
         platform_delay(1000/60);

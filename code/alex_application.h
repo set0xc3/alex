@@ -2,15 +2,17 @@
 #define ALEX_APPLICATION_H
 
 #include "alex_logger.h"
+#include "alex_renderer.h"
 #include "alex_window.h"
 
 struct Application
 {
     b8 running;
     
-    Window *window;
+    Renderer renderer;
+    Window window;
 };
-global_variable Application *app;
+global_variable Application app;
 
 internal void create_application();
 

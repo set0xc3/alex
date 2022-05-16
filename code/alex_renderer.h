@@ -6,15 +6,12 @@
 
 struct Renderer
 {
-    public:
-    
-    void init();
-    void draw(const Shader *shader, const Mesh *mesh);
-    
-    void set_viewport(i32 x, i32 y, i32 width, i32 height);
-    void set_color(f32 r, f32 g, f32 b, f32 a);
-    
-    private:
 };
+
+internal void create_renderer(Renderer *renderer);
+internal void renderer_draw(const Shader *shader, const Mesh *mesh);
+
+internal void renderer_set_viewport(i32 x, i32 y, i32 width, i32 height);
+internal void renderer_set_color(f32 r, f32 g, f32 b);
 
 #endif //ALEX_RENDERER_H

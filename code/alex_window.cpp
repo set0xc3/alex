@@ -5,7 +5,6 @@
 internal void 
 create_window(const Window_Data *wd, Window *window)
 {
-    window = (Window*)malloc(sizeof(Window));
     ZERO_STRUCT(window);
     
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -18,7 +17,7 @@ create_window(const Window_Data *wd, Window *window)
     window->sdl_window = SDL_CreateWindow(wd->title, 
                                           wd->pos_x,wd->pos_y, 
                                           wd->width, wd->height, 
-                                          SDL_WINDOW_OPENGL);
+                                          SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN);
     if (!window->sdl_window)
     {
         LOG_ERROR("[SDL] Failed: %s", SDL_GetError());
@@ -61,6 +60,12 @@ create_window(const Window_Data *wd, Window *window)
 internal void 
 window_display(Window *window)
 {
+    if (!window)
+    {
+        LOG_ERROR("Failed");
+        exit(-1);
+    }
+    
     SDL_GL_SwapWindow(window->sdl_window);
 }
 

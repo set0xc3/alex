@@ -1,10 +1,12 @@
 #include "alex_shader.h"
 
-internal 
-Shader shader_create(const char *vert_path, const char *frag_path)
+#include "stb_image.h"
+
+internal Shader 
+shader_create(const char *vert_path, const char *frag_path)
 {
     Shader shader;
-    memset(&shader, 0, sizeof(shader));
+    ZERO_STRUCT(&shader);
     
     char *vertex_shader_source = get_data_from_file(vert_path); 
     if (!vertex_shader_source)
@@ -90,8 +92,8 @@ Shader shader_create(const char *vert_path, const char *frag_path)
     return shader;
 }
 
-internal 
-void shader_set_math4(const Shader *shader, const char *name, const glm::mat4 &v)
+internal void 
+shader_set_math4(const Shader *shader, const char *name, const glm::mat4 &v)
 {
     int loc = glGetUniformLocation(shader->id, name);
     glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(v));
