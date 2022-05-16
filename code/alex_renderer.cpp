@@ -6,6 +6,9 @@ internal void
 create_renderer(Renderer *renderer)
 {
     ZERO_STRUCT(renderer);
+    
+    renderer->shader = shader_create("./assets/shaders/flat_color.vs", 
+                                     "./assets/shaders/flat_color.fs");
 }
 
 internal void 
@@ -28,4 +31,22 @@ renderer_set_color(f32 r, f32 g, f32 b)
 {
     glClearColor(r, g, b, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+}
+
+internal void 
+renderer_draw_line(f32 x, f32 y)
+{
+    
+}
+
+internal void 
+renderer_draw_rect(f32 x, f32 y, f32 width, f32 height)
+{
+    
+}
+
+internal void 
+renderer_draw_fill_rect(f32 x, f32 y, f32 width, f32 height)
+{
+    
 }

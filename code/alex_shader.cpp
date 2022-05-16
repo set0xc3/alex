@@ -1,5 +1,6 @@
 #include "alex_shader.h"
 
+#define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
 internal Shader 
@@ -60,35 +61,12 @@ shader_create(const char *vert_path, const char *frag_path)
     glDeleteShader(vertex_shader);
     glDeleteShader(fragment_shader);
     
-    // Load Texture
-    stbi_set_flip_vertically_on_load(true);
-    i32 width, height, nr_channels;
-    u8 *data = stbi_load("assets/test1.png", &width, &height, &nr_channels, 0); 
-    
-    // Texture
-    u32 texture_id;
-    glGenTextures(1, &texture_id);  
-    glBindTexture(GL_TEXTURE_2D, texture_id);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    if (data)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else 
-    {
-        LOG_ERROR("stbi_load failed");
-    }
-    stbi_image_free(data);
-    
     shader.id = shader_program_id;
     
     free(vertex_shader_source);
     free(fragment_shader_source);
     
+    LOG_DEBUG("Shader Loaded");
     return shader;
 }
 

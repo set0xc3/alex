@@ -42,6 +42,9 @@ create_application()
         }
         
         renderer_set_color(1.f, 0.f, 1.f);
+        
+        
+        
         window_display(&app.window);
         
         //LOG_DEBUG("TEST");
