@@ -37,13 +37,14 @@ create_application()
         if (!window_handle_event())
         {
             app.running = false;
-            LOG_DEBUG("Shutdown");
+            
+            LOG_INFO("Shutdown");
             break;
         }
         
         renderer_set_color(1.f, 0.f, 1.f);
         
-        
+        renderer_draw_rect(&app.renderer, 0.5f, 0.f, 10.f, 10.f);
         
         window_display(&app.window);
         

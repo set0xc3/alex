@@ -1,20 +1,10 @@
 #include "alex_logger.h"
 
 internal void 
-logger_print(const Log_Type type, 
+logger_print(const char *type_str, 
              const char *file_name, const i32 line,
              const char *fmt, ...)
 {
-    local_variable const char *type_str[LogType_Count] = 
-    { 
-        "Info", 
-        "Warn", 
-        "Debug", 
-        "Trace", 
-        "Error", 
-        "Fatal" 
-    };
-    
     // Time
     char time_buff[MAX_STR_LEN] = "";
     time_t rawtime;
@@ -25,7 +15,7 @@ logger_print(const Log_Type type,
     
     // Header
     char header_buff[MAX_STR_LEN] = "";
-    sprintf(header_buff, "[%s][%s][%s:%i] ", time_buff, type_str[type], file_name, line); 
+    sprintf(header_buff, "[%s][%s][%s:%i] ", time_buff, type_str, file_name, line); 
     
     va_list arg_list;
     va_start(arg_list, fmt);
