@@ -2,6 +2,12 @@
 
 #include "alex_platform.h"
 
+#include <glad/glad.h>
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 internal void 
 create_application()
 {
@@ -42,13 +48,35 @@ create_application()
             break;
         }
         
-        renderer_set_color(1.f, 0.f, 1.f);
+        renderer_set_color(1.0f, 0.0f, 1.0f);
         
-        renderer_draw_rect(&app.renderer, 0.5f, 0.f, 10.f, 10.f);
+        // Update Camera
+        {
+            glUseProgram(app.renderer.shader.id);
+            
+            glm::mat4 projection = glm::mat4(1.0f);
+            projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+            int projection_loc = glGetUniformLocation(app.renderer.shader.id, "u_projection");
+            glUniformMatrix4fv(projection_loc, 1, GL_FALSE, &projection[0][0]);
+            
+            glm::mat4 view = glm::mat4(1.0f);
+            view = glm::translate(view, glm::vec3(0.0f, 0.0f, -1.0f)); 
+            int view_loc = glGetUniformLocation(app.renderer.shader.id, "u_view");
+            glUniformMatrix4fv(view_loc, 1, GL_FALSE, &view[0][0]);
+            
+            glUseProgram(0);
+        }
+        
+        f32 p0[] = { 0.0f, 0.0f, 0.0f };
+        f32 p1[] = { 10.0f, 0.0f, 0.0f };
+        //renderer_draw_line(&app.renderer, p0, p1);
+        
+        renderer_draw_rect(&app.renderer, 0.0f, 0.0f, 10.0f, 10.0f);
+        renderer_draw_fill_rect(&app.renderer, 1.0f, 1.0f, 10.0f, 10.0f);
         
         window_display(&app.window);
         
         //LOG_DEBUG("TEST");
-        platform_delay(1000/60);
+        platform_delay(1000/16);
     }
 }

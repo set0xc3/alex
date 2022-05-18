@@ -13,13 +13,21 @@ struct Vertex
 
 struct RendererData
 {
-    internal const u32 max_quads    = 20000;
-    internal const u32 max_vertices = max_quads * 4;
-    internal const u32 max_indices  = max_quads * 6;
+    internal const u32 max_quads         = 1000;
+    internal const u32 max_quad_vertices = max_quads * 4;
+    internal const u32 max_quad_indices  = max_quads * 6;
     
     u32 quad_index_count = 0;
 };
-global_variable RendererData g_data;
+global_variable RendererData s_data;
+
+global_variable Vertex vertices[]
+{
+    { 0.5f, 0.5f, 0.0f },
+    { 0.5f, -0.5f, 0.0f },
+    { -0.5f, -0.5f, 0.0f },
+    { -0.5f,  0.5f, 0.0f },
+};
 
 internal void 
 create_renderer(Renderer *renderer)
@@ -30,19 +38,6 @@ create_renderer(Renderer *renderer)
                                      "./assets/shaders/flat_color.fs");
     // Create Quate
     {
-        local_variable Vertex vertices[]
-        {
-            { 0.5f, 0.5f, 0.0f },
-            { 0.5f, -0.5f, 0.0f },
-            { -0.5f, -0.5f, 0.0f },
-            { -0.5f,  0.5f, 0.0f },
-        };
-        local_variable i32 indices[] = 
-        {
-            0, 1, 3,  // first Triangle
-            1, 2, 3   // second Triangle
-        };
-        
         u32 vbo, vao, ebo;
         glGenVertexArrays(1, &vao);
         glGenBuffers(1, &vbo);
@@ -50,25 +45,58 @@ create_renderer(Renderer *renderer)
         glBindVertexArray(vao);
         
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, s_data.max_quad_vertices, 0, GL_DYNAMIC_DRAW);
+        
+        u32* indices = (u32*)malloc(s_data.max_quad_indices * sizeof(u32));
+        ZERO_MEMORY(indices);
+        
+        u32 offset = 0;
+		for (u32 i = 0; i < s_data.max_quad_indices; i += 6)
+		{
+			indices[i + 0] = offset + 0;
+			indices[i + 1] = offset + 1;
+			indices[i + 2] = offset + 2;
+            
+			indices[i + 3] = offset + 2;
+			indices[i + 4] = offset + 3;
+			indices[i + 5] = offset + 0;
+            
+			offset += 4;
+		}
         
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, s_data.max_quad_indices, indices, GL_STATIC_DRAW);
         
         // Position
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(f32), 0); 
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(f32), (void*)0); 
         glEnableVertexAttribArray(0);
         
         glBindBuffer(GL_ARRAY_BUFFER, 0); 
         glBindVertexArray(0);
         
-        renderer->mesh.vao_id = vao;
-        renderer->mesh.indices = ARRAY_SIZE(indices);
+        renderer->quad_mesh.id = vao;
         
-        LOG_DEBUG("Mesh_id: %u", vao);
-        LOG_DEBUG("Mesh_size: %u", 1024 * sizeof(Vertex));
-        LOG_DEBUG("Mesh_vertices: %u", ARRAY_SIZE(vertices));
-        LOG_DEBUG("Mesh_indices: %u", ARRAY_SIZE(indices));
+        free(indices);
+    }
+    
+    // Create Line
+    {
+        u32 vbo, vao;
+        glGenVertexArrays(1, &vao);
+        glGenBuffers(1, &vbo);
+        glBindVertexArray(vao);
+        
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBufferData(GL_ARRAY_BUFFER, s_data.max_quad_vertices, 0, GL_DYNAMIC_DRAW);
+        
+        // Position
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(f32), (void*)0); 
+        glEnableVertexAttribArray(0);
+        
+        glBindBuffer(GL_ARRAY_BUFFER, 0); 
+        glBindVertexArray(0);
+        
+        renderer->line_mesh.id = vao;
     }
 }
 
@@ -76,7 +104,7 @@ internal void
 renderer_draw(const Shader *shader, const Mesh *mesh)
 {
     glUseProgram(shader->id);
-    glBindVertexArray(mesh->vao_id);
+    glBindVertexArray(mesh->id);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     //glDrawArrays(GL_TRIANGLES, 6, 0);
 }
@@ -90,32 +118,115 @@ renderer_set_viewport(i32 x, i32 y, i32 width, i32 height)
 internal void 
 renderer_set_color(f32 r, f32 g, f32 b)
 {
+    glEnable(GL_DEPTH_TEST);
+    
     glClearColor(r, g, b, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 internal void 
-renderer_draw_line(Renderer *renderer, f32 x, f32 y)
+renderer_draw_line(Renderer *renderer, f32 p0[3], f32 p1[3])
 {
+    Vertex vertices[]
+    {
+        { p0[0], p0[1], p0[2] },
+        { p1[0], p1[1], p1[2] },
+    };
     
+    glUseProgram(renderer->shader.id);
+    
+    // Transform
+    {
+        glm::mat4 transform = glm::mat4(1.0f);
+        transform = glm::scale(transform, glm::vec3(1.0f));
+        transform = glm::translate(transform, glm::vec3(1.0f));
+        int model_loc = glGetUniformLocation(renderer->shader.id, "u_model");
+        glUniformMatrix4fv(model_loc, 1, GL_FALSE, &transform[0][0]);
+    }
+    
+    // Update data
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, renderer->line_mesh.id);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+        
+        //void *ptr = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+        //memcpy(ptr, vertices, sizeof(vertices));
+        //glUnmapBuffer(GL_ARRAY_BUFFER);
+    }
+    
+    glBindVertexArray(renderer->line_mesh.id);
+    glDrawArrays(GL_LINES, 0, 2);
+    
+    // Unbind
+    glUseProgram(0);
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 internal void 
 renderer_draw_rect(Renderer *renderer, f32 x, f32 y, f32 width, f32 height)
 {
     glUseProgram(renderer->shader.id);
-    glBindVertexArray(renderer->mesh.vao_id);
     
-    glDrawElements(GL_TRIANGLES, renderer->mesh.indices, GL_UNSIGNED_INT, 0);
+    // Transform
+    {
+        glm::mat4 transform = glm::mat4(1.0f);
+        transform = glm::scale(transform, glm::vec3(width/100.0f, height/100.0f, 0.0f));
+        transform = glm::translate(transform, glm::vec3(x, y, 0.0f));
+        int model_loc = glGetUniformLocation(renderer->shader.id, "u_model");
+        glUniformMatrix4fv(model_loc, 1, GL_FALSE, &transform[0][0]);
+    }
     
-    glBindVertexArray(0);
+    // Update data
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, renderer->quad_mesh.id);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+        
+        //void *ptr = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+        //memcpy(ptr, vertices, sizeof(vertices));
+        //glUnmapBuffer(GL_ARRAY_BUFFER);
+    }
+    
+    glBindVertexArray(renderer->quad_mesh.id);
+    glDrawElements(GL_LINE_STRIP, 6, GL_UNSIGNED_INT, 0);
+    
+    // Unbind
     glUseProgram(0);
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 internal void 
 renderer_draw_fill_rect(Renderer *renderer, f32 x, f32 y, f32 width, f32 height)
 {
+    glUseProgram(renderer->shader.id);
     
+    // Transform
+    {
+        glm::mat4 transform = glm::mat4(1.0f);
+        transform = glm::scale(transform, glm::vec3(width/100.0f, height/100.0f, 0.0f));
+        transform = glm::translate(transform, glm::vec3(x, y, 0.0f));
+        int model_loc = glGetUniformLocation(renderer->shader.id, "u_model");
+        glUniformMatrix4fv(model_loc, 1, GL_FALSE, &transform[0][0]);
+    }
+    
+    // Update data
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, renderer->quad_mesh.id);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+        
+        //void *ptr = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+        //memcpy(ptr, vertices, sizeof(vertices));
+        //glUnmapBuffer(GL_ARRAY_BUFFER);
+    }
+    
+    glBindVertexArray(renderer->quad_mesh.id);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    
+    // Unbind
+    glUseProgram(0);
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 internal void 

@@ -6,7 +6,8 @@
 
 struct Renderer
 {
-    Mesh mesh;
+    Mesh quad_mesh;
+    Mesh line_mesh;
     
     Shader shader;
 };
@@ -18,7 +19,7 @@ internal void renderer_set_viewport(i32 x, i32 y, i32 width, i32 height);
 internal void renderer_set_color(f32 r, f32 g, f32 b);
 
 // 2D
-internal void renderer_draw_line(Renderer *renderer, f32 x, f32 y);
+internal void renderer_draw_line(Renderer *renderer, f32 p0[3], f32 p1[3]);
 internal void renderer_draw_rect(Renderer *renderer, f32 x, f32 y, f32 width, f32 height);
 internal void renderer_draw_fill_rect(Renderer *renderer, f32 x, f32 y, f32 width, f32 height);
 

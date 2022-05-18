@@ -3,7 +3,7 @@
 
 struct Mesh 
 {
-    u32 vao_id;
+    u32 id;
     u32 indices;
 };
 

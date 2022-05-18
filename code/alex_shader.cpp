@@ -23,7 +23,7 @@ shader_create(const char *vert_path, const char *frag_path)
     }
     
     i32 success = false;
-    char info_log[MAX_STR_LEN] = "";
+    char info_log[256] = "";
     
     // Vertex Shader
     u32 vertex_shader = glCreateShader(GL_VERTEX_SHADER);
@@ -74,5 +74,5 @@ internal void
 shader_set_math4(const Shader *shader, const char *name, const glm::mat4 &v)
 {
     int loc = glGetUniformLocation(shader->id, name);
-    glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(v));
+    glUniformMatrix4fv(loc, 1, GL_FALSE, &v[0][0]);
 }
