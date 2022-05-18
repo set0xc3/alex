@@ -71,8 +71,14 @@ shader_create(const char *vert_path, const char *frag_path)
 }
 
 internal void 
-shader_set_math4(const Shader *shader, const char *name, const glm::mat4 &v)
+shader_use(const Shader &shader)
 {
-    int loc = glGetUniformLocation(shader->id, name);
+    glUseProgram(shader.id);
+}
+
+internal void 
+shader_set_math4(const Shader &shader, const char *name, const glm::mat4 &v)
+{
+    int loc = glGetUniformLocation(shader.id, name);
     glUniformMatrix4fv(loc, 1, GL_FALSE, &v[0][0]);
 }

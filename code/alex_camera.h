@@ -24,19 +24,6 @@ enum Camera_Projection
 
 struct Camera
 {
-    f32 yaw;
-    f32 pitch;
-    
-    glm::vec3 pos;
-    glm::vec3 front;
-    glm::vec3 up;
-    
-    glm::mat4 projection;
-    glm::mat4 view;
-};
-
-struct Camera3D
-{
     Transform transform;
     Transform target;
     
@@ -45,18 +32,29 @@ struct Camera3D
     
     f32 yaw;
     f32 pitch;
+    f32 distance;
+    
     f32 fov;
+    f32 aspect_ratio;
+    f32 near_clip;
+    f32 far_clip;
     
-    m4 view;
+    f32 viewport_width;
+    f32 viewport_height;
     
-    u32 projection;
+    glm::mat4 projection_mat;
+    glm::mat4 view_mat;
+    glm::mat4 view_projection_mat;
 };
-//typedef Camera3D Camera;
+typedef Camera Camera3D;
 
-internal void camera_init(Application *app);
-internal void camera_update(Application *app);
-internal void camera_on_rescale(v2 offset, v2 scale);
+internal void camera_create(Camera *camera);
+internal void camera_update(Camera *camera);
+internal void camera_on_rescale(Camera *camera, v2 offset, v2 scale);
 
-internal m4 get_camera_matrix(Camera3D camera);
+internal void camera_update_projection(Camera* camera);
+internal void camera_update_view(Camera* camera);
+
+internal glm::mat4 camera_get_matrix(Camera* camera);
 
 #endif //ALEX_CAMERA_H

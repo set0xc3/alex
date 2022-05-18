@@ -1,5 +1,4 @@
 #include "alex_application.h"
-
 #include "alex_platform.h"
 
 #include <glad/glad.h>
@@ -37,6 +36,9 @@ create_application()
     create_renderer(&app.renderer);
     renderer_set_viewport(0, 0, 800, 600);
     
+    // Sandbox
+    sandbox_init();
+    
     app.running = true;
     while (app.running)
     {
@@ -48,35 +50,15 @@ create_application()
             break;
         }
         
-        renderer_set_color(1.0f, 0.0f, 1.0f);
+        renderer_set_color(0.1f, 0.1f, 0.1f);
         
-        // Update Camera
-        {
-            glUseProgram(app.renderer.shader.id);
-            
-            glm::mat4 projection = glm::mat4(1.0f);
-            projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
-            int projection_loc = glGetUniformLocation(app.renderer.shader.id, "u_projection");
-            glUniformMatrix4fv(projection_loc, 1, GL_FALSE, &projection[0][0]);
-            
-            glm::mat4 view = glm::mat4(1.0f);
-            view = glm::translate(view, glm::vec3(0.0f, 0.0f, -1.0f)); 
-            int view_loc = glGetUniformLocation(app.renderer.shader.id, "u_view");
-            glUniformMatrix4fv(view_loc, 1, GL_FALSE, &view[0][0]);
-            
-            glUseProgram(0);
-        }
-        
-        f32 p0[] = { 0.0f, 0.0f, 0.0f };
-        f32 p1[] = { 10.0f, 0.0f, 0.0f };
-        //renderer_draw_line(&app.renderer, p0, p1);
-        
-        renderer_draw_rect(&app.renderer, 0.0f, 0.0f, 10.0f, 10.0f);
-        renderer_draw_fill_rect(&app.renderer, 1.0f, 1.0f, 10.0f, 10.0f);
+        sandbox_on_event();
+        sandbox_on_update();
+        sandbox_on_render();
         
         window_display(&app.window);
         
         //LOG_DEBUG("TEST");
-        platform_delay(1000/16);
+        platform_delay(1000/60);
     }
 }

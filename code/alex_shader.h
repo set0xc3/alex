@@ -11,6 +11,9 @@ struct Shader
 };
 
 internal Shader shader_create(const char *vert_path, const char *frag_path);
-internal void shader_set_math4(const Shader *shader, const char *name, const glm::mat4 &v);
+
+internal void shader_use(const Shader &shader);
+
+internal void shader_set_math4(const Shader &shader, const char *name, const glm::mat4 &v);
 
 #endif //ALEX_SHADER_H

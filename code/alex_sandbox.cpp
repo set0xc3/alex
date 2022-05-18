@@ -8,239 +8,130 @@
 
 #include <glad/glad.h>
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+struct Vertex
+{
+    glm::vec3 position;
+};
 
-struct Renderer_State
+global_variable Vertex quad_vertices[]
+{
+    glm::vec3(0.5f, 0.5f, 0.0f),
+    glm::vec3(0.5f, -0.5f, 0.0f),
+    glm::vec3(-0.5f, -0.5f, 0.0f),
+    glm::vec3(-0.5f,  0.5f, 0.0f),
+};
+
+struct Renderer_Statistics
 {
 };
 
 struct Sandbox
 {
+    internal const u32 max_quads         = 1000;
+    internal const u32 max_quad_vertices = max_quads * 4;
+    internal const u32 max_quad_indices  = max_quads * 6;
+    
+    u32 quad_index_count = 0;
+    
+    Mesh quad_mesh;
+    
     Shader shader;
-    Camera camera;
-    
-    Entity entities[256];
-    i32 entity_count;
-    
-    Mesh square;
-    Mesh cube;
-    Mesh sphere;
+    Camera3D camera;
 };
 
 global_variable Sandbox box;
 
 internal
-void sandbox_init(Application *app)
+void sandbox_init()
 {
-    memset(&box, 0, sizeof(box));
+    ZERO_STRUCT(&box);
     
     // Camera
-    camera_init(&box.camera);
+    camera_create(&box.camera);
     
     // Create Shaders
-    sandbox_create_shaders();
-    
-    // Create Triangle
-    box.square = sandbox_create_square_mesh();
-    box.cube   = sandbox_create_cube_mesh();
-    box.sphere = sandbox_create_sphere_mesh();
-}
-
-internal
-void sandbox_on_update(Application *app)
-{
-}
-
-internal
-void sandbox_on_event(Application *app)
-{
-    
-}
-
-internal
-void sandbox_on_render(Application *app)
-{
-    renderer_set_viewport(0, 0, 800, 600);
-    renderer_set_color(0.08f, 0.08f, 0.08f, 1.0f);
-    
-    sandbox_begin_camera(box.camera);
-    
-    // Camera
-    {
-        box.camera.projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
-        shader_set_math4(&box.shader, "projection", box.camera.projection);
-        
-        box.camera.view = glm::lookAt(box.camera.pos, box.camera.pos + box.camera.front, box.camera.up);
-        shader_set_math4(&box.shader, "view", box.camera.view);
-    }
-    
-    sandbox_draw_square(app);
-}
-
-internal 
-void sandbox_begin_camera(Camera camera)
-{
-    box.camera = camera;
-}
-
-internal
-void sandbox_create_shaders()
-{
-    
     box.shader = shader_create("./assets/shaders/flat_color.vs", 
                                "./assets/shaders/flat_color.fs");
-}
-
-// Draw
-
-internal
-void sandbox_draw_line(Application *app)
-{
-}
-
-internal
-void sandbox_draw_square(Application *app)
-{
-    glm::mat4 transform = glm::mat4(1.0f);
-    transform = glm::translate(transform, glm::vec3(1.0f)); 
-    shader_set_math4(&box.shader, "model", transform);
     
-    renderer_draw(&app->renderer, &box.shader, &box.square);
-}
-
-internal void sandbox_draw_cube(Application *app)
-{
-    glm::mat4 transform = glm::mat4(1.0f);
-    transform = glm::translate(transform, glm::vec3(1.0f)); 
-    shader_set_math4(&box.shader, "model", transform);
-    
-    renderer_draw(&app->renderer, &box.shader, &box.cube);
-}
-
-internal void sandbox_draw_plane(Application *app)
-{
-}
-
-internal
-void sandbox_draw_sphere(Application *app)
-{
-}
-
-// Mesh
-
-internal
-Mesh sandbox_create_square_mesh()
-{
-    Mesh out_mesh = {0};
-    
-    local_variable Vertex vertecs[]
+    // Create Quad
     {
-        { 0.5f, 0.5f, 0.0f },
-        { 0.5f, -0.5f, 0.0f },
-        { -0.5f, -0.5f, 0.0f },
-        { -0.5f,  0.5f, 0.0f },
-    };
-    local_variable i32 indices[] = 
-    {
-        0, 1, 3,  // first Triangle
-        1, 2, 3   // second Triangle
-    };
-    
-    u32 vbo, vao, ebo;
-    glGenVertexArrays(1, &vao);
-    glGenBuffers(1, &vbo);
-    glGenBuffers(1, &ebo);
-    glBindVertexArray(vao);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertecs), vertecs, GL_STATIC_DRAW);
-    
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-    
-    // Position
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(f32), 0); 
-    glEnableVertexAttribArray(0);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, 0); 
-    glBindVertexArray(0);
-    
-    out_mesh.vao_id = vao;
-    return out_mesh;
+        u32 vbo, vao, ebo;
+        glGenVertexArrays(1, &vao);
+        glGenBuffers(1, &vbo);
+        glGenBuffers(1, &ebo);
+        glBindVertexArray(vao);
+        
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBufferData(GL_ARRAY_BUFFER, box.max_quad_vertices, 0, GL_DYNAMIC_DRAW);
+        
+        u32* indices = (u32*)malloc(box.max_quad_indices * sizeof(u32));
+        ZERO_MEMORY(indices);
+        
+        u32 offset = 0;
+		for (u32 i = 0; i < box.max_quad_indices; i += 6)
+		{
+			indices[i + 0] = offset + 0;
+			indices[i + 1] = offset + 1;
+			indices[i + 2] = offset + 2;
+            
+			indices[i + 3] = offset + 2;
+			indices[i + 4] = offset + 3;
+			indices[i + 5] = offset + 0;
+            
+			offset += 4;
+		}
+        
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, box.max_quad_indices, indices, GL_STATIC_DRAW);
+        
+        // Position
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(f32), (void*)0); 
+        glEnableVertexAttribArray(0);
+        
+        glBindBuffer(GL_ARRAY_BUFFER, 0); 
+        glBindVertexArray(0);
+        
+        box.quad_mesh.id = vao;
+        box.quad_mesh.vertecs = 4;
+        
+        free(indices);
+    }
 }
 
-internal 
-Mesh sandbox_create_cube_mesh()
+internal void 
+sandbox_on_update()
 {
-    Mesh out_mesh = {0};
-    
-    local_variable Vertex vertecs[]
+    // Update Camera
     {
-        { -0.5f, -0.5f, -0.5f }, 
-        { 0.5f, -0.5f, -0.5f },  
-        { 0.5f,  0.5f, -0.5f },  
-        { 0.5f,  0.5f, -0.5f },  
-        { -0.5f,  0.5f, -0.5f }, 
-        { -0.5f, -0.5f, -0.5f }, 
+        Camera3D camera;
+        camera_create(&camera);
         
-        { -0.5f, -0.5f,  0.5f }, 
-        { 0.5f, -0.5f,  0.5f },  
-        { 0.5f,  0.5f,  0.5f },  
-        { 0.5f,  0.5f,  0.5f },  
-        { -0.5f,  0.5f,  0.5f }, 
-        { -0.5f, -0.5f,  0.5f }, 
-        
-        { -0.5f,  0.5f,  0.5f }, 
-        { -0.5f,  0.5f, -0.5f }, 
-        { -0.5f, -0.5f, -0.5f }, 
-        { -0.5f, -0.5f, -0.5f }, 
-        { -0.5f, -0.5f,  0.5f }, 
-        { -0.5f,  0.5f,  0.5f }, 
-        
-        { 0.5f,  0.5f,  0.5f },  
-        { 0.5f,  0.5f, -0.5f },  
-        { 0.5f, -0.5f, -0.5f },  
-        { 0.5f, -0.5f, -0.5f },  
-        { 0.5f, -0.5f,  0.5f },  
-        { 0.5f,  0.5f,  0.5f },  
-        
-        { -0.5f, -0.5f, -0.5f }, 
-        { 0.5f, -0.5f, -0.5f },  
-        { 0.5f, -0.5f,  0.5f },  
-        { 0.5f, -0.5f,  0.5f },  
-        { -0.5f, -0.5f,  0.5f }, 
-        { -0.5f, -0.5f, -0.5f }, 
-        
-        { -0.5f,  0.5f, -0.5f }, 
-        { 0.5f,  0.5f, -0.5f },  
-        { 0.5f,  0.5f,  0.5f },  
-        { 0.5f,  0.5f,  0.5f },  
-        { -0.5f,  0.5f,  0.5f }, 
-        { -0.5f,  0.5f, -0.5f }, 
-    };
-    
-    u32 vbo, vao;
-    glGenVertexArrays(1, &vao);
-    glGenBuffers(1, &vbo);
-    glBindVertexArray(vao);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertecs), vertecs, GL_STATIC_DRAW);
-    
-    // Position
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(f32), 0); 
-    glEnableVertexAttribArray(0);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, 0); 
-    glBindVertexArray(0);
-    
-    out_mesh.vao_id = vao;
-    return out_mesh;
+        shader_use(box.shader);
+        shader_set_math4(box.shader, "u_view_projection", camera_get_matrix(&camera));
+    }
 }
 
-internal
-Mesh sandbox_create_sphere_mesh()
+internal void 
+sandbox_on_event()
 {
-    return Mesh();
+    
+}
+
+internal void 
+sandbox_on_render()
+{
+    sandbox_draw_quad({ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+    sandbox_draw_quad({ 1.0f, 1.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+}
+
+internal void 
+sandbox_draw_quad(const glm::vec3 &position, const glm::vec3 &size, const glm::vec4 &color)
+{
+    glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) 
+        * glm::scale(glm::mat4(1.0f), size);
+    
+    shader_use(box.shader);
+    shader_set_math4(box.shader, "u_model", transform);
+    mesh_set_data(box.quad_mesh, quad_vertices, sizeof(quad_vertices));
+    renderer_draw(box.shader, box.quad_mesh, 6);
 }

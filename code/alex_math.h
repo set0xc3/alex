@@ -1,6 +1,10 @@
 #ifndef ALEX_MATH_H
 #define ALEX_MATH_H
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 struct Vector2
 {
     f32 x;
@@ -29,9 +33,9 @@ typedef Vector4 q4;
 
 struct Transform
 {
-    v3 translation;
-    q4 rotation;
-    v3 scale;
+    glm::vec3 position;
+    glm::vec4 rotation;
+    glm::vec3 scale;
 };
 
 struct Matrix

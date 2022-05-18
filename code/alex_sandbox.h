@@ -1,29 +1,13 @@
 #ifndef ALEX_SANDBOX_H
 #define ALEX_SANDBOX_H
 
-#include "alex_application.h"
-
-internal void sandbox_init(Application *app);
+internal void sandbox_init();
 
 // Callbacks
-internal void sandbox_on_update(Application *app);
-internal void sandbox_on_event(Application *app);
-internal void sandbox_on_render(Application *app);
+internal void sandbox_on_update();
+internal void sandbox_on_event();
+internal void sandbox_on_render();
 
-internal void sandbox_begin_camera(Camera camera);
-internal void sandbox_create_shaders();
-
-// Draw
-internal void sandbox_draw_line(Application *app);
-internal void sandbox_draw_square(Application *app);
-internal void sandbox_draw_cube(Application *app);
-internal void sandbox_draw_plane(Application *app);
-internal void sandbox_draw_sphere(Application *app);
-
-// Mesh
-internal Mesh sandbox_create_square_mesh();
-internal Mesh sandbox_create_cube_mesh();
-internal Mesh sandbox_create_sphere_mesh();
-
+internal void sandbox_draw_quad(const glm::vec3 &position, const glm::vec3 &size, const glm::vec4 &color);
 
 #endif //ALEX_SANDBOX_H
