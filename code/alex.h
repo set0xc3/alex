@@ -27,6 +27,7 @@ typedef bool   b8;
 #define local_variable  static
 #define global_variable static
 
+#if 0
 #define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
 
@@ -51,5 +52,6 @@ struct Color
 };
 
 internal char *get_data_from_file(const char *path);
+#endif
 
 #endif // ALEX_H
