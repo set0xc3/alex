@@ -1,10 +1,7 @@
 #ifndef ALEX_WINDOW_H
 #define ALEX_WINDOW_H
 
-#include <glad/glad.h>
-
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_opengl.h>
+#include <GLFW/glfw3.h>
 
 struct Window_Data
 {
@@ -17,13 +14,13 @@ struct Window_Data
 
 struct Window
 {
-    SDL_Window *sdl_window;
-    SDL_GLContext gl_context;
+    GLFWwindow *glfw_window;
 };
 
-internal void create_window(const Window_Data *wd, Window *window);
+internal b8 create_window(const Window_Data *wd, Window *window);
+internal void destroy_window(Window *window);
 internal void window_display(Window *window);
-internal b8 window_handle_event();
+internal b8 window_handle_event(Window *window);
 
 internal void window_set_visible(Window *window, const b8 visible);
 internal void window_set_vsync(Window *window, const b8 interval);

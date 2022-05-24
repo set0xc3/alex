@@ -15,6 +15,8 @@ $root/third-party/imgui/backends/imgui_impl_opengl3.cpp
 "
 
 includes="
+-I$root/third-party/glm/
+
 -I$root/third-party/imgui/
 -I$root/third-party/imgui/backends/
 "
@@ -27,7 +29,7 @@ libs="
 "
 
 binary=$root/build/sandbox
-flags="-std=c++11 -O0 -g3 -Wall -Wformat"
+flags="-std=c++11 -O0 -g3"
 
 mkdir -p $root/build/
 clang++ $files $includes $flags $libs -o $binary

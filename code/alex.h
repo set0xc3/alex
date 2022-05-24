@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
+#include <cstdlib>
 #include <errno.h>
 #include <time.h>
 
@@ -27,7 +28,7 @@ typedef bool   b8;
 #define local_variable  static
 #define global_variable static
 
-#if 0
+#if 1
 #define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
 

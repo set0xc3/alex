@@ -1,16 +1,17 @@
 #include "alex.h"
 
 #include "alex_main.cpp"
+#include "alex_application.cpp"
+#include "alex_logger.cpp"
+#include "alex_window.cpp"
 
 #if 0
-#include "alex_application.cpp"
 #include "alex_camera.cpp"
-#include "alex_logger.cpp"
 #include "alex_mesh.cpp"
-#include "alex_window.cpp"
 #include "alex_renderer.cpp"
 #include "alex_sandbox.cpp"
 #include "alex_shader.cpp"
+#endif
 
 internal 
 char *get_data_from_file(const char *path)
@@ -33,4 +34,3 @@ char *get_data_from_file(const char *path)
     }
     return 0;
 }
-#endif

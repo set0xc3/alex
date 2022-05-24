@@ -1,4 +1,13 @@
+#include "alex_application.h"
 
+int 
+main()
+{
+    create_application();
+    return 0;
+}
+
+#if 0
 #include <stdio.h>
 
 #include "imgui.h"
@@ -43,7 +52,7 @@ main(int, char**)
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
     //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
-    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
+    //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
     //io.ConfigViewportsNoAutoMerge = true;
     //io.ConfigViewportsNoTaskBarIcon = true;
     
@@ -168,3 +177,4 @@ main(int, char**)
     
     return 0;
 }
+#endif
