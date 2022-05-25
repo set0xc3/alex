@@ -1,7 +1,5 @@
 #include "alex_renderer.h"
 
-#include <glad/glad.h>
-
 internal void 
 create_renderer(Renderer *renderer)
 {

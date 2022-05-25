@@ -1,7 +1,7 @@
 #ifndef ALEX_WINDOW_H
 #define ALEX_WINDOW_H
 
-#include <GLFW/glfw3.h>
+struct GLFWwindow;
 
 struct Window_Data
 {

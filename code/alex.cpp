@@ -1,18 +1,17 @@
-#include "alex.h"
+// IMGUI
+#include "imgui.cpp"
+#include "imgui_widgets.cpp"
+#include "imgui_tables.cpp"
+#include "imgui_draw.cpp"
+#include "imgui_demo.cpp"
+#include "imgui_impl_opengl3.cpp"
+#include "imgui_impl_glfw.cpp"
 
+// Engine
 #include "alex_main.cpp"
-#include "alex_application.cpp"
-#include "alex_logger.cpp"
-#include "alex_window.cpp"
 
 #if 0
-#include "alex_camera.cpp"
-#include "alex_mesh.cpp"
-#include "alex_renderer.cpp"
-#include "alex_sandbox.cpp"
-#include "alex_shader.cpp"
-#endif
-
+#include "alex.h"
 internal 
 char *get_data_from_file(const char *path)
 {
@@ -34,3 +33,4 @@ char *get_data_from_file(const char *path)
     }
     return 0;
 }
+#endif

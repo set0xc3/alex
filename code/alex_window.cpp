@@ -1,5 +1,10 @@
 #include "alex_window.h"
 
+//#include <glad/glad.h>
+
+#define GLFW_INCLUDE_NONE
+#include <GLFW/glfw3.h>
+
 internal void 
 glfw_error_callback(i32 error, const char* description)
 {
@@ -21,7 +26,7 @@ create_window(const Window_Data *wd, Window *window)
     // GL 3.0 + GLSL 130
     const char* glsl_version = "#version 130";
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
     //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
     
@@ -33,6 +38,7 @@ create_window(const Window_Data *wd, Window *window)
     }
     
     glfwMakeContextCurrent(window->glfw_window);
+    //gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
     glfwSwapInterval(1);
     
     return true;
@@ -48,6 +54,12 @@ destroy_window(Window *window)
 internal void 
 window_display(Window *window)
 {
+    //int display_w, display_h;
+    //glfwGetFramebufferSize(window->glfw_window, &display_w, &display_h);
+    //glViewport(0, 0, display_w, display_h);
+    //glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
+    //glClear(GL_COLOR_BUFFER_BIT);
+    
     glfwSwapBuffers(window->glfw_window);
 }
 

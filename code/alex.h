@@ -28,7 +28,6 @@ typedef bool   b8;
 #define local_variable  static
 #define global_variable static
 
-#if 1
 #define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
 
@@ -44,15 +43,6 @@ typedef bool   b8;
 // Time
 #define UTC (3) // Europe/Moscow
 
-struct Color
-{
-    u8 r;
-    u8 g;
-    u8 b;
-    u8 a;
-};
-
 internal char *get_data_from_file(const char *path);
-#endif
 
 #endif // ALEX_H

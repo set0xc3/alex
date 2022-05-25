@@ -4,32 +4,31 @@ root=$PWD
 
 files="
 $root/code/alex.cpp
-
-$root/third-party/imgui/imgui.cpp
-$root/third-party/imgui/imgui_demo.cpp
-$root/third-party/imgui/imgui_draw.cpp
-$root/third-party/imgui/imgui_tables.cpp
-$root/third-party/imgui/imgui_widgets.cpp
-$root/third-party/imgui/backends/imgui_impl_glfw.cpp
-$root/third-party/imgui/backends/imgui_impl_opengl3.cpp
 "
 
 includes="
--I$root/third-party/glm/
+-I/usr/local/include/
 
+-I$root/third-party/glm/
 -I$root/third-party/imgui/
--I$root/third-party/imgui/backends/
+-I$root/third-party/imgui/backends
+"
+
+GL="
+-lGL
+`pkg-config --static --libs glfw3`
+`pkg-config --cflags glfw3`
 "
 
 libs="
--lGL
--lglfw
+-L/usr/local/lib
 -lm
 -lX11
+$GL
 "
 
 binary=$root/build/sandbox
-flags="-std=c++11 -O0 -g3"
+flags="-std=c++11 -O0 -g3 -Wall -Wformat"
 
 mkdir -p $root/build/
 clang++ $files $includes $flags $libs -o $binary
