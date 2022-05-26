@@ -1,6 +1,8 @@
 #ifndef ALEX_MATH_H
 #define ALEX_MATH_H
 
+#define PI (3.14159f)
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>

@@ -29,20 +29,24 @@ typedef bool   b8;
 #define global_variable static
 
 #define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
-#define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
-
-#define MAX_STR_LEN (4095)
 
 // Memory
 #define ZERO_MEMORY(s) (memset(s, 0, sizeof(*s)))
 #define ZERO_STRUCT(s) (memset(s, 0, sizeof(*s)))
 
-// Math
-#define PI (3.14159f)
-
 // Time
 #define UTC (3) // Europe/Moscow
 
-internal char *get_data_from_file(const char *path);
+internal char *read_file(const char *path);
+
+
+struct GLFWwindow;
+struct App_Context
+{
+    GLFWwindow* window;
+};
+
+global_variable App_Context app;
+
 
 #endif // ALEX_H

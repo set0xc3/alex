@@ -8,12 +8,13 @@
 #include "imgui_impl_glfw.cpp"
 
 // Engine
+#include "alex_logger.cpp"
+#include "alex_imgui.cpp"
 #include "alex_main.cpp"
 
-#if 0
 #include "alex.h"
 internal 
-char *get_data_from_file(const char *path)
+char *read_file(const char *path)
 {
     FILE *file = fopen(path , "r");
     char *str = 0;
@@ -33,4 +34,3 @@ char *get_data_from_file(const char *path)
     }
     return 0;
 }
-#endif
