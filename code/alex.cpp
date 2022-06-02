@@ -1,3 +1,4 @@
+#if 0
 // IMGUI
 #include "imgui.cpp"
 #include "imgui_widgets.cpp"
@@ -6,15 +7,19 @@
 #include "imgui_demo.cpp"
 #include "imgui_impl_opengl3.cpp"
 #include "imgui_impl_glfw.cpp"
+#endif
 
 // Engine
-#include "alex_logger.cpp"
-#include "alex_imgui.cpp"
-#include "alex_main.cpp"
-
+#include "alex_base_def.h"
 #include "alex.h"
+
+#include "alex_application.cpp"
+#include "alex_logger.cpp"
+#include "alex_main.cpp"
+#include "alex_window.cpp"
+
 internal 
-char *read_file(const char *path)
+char *read_from_file(const char *path)
 {
     FILE *file = fopen(path , "r");
     char *str = 0;

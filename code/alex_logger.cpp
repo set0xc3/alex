@@ -1,5 +1,7 @@
 #include "alex_logger.h"
 
+#define UTC (3) // Europe/Moscow
+
 internal void 
 logger_print(const char *type_str, 
              const char *file_name, const i32 line,

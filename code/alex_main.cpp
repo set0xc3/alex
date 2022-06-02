@@ -1,3 +1,15 @@
+#include "alex_application.h"
+
+int 
+main()
+{
+    init_application();
+    application_run();
+    
+    return 0;
+}
+
+#if 0
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -5,7 +17,6 @@
 #include <GLFW/glfw3.h>
 
 #include "alex.h"
-#include "alex_main.h"
 #include "alex_imgui.h"
 #include "alex_logger.h"
 
@@ -18,8 +29,6 @@ glfw_error_callback(i32 error, const char* description)
 int 
 main()
 {
-    ZERO_STRUCT(&app);
-    
     // Setup window
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit())
@@ -114,3 +123,4 @@ main()
     
     return 0;
 }
+#endif
