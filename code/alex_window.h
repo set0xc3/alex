@@ -12,7 +12,7 @@ internal void create_window(window_context *win);
 internal void destroy_window(window_context *win);
 
 internal void window_update(window_context *win);
-internal b8 window_process_event(window_context *win);
+internal b8 window_handle_input(window_context *win);
 
 internal void window_set_name_title(window_context *win, const char *title);
 

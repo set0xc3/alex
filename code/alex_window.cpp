@@ -109,7 +109,7 @@ window_update(window_context *win)
 }
 
 internal b8 
-window_process_event(window_context *win)
+window_handle_input(window_context *win)
 {
     _internal_data* in = (_internal_data*)win->internal_data;
     while (XPending(in->display) > 0) 

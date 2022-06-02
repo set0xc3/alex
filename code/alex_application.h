@@ -3,12 +3,14 @@
 #ifndef ALEX_APPLICATION_H
 #define ALEX_APPLICATION_H
 
+#include "alex_game.h"
 #include "alex_window.h"
 
 struct application_context
 {
     b8 quit;
     
+    game_context game;
     window_context window;
 };
 

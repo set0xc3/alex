@@ -11,13 +11,20 @@ init_application()
 internal void 
 application_run()
 {
+    game_on_startup();
+    
     while (!g_app.quit)
     {
-        if (!window_process_event(&g_app.window))
+        if (!window_handle_input(&g_app.window))
             g_app.quit = true;
+        
+        game_on_input();
+        game_on_update(0.0);
         
         window_update(&g_app.window);
         
         usleep(1);
     }
+    
+    game_on_shutdown();
 }
