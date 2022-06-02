@@ -5,7 +5,8 @@ global_variable application_context g_app;
 internal void 
 startup_application()
 {
-    startup_graphics(&g_app.graphics);
+    create_window(&g_app.window);
+    startup_renderer(&g_app.renderer);
 }
 
 internal void 
@@ -21,16 +22,18 @@ application_run()
     
     while (!g_app.quit)
     {
-        if (!graphics_handle_input(&g_app.graphics))
+        if (!window_handle_input(&g_app.window))
             shutdown_application();
         
         game_handle_input(&g_app.game);
         game_update(&g_app.game, 0.0);
         
-        graphics_update(&g_app.graphics);
+        window_update(&g_app.window);
         
         usleep(1);
     }
     
     game_shutdown(&g_app.game);
+    
+    destroy_window(&g_app.window);
 }

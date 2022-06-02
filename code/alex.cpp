@@ -15,7 +15,7 @@
 
 #include "alex_application.cpp"
 #include "alex_game.cpp"
-#include "alex_graphics.cpp"
+#include "alex_renderer.cpp"
 #include "alex_logger.cpp"
 #include "alex_main.cpp"
 #include "alex_window.cpp"

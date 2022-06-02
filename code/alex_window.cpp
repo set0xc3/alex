@@ -119,7 +119,7 @@ window_handle_input(window_context *context)
         
         if (event.type == ClientMessage)
         {
-            LOG_DEBUG(" [Event] User closed window");
+            LOG_DEBUG("[Event] User closed window");
             return false;
         }
     }
