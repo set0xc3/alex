@@ -8,12 +8,12 @@ struct window_context
     void *internal_data;
 };
 
-internal void create_window(window_context *win);
-internal void destroy_window(window_context *win);
+internal void create_window(window_context *context);
+internal void destroy_window(window_context *context);
 
-internal void window_update(window_context *win);
-internal b8 window_handle_input(window_context *win);
+internal void window_update(window_context *context);
+internal b8 window_handle_input(window_context *context);
 
-internal void window_set_name_title(window_context *win, const char *title);
+internal void window_set_name_title(window_context *context, const char *title);
 
 #endif //ALEX_WINDOW_H

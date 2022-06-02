@@ -8,10 +8,10 @@ struct game_context
     
 };
 
-internal void game_on_startup();
-internal void game_on_shutdown();
+internal void game_startup(game_context *context);
+internal void game_shutdown(game_context *context);
 
-internal void game_on_update(f64 dt);
-internal void game_on_input();
+internal void game_update(game_context *context, f64 dt);
+internal void game_handle_input(game_context *context);
 
 #endif //ALEX_GAME_H

@@ -3,28 +3,34 @@
 global_variable application_context g_app;
 
 internal void 
-init_application()
+startup_application()
 {
-    create_window(&g_app.window);
+    startup_graphics(&g_app.graphics);
+}
+
+internal void 
+shutdown_application()
+{
+    g_app.quit = true;
 }
 
 internal void 
 application_run()
 {
-    game_on_startup();
+    game_startup(&g_app.game);
     
     while (!g_app.quit)
     {
-        if (!window_handle_input(&g_app.window))
-            g_app.quit = true;
+        if (!graphics_handle_input(&g_app.graphics))
+            shutdown_application();
         
-        game_on_input();
-        game_on_update(0.0);
+        game_handle_input(&g_app.game);
+        game_update(&g_app.game, 0.0);
         
-        window_update(&g_app.window);
+        graphics_update(&g_app.graphics);
         
         usleep(1);
     }
     
-    game_on_shutdown();
+    game_shutdown(&g_app.game);
 }

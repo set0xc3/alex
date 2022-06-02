@@ -4,17 +4,19 @@
 #define ALEX_APPLICATION_H
 
 #include "alex_game.h"
-#include "alex_window.h"
+#include "alex_graphics.h"
 
 struct application_context
 {
     b8 quit;
     
     game_context game;
-    window_context window;
+    graphics_context graphics;
 };
 
-internal void init_application();
+internal void startup_application();
+internal void shutdown_application();
+
 internal void application_run();
 
 #endif //ALEX_APPLICATION_H

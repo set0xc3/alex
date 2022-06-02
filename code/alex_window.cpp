@@ -16,12 +16,12 @@ struct _internal_data
 };
 
 internal void 
-create_window(window_context *win)
+create_window(window_context *context)
 {
     _internal_data *in = 0;
     in = (_internal_data*)malloc(sizeof(_internal_data));
     ZERO_MEMORY(in);
-    win->internal_data = in;
+    context->internal_data = in;
     
     in->display = XOpenDisplay(0);
     if (!in->display)
@@ -79,9 +79,9 @@ create_window(window_context *win)
 }
 
 internal void 
-destroy_window(window_context *win)
+destroy_window(window_context *context)
 {
-    _internal_data* in = (_internal_data*)win->internal_data;
+    _internal_data* in = (_internal_data*)context->internal_data;
     
     glXDestroyContext(in->display, in->gl_context);
     XFree(in->visual);
@@ -90,9 +90,9 @@ destroy_window(window_context *win)
 }
 
 internal void 
-window_update(window_context *win)
+window_update(window_context *context)
 {
-    _internal_data* in = (_internal_data*)win->internal_data;
+    _internal_data* in = (_internal_data*)context->internal_data;
     
     glViewport(0, 0, 1280, 720);
     glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
@@ -109,9 +109,9 @@ window_update(window_context *win)
 }
 
 internal b8 
-window_handle_input(window_context *win)
+window_handle_input(window_context *context)
 {
-    _internal_data* in = (_internal_data*)win->internal_data;
+    _internal_data* in = (_internal_data*)context->internal_data;
     while (XPending(in->display) > 0) 
     {
         XEvent event;
@@ -128,8 +128,8 @@ window_handle_input(window_context *win)
 }
 
 internal void 
-window_set_name_title(window_context *win, const char *title)
+window_set_name_title(window_context *context, const char *title)
 {
-    _internal_data* in = (_internal_data*)win->internal_data;
+    _internal_data* in = (_internal_data*)context->internal_data;
     XStoreName(in->display, in->window, title);
 }

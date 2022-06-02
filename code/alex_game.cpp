@@ -1,25 +1,25 @@
 #include "alex_game.h"
 
 internal void 
-game_on_startup()
+game_startup(game_context *context)
 {
     
 }
 
 internal void 
-game_on_shutdown()
+game_shutdown(game_context *context)
 {
     
 }
 
 internal void 
-game_on_update(f64 dt)
+game_update(game_context *context, f64 dt)
 {
     
 }
 
 internal void 
-game_on_input()
+game_handle_input(game_context *context)
 {
     
 }

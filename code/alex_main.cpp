@@ -3,7 +3,7 @@
 int 
 main()
 {
-    init_application();
+    startup_application();
     application_run();
     
     return 0;
