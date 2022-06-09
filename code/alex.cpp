@@ -20,6 +20,8 @@
 #include "alex_main.cpp"
 #include "alex_window.cpp"
 
+#include "../../glad/src/glad.c"
+
 internal 
 char *read_from_file(const char *path)
 {

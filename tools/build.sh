@@ -9,6 +9,7 @@ $root/code/alex.cpp
 includes="
 -I/usr/local/include/
 
+-I$root/third-party/glad/include/
 -I$root/third-party/glm/
 "
 libs="
@@ -19,7 +20,7 @@ libs="
 "
 
 binary=$root/build/sandbox
-flags="-std=c++11 -O0 -g"
+flags="-std=c++11 -O0 -g3"
 
 mkdir -p $root/build/
-gcc $files $includes $flags $libs -o $binary
+clang++ $files $includes $flags $libs -o $binary

@@ -1,8 +1,8 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
-#include <GL/gl.h>
 #include <GL/glx.h>
+#include <glad/glad.h>
 
 #include "alex_window.h"
 #include "alex_logger.h"
@@ -76,6 +76,12 @@ create_window(window_context *context)
     // Process window close event in X11 event loop for(;;)
 	Atom wnd_del = XInternAtom(in->display, "WM_DELETE_WINDOW", 0);
 	XSetWMProtocols(in->display, in->window, &wnd_del, 1);
+    
+    // Init Glad
+    if (!gladLoadGL())
+    {
+        // TODO(alex): debug
+    }
 }
 
 internal void 
@@ -93,17 +99,6 @@ internal void
 window_update(window_context *context)
 {
     _internal_data* in = (_internal_data*)context->internal_data;
-    
-    glViewport(0, 0, 1280, 720);
-    glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-    
-    glBegin(GL_TRIANGLES);
-    glColor3f(1.0f, 1.0f, 1.0f);
-    glVertex2f(-0.5f, -0.5f);
-    glVertex2f(0.5f, -0.5f);
-    glVertex2f(0.0f, 0.5f);
-    glEnd();
     
     glXSwapBuffers(in->display, in->window);
 }
